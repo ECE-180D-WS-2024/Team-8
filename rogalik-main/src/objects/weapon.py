@@ -229,7 +229,7 @@ class Staff(Weapon):
         self.calculate_firing_position()
         self.game.bullet_manager.add_bullet(
             StaffBullet(self.game, self, self.game.world_manager.current_room, self.firing_position[0],
-                        self.firing_position[1], pos))
+                        self.firing_position[1], pos, self.player.name))
         self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Shoot6.wav'))
 
     def player_update(self):

@@ -7,8 +7,8 @@ from src.particles import Dust
 
 
 pygame.init()
-class Player(Entity):
-    name = 'player'
+class Player2(Entity):
+    name = 'player2'
     speed = 360
     max_hp = 100
     gold = 0
@@ -19,7 +19,7 @@ class Player(Entity):
 
     def __init__(self, game):
         Entity.__init__(self, game, self.name)
-        self.rect = self.image.get_rect(center=(512 + 2.5 * 64, 600))
+        self.rect = self.image.get_rect(center=(100 + 2.5 * 64, 600))
         self.weapon = None
         self.attacking = False
         self.interaction = True
@@ -32,18 +32,18 @@ class Player(Entity):
 
     def input(self):
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
+        if pressed[pygame.K_UP]:
             self.direction = 'up'
-        if pressed[pygame.K_s]:
+        if pressed[pygame.K_DOWN]:
             self.direction = 'down'
-        if pressed[pygame.K_a]:
+        if pressed[pygame.K_LEFT]:
             self.direction = 'left'
-        if pressed[pygame.K_d]:
+        if pressed[pygame.K_RIGHT]:
             self.direction = 'right'
-        if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
+        if pressed[pygame.K_z] and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
             self.game.object_manager.interact(self.name)
-        if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
+        if pressed[pygame.K_x] and self.weapon and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
             self.weapon.drop()
             if self.items:
@@ -67,13 +67,13 @@ class Player(Entity):
         # constant_dt = 0.06
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]
-        vel_up = [i * pressed[pygame.K_w] for i in vel_up]
+        vel_up = [i * pressed[pygame.K_UP] for i in vel_up]
         vel_down = [0, self.speed * constant_dt]
-        vel_down = [i * pressed[pygame.K_s] for i in vel_down]
+        vel_down = [i * pressed[pygame.K_DOWN] for i in vel_down]
         vel_left = [-self.speed * constant_dt, 0]
-        vel_left = [i * pressed[pygame.K_a] for i in vel_left]
+        vel_left = [i * pressed[pygame.K_LEFT] for i in vel_left]
         vel_right = [self.speed * constant_dt, 0]
-        vel_right = [i * pressed[pygame.K_d] for i in vel_right]
+        vel_right = [i * pressed[pygame.K_RIGHT] for i in vel_right]
         vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 

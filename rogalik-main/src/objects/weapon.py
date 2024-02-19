@@ -83,7 +83,7 @@ class Weapon(Object):
         self.hitbox = get_mask_rect(self.original_image, *self.rect.topleft)
 
     def detect_collision(self):
-        if self.game.player.hitbox.colliderect(self.rect):
+        if self.game.player.hitbox.colliderect(self.rect) or self.game.player2.hitbox.colliderect(self.rect):
             self.image = self.image_picked
             self.interaction = True
         else:
@@ -91,9 +91,12 @@ class Weapon(Object):
             self.interaction = False
             self.show_name.reset_line_length()
 
-    def interact(self):
+    def interact(self,name):
         self.weapon_swing.reset()
-        self.player = self.game.player
+        if(name == "player"):
+            self.player = self.game.player
+        elif(name == "player2"):
+            self.player = self.game.player2
         self.player.items.append(self)
         if not self.player.weapon:
             self.player.weapon = self
@@ -129,6 +132,17 @@ class Weapon(Object):
                 self.game.player.weapon.special_effect(enemy)
                 enemy.hurt = True
                 enemy.hp -= self.game.player.weapon.damage * self.game.player.strength
+                enemy.entity_animation.hurt_timer = pygame.time.get_ticks()
+                self.game.sound_manager.play_hit_sound()
+                enemy.weapon_hurt_cooldown = pygame.time.get_ticks()
+            elif(
+                    pygame.sprite.collide_mask(self.game.player2.weapon, enemy)
+                    and enemy.dead is False
+                    and enemy.can_get_hurt_from_weapon()
+            ):
+                self.game.player2.weapon.special_effect(enemy)
+                enemy.hurt = True
+                enemy.hp -= self.game.player2.weapon.damage * self.game.player2.strength
                 enemy.entity_animation.hurt_timer = pygame.time.get_ticks()
                 self.game.sound_manager.play_hit_sound()
                 enemy.weapon_hurt_cooldown = pygame.time.get_ticks()

@@ -208,8 +208,9 @@ class Weapon(Object):
                     pygame.sprite.collide_mask(self.game.player.weapon, enemy)
                     and enemy.dead is False
                     and enemy.can_get_hurt_from_weapon()
-            ):
-                self.game.player.weapon.special_effect(enemy)
+            ):  
+                if(self.game.player.weapon.name != "staff"):
+                    self.game.player.weapon.special_effect(enemy)
                 enemy.hurt = True
                 enemy.hp -= self.game.player.weapon.damage * self.game.player.strength
                 enemy.entity_animation.hurt_timer = pygame.time.get_ticks()
@@ -220,7 +221,8 @@ class Weapon(Object):
                     and enemy.dead is False
                     and enemy.can_get_hurt_from_weapon()
             ):
-                self.game.player2.weapon.special_effect(enemy)
+                if(self.game.player.weapon.name != "staff"):
+                    self.game.player2.weapon.special_effect(enemy)
                 enemy.hurt = True
                 enemy.hp -= self.game.player2.weapon.damage * self.game.player2.strength
                 enemy.entity_animation.hurt_timer = pygame.time.get_ticks()

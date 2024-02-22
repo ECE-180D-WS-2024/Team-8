@@ -30,7 +30,7 @@ class GameOver:
             self.played = True
 
     def update(self):
-        if self.game.player.dead and self.game.player2.dead:
+        if self.game.player.dead:
             self.input()
             self.counter += 1
             if self.position[1] <= self.rect.midtop[1]:
@@ -41,7 +41,8 @@ class GameOver:
                 self.play_sound()
 
     def draw(self):
-        if self.game.player.dead and self.game.player2.dead:
+        if self.game.player.dead:
+
             self.game.screen.blit(self.image, self.position)
             # pygame.draw.rect(self.game.screen, (255, 255, 255), self.rect, 1)
 

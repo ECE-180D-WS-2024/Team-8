@@ -2,7 +2,6 @@ import pygame
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
-from .entities.player2 import Player2
 from .menu import MainMenu
 from .mini_map import MiniMap
 from .particles import ParticleManager
@@ -17,9 +16,9 @@ from .sound_manager import SoundManager
 pygame.init()
 pygame.mixer.init()
 
-#world_size = (21*64, 12*64)
-#Below suitable for my screen. Steve
-world_size = (20 * 64, 12 * 64) 
+world_size = (21 * 64, 14 * 64)
+
+
 
 class Game:
     def __init__(self):
@@ -33,9 +32,7 @@ class Game:
         self.bullet_manager = BulletManager(self)
         self.sound_manager = SoundManager(self)
         self.player = Player(self)
-        self.player2 = Player2(self)
-        self.hud1 = Hud(self, "player")
-        self.hud2 = Hud(self, "player2")
+        self.hud = Hud(self)
         self.running = True
         self.menu = MainMenu(self)
         self.mini_map = MiniMap(self)
@@ -58,7 +55,6 @@ class Game:
         self.enemy_manager.update_enemies()
         self.object_manager.update()
         self.player.update()
-        self.player2.update()
         self.particle_manager.update_particles()
         self.particle_manager.update_fire_particles()
         self.bullet_manager.update()
@@ -72,18 +68,15 @@ class Game:
         self.world_manager.draw_map(self.screen)
         if self.player:
             self.player.draw(self.screen)
-        if self.player2:
-            self.player2.draw(self.screen)
         self.enemy_manager.draw_enemies(self.screen)
         self.object_manager.draw()
         self.bullet_manager.draw()
         self.mini_map.draw(self.screen)
-        self.hud1.draw()
-        self.hud2.draw()
+        self.hud.draw()
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
         self.particle_manager.draw_fire_particles()
         self.game_over.draw()
-    
+
     def input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -93,7 +86,6 @@ class Game:
                 self.object_manager.hover = True
 
         self.player.input()
-        self.player2.input()
         pressed = pygame.key.get_pressed()
         # if pressed[pygame.K_r]:
         #     self.refresh()

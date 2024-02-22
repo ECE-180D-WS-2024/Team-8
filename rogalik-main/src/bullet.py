@@ -56,7 +56,6 @@ class Bullet():
                     self.kill()
                     break
         self.player_collision(self.game.player)
-        self.player_collision(self.game.player2)
         self.bounce()
         if self.rect.y < 0 or self.rect.y > 1000 or self.rect.x < 0 or self.rect.x > 1300:
             self.kill()
@@ -82,14 +81,9 @@ class Bullet():
             if collision_enemy.shield:
                 collision_enemy.shield -= 1
             else:
-                if(collision_enemy.name == "player"):
-                    self.game.player.hp -= self.damage
-                    self.game.player.hurt = True
-                    self.game.player.entity_animation.hurt_timer = pygame.time.get_ticks()
-                elif(collision_enemy.name == "player2"):
-                    self.game.player2.hp -= self.damage
-                    self.game.player2.hurt = True
-                    self.game.player2.entity_animation.hurt_timer = pygame.time.get_ticks()
+                self.game.player.hp -= self.damage
+                self.game.player.hurt = True
+                self.game.player.entity_animation.hurt_timer = pygame.time.get_ticks()
             self.sparkle()
             self.kill()
 
@@ -108,16 +102,7 @@ class Bullet():
             self.speed *= random.randint(10, 20) / 10
             self.bounce_back = False
             self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Hit.wav'))
-        elif(                 
-                self.game.player2.weapon
-                and self.game.player2.attacking
-                and pygame.sprite.collide_mask(self.game.player2.weapon, self)
-                and self.bounce_back
-        ):
-            self.dir = (-self.dir[0] + random.randint(-20, 10) / 100, -self.dir[1] + random.randint(-10, 10) / 100)
-            self.speed *= random.randint(10, 20) / 10
-            self.bounce_back = False
-            self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Hit.wav'))
+
 
 class ImpBullet(Bullet):
     speed = 5
@@ -134,12 +119,9 @@ class StaffBullet(Bullet):
     bullet_size = 12
     radius = 7
 
-    def __init__(self, game, master, room, x, y, target, name):
+    def __init__(self, game, master, room, x, y, target):
         super().__init__(game, master, room, x, y, target)
-        if(name == "player"):
-            self.damage = 35 * self.game.player.strength
-        elif(name == "player2"):
-            self.damage = 35 * self.game.player2.strength
+        self.damage = 35 * self.game.player.strength
         self.bounce_back = False
 
     def sparkle(self):
@@ -199,7 +181,6 @@ class MachineGunBullet(BossBullet):
     def update(self):
         self.update_position()
         self.player_collision(self.game.player)
-        self.player_collision(self.game.player2)
         if self.rect.y < 0 or self.rect.y > 1000 or self.rect.x < 0 or self.rect.x > 1300:
             self.kill()
         self.wall_collision()

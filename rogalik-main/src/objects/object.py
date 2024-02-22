@@ -225,10 +225,7 @@ class Object:
         self.image = self.original_image
 
     def detect_collision(self):
-        if (self.game.player.hitbox.colliderect(self.rect) and self.game.player.interaction):
-            self.image = self.image_picked
-            self.interaction = True
-        elif (self.game.player2.hitbox.colliderect(self.rect) and self.game.player2.interaction):
+        if self.game.player.hitbox.colliderect(self.rect) and self.game.player.interaction:
             self.image = self.image_picked
             self.interaction = True
         else:
@@ -253,7 +250,7 @@ class Object:
         self.hitbox = get_mask_rect(self.image, *self.rect.topleft)
         self.hitbox.midbottom = self.rect.midbottom
 
-    def interact(self,name):
+    def interact(self):
         pass
 
     def remove_object(self):

@@ -69,18 +69,6 @@ class WeaponSwing:
         self.counter = 0
 
     def rotate(self, weapon=None):
-        #Mouse cursor Weapon Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        '''
-        mx, my = pygame.mouse.get_pos()
-        if self.swing_side == 1:
-        #self.angle = angle where weapon orientated
-            #self.angle = (180 / math.pi) * math.atan2(-self.swing_side * dy, dx) + self.left_swing
-            self.angle = 0
-        else:
-            #self.angle = (180 / math.pi) * math.atan2(self.swing_side * dy, dx) + self.right_swing
-            self.angle = 0
-        '''
-        #OpenCV Weapon Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # define range of blue color in HSV
         lower_yellow = np.array([20,100,100])
         upper_yellow = np.array([40,255,255]) 
@@ -190,12 +178,15 @@ class WeaponSwing:
         self.offset_rotated = Vector2(0, -35).rotate(-self.angle)
 
     def swing(self):
-        self.angle += 20 * self.swing_side
+        #weapon swing range
+        #-----------------
+        swingrange = 8
+        #----------------
+        self.angle += swingrange * self.swing_side
         position = self.weapon.player.hitbox.center
         self.weapon.image = pygame.transform.rotozoom(self.weapon.original_image, self.angle, 1)
         offset_rotated = self.offset.rotate(-self.angle)
         self.weapon.rect = self.weapon.image.get_rect(center=position + offset_rotated)
-        # self.rect_mask = get_mask_rect(self.image, *self.rect.topleft)
         self.weapon.hitbox = pygame.mask.from_surface(self.weapon.image)
         self.counter += 1
 
@@ -360,37 +351,36 @@ class Staff(Weapon):
 
     def fire(self):
         #Mouse cursor attacking orientation control-------------------------------------------------------------------------------------------------------------------------------------------
-        
+        '''
         pos = pygame.mouse.get_pos()
-        print(pos)
-
+        print(self.weapon_swing.angle)
+        '''
         #Opencv attacking orientation control ------------------------------------------------------------------------------------------------------------------------------------------
-        '''
-        if(self.angle == 0):
-            pos = [660,210]
-        if(self.angle == 30):
-            pos = []
-        if(self.angle == 60):
-            pos = []
-        if(self.angle == 90):
-            pos = []
-        if(self.angle == 120):
-            pos = []
-        if(self.angle == 150):
-            pos = []
-        if(self.angle == 180):
-            pos = []
-        if(self.angle == 210):
-            pos = []
-        if(self.angle == 240):
-            pos = []
-        if(self.angle == 270):
-            pos = []
-        if(self.angle == 300):
-            pos = []
-        if(self.angle == 330):
-            pos = []
-        '''
+
+        if(self.weapon_swing.angle == 0):
+            pos = [658,10]
+        if(self.weapon_swing.angle == 30):
+            pos = [414,9]
+        if(self.weapon_swing.angle == 60):
+            pos = [31,135]
+        if(self.weapon_swing.angle == 90):
+            pos = [10,420]
+        if(self.weapon_swing.angle == 120):
+            pos = [16,701]
+        if(self.weapon_swing.angle == 150):
+            pos = [499,719]
+        if(self.weapon_swing.angle == 180):
+            pos = [685,716]
+        if(self.weapon_swing.angle == 210):
+            pos = [868,721]
+        if(self.weapon_swing.angle == 240):
+            pos = [1144,669]
+        if(self.weapon_swing.angle == 270):
+            pos = [1188,427]
+        if(self.weapon_swing.angle == 300):
+            pos = [1157,215]
+        if(self.weapon_swing.angle == 330):
+            pos = [888,11]
 
         self.update_hitbox()
         self.calculate_firing_position()

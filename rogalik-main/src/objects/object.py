@@ -259,12 +259,18 @@ class Object:
     def remove_object(self):
         self.room.objects.remove(self)
 
-    def buy(self):
-        if self.game.player.gold >= self.value:
-            self.game.player.gold -= self.value
-            self.interact()
-            self.for_sale = False
-
+    def buy(self, name):
+        if(name == "player"):
+            if self.game.player.gold >= self.value:
+                self.game.player.gold -= self.value
+                self.interact(name)
+                self.for_sale = False
+        elif(name == "player2"):
+            if self.game.player2.gold >= self.value:
+                self.game.player2.gold -= self.value
+                self.interact(name)
+                self.for_sale = False
+                
     def draw(self):
         surface = self.room.tile_map.map_surface
         # self.room.tile_map.map_surface.blit(self.image, (self.rect.x + 64, self.rect.y + 32))

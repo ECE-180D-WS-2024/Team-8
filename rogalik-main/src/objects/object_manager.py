@@ -55,4 +55,4 @@ class ObjectManager:
                 if not o.for_sale:
                     o.interact(name)
                 else:
-                    o.buy()
+                    o.buy(name)

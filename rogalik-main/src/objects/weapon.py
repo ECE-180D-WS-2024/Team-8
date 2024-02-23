@@ -221,7 +221,7 @@ class Weapon(Object):
                     and enemy.dead is False
                     and enemy.can_get_hurt_from_weapon()
             ):
-                if(self.game.player.weapon.name != "staff"):
+                if(self.game.player2.weapon.name != "staff"):
                     self.game.player2.weapon.special_effect(enemy)
                 enemy.hurt = True
                 enemy.hp -= self.game.player2.weapon.damage * self.game.player2.strength

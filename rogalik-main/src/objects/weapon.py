@@ -69,7 +69,7 @@ class WeaponSwing:
         self.counter = 0
 
     def rotate(self, weapon=None):
-        #Mouse cursor Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        #Mouse cursor Weapon Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
         '''
         mx, my = pygame.mouse.get_pos()
         if self.swing_side == 1:
@@ -80,7 +80,7 @@ class WeaponSwing:
             #self.angle = (180 / math.pi) * math.atan2(self.swing_side * dy, dx) + self.right_swing
             self.angle = 0
         '''
-        #OpenCV Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        #OpenCV Weapon Orientation Control---------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # define range of blue color in HSV
         lower_yellow = np.array([20,100,100])
         upper_yellow = np.array([40,255,255]) 
@@ -359,7 +359,39 @@ class Staff(Weapon):
             self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
 
     def fire(self):
+        #Mouse cursor attacking orientation control-------------------------------------------------------------------------------------------------------------------------------------------
+        
         pos = pygame.mouse.get_pos()
+        print(pos)
+
+        #Opencv attacking orientation control ------------------------------------------------------------------------------------------------------------------------------------------
+        '''
+        if(self.angle == 0):
+            pos = [660,210]
+        if(self.angle == 30):
+            pos = []
+        if(self.angle == 60):
+            pos = []
+        if(self.angle == 90):
+            pos = []
+        if(self.angle == 120):
+            pos = []
+        if(self.angle == 150):
+            pos = []
+        if(self.angle == 180):
+            pos = []
+        if(self.angle == 210):
+            pos = []
+        if(self.angle == 240):
+            pos = []
+        if(self.angle == 270):
+            pos = []
+        if(self.angle == 300):
+            pos = []
+        if(self.angle == 330):
+            pos = []
+        '''
+
         self.update_hitbox()
         self.calculate_firing_position()
         self.game.bullet_manager.add_bullet(
@@ -454,7 +486,7 @@ class AnimeSword(Weapon):
             self.weapon_swing.swing()
             self.enemy_collision()
             self.game.sound_manager.play_sword_sound()
-            self.screen_shake()
+            #self.screen_shake()
         else:
             self.weapon_swing.rotate()
 

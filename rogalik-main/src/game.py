@@ -14,6 +14,7 @@ import time
 from .bullet import BulletManager
 from .sound_manager import SoundManager
 pygame.init()
+clock = pygame.time.Clock()
 pygame.mixer.init()
 
 world_size = (21 * 64, 14 * 64)
@@ -120,4 +121,8 @@ class Game:
             self.display.blit(self.screen, self.screen_position)
             if self.running:
                 pygame.display.flip()
+                #frame rate
+                #------------------------------------------------------------------------------------------------------------------------------------------------------------
+                clock.tick(60)
+                #------------------------------------------------------------------------------------------------------------------------------------------------------------
         pygame.quit()

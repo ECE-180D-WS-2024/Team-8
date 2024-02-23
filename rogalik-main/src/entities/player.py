@@ -85,12 +85,16 @@ class Player(Entity):
         else:
             self.set_velocity(vel_list)
 
-        if pygame.mouse.get_pressed()[0] and pygame.time.get_ticks() - self.time > self.attack_cooldown \
-                and self.weapon:
+        #Auto Attack
+        #----------------------------------------------------------------------------------------------------------------------------------------------
+        attackspeed = 1.5
+        k = attackspeed
+        if pygame.time.get_ticks() - self.time > k*self.attack_cooldown and self.weapon:
             self.time = pygame.time.get_ticks()
             self.attacking = True
             if self.weapon.name != 'staff':
-                self.weapon.weapon_swing.swing_side *= (-1)
+                self.weapon.weapon_swing.swing_side *= (-1)        
+        #----------------------------------------------------------------------------------------------------------------------------------------------
 
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]

@@ -19,7 +19,7 @@ class Player2(Entity):
 
     def __init__(self, game):
         Entity.__init__(self, game, self.name)
-        self.rect = self.image.get_rect(center=(100 + 2.5 * 64, 600))
+        self.rect = self.image.get_rect(center=(512 + 2.5 * 64, 600))
         self.weapon = None
         self.attacking = False
         self.interaction = True

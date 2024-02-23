@@ -50,8 +50,10 @@ class WorldManager:
     def move_entities(self, direction, value, anim_speed=30):
         if direction in ('up', 'down'):
             self.game.player.rect.y -= value * anim_speed
+            self.game.player2.rect.y -= value * anim_speed
         else:
             self.game.player.rect.x -= value * anim_speed
+            self.game.player2.rect.x -= value * anim_speed
 
     def move_rooms(self, direction, value):
         anim_speed = 30
@@ -75,15 +77,16 @@ class WorldManager:
 
     def detect_next_room(self):  # checks if player goes through one of 4 possible doors
         if not self.switch_room and self.game.player and self.game.player.falling is False and not self.move_current_room:
-            player = self.game.player
-            if player.rect.y <= 96:
-                self.initialize_room_change('up', -1)
-            elif player.rect.y >= 11 * 64:
-                self.initialize_room_change('down', 1)
-            elif player.rect.x <= 3 * 64:
-                self.initialize_room_change('left', -1)
-            elif player.rect.x > 17 * 64:
-                self.initialize_room_change('right', 1)
+            if((self.game.player.weapon != None) and (self.game.player2.weapon != None)):
+                player = self.game.player
+                if player.rect.y <= 96:
+                    self.initialize_room_change('up', -1)
+                elif player.rect.y >= 11 * 64:
+                    self.initialize_room_change('down', 1)
+                elif player.rect.x <= 3 * 64:
+                    self.initialize_room_change('left', -1)
+                elif player.rect.x > 17 * 64:
+                    self.initialize_room_change('right', 1)
 
     def initialize_room_change(self, direction, value):
         self.direction, self.value = direction, value
@@ -91,6 +94,8 @@ class WorldManager:
         self.switch_room = True
         self.game.player.can_move = False
         self.game.player.interaction = False
+        self.game.player2.can_move = False
+        self.game.player2.interaction = False
         self.game.object_manager.interaction = False
         self.game.sound_manager.play_passage()
 
@@ -99,18 +104,22 @@ class WorldManager:
             self.set_next_room(self.world.world[self.x - 1][self.y])
             self.next_room_map.y = -13 * 64  # hard code
             self.game.player.rect.y = -3.3 * 64
+            self.game.player2.rect.y = -3.3 * 64
         elif direction == 'down':
             self.set_next_room(self.world.world[self.x + 1][self.y])
             self.next_room_map.y = utils.world_size[1]
             self.game.player.rect.y = 16 * 64
+            self.game.player2.rect.y = 16 * 64
         elif direction == 'right':
             self.set_next_room(self.world.world[self.x][self.y + 1])
             self.next_room_map.x = utils.world_size[0]
             self.game.player.rect.x = utils.world_size[0] + 3.3 * 64
+            self.game.player2.rect.x = utils.world_size[0] + 3.3 * 64
         elif direction == 'left':
             self.set_next_room(self.world.world[self.x][self.y - 1])
             self.next_room_map.x = -19 * 64
             self.game.player.rect.x = -2.3 * 64
+            self.game.player2.rect.x = -2.3 * 64
 
     def end_condition(self):
         if self.next_room_map.x <= 0 and self.direction == 'right':
@@ -129,6 +138,8 @@ class WorldManager:
         self.set_next_room()
         self.game.player.can_move = True
         self.game.player.interaction = True
+        self.game.player2.can_move = True
+        self.game.player2.interaction = True
         self.game.object_manager.interaction = True
 
     def stop_room_change(self):
@@ -149,6 +160,7 @@ class WorldManager:
             self.current_map.x = -20 * 64
             self.move_current_room = True
             self.game.player.fall(-300)
+            self.game.player2.fall(-300)
             self.game.enemy_manager.add_enemies()
             self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Intro.wav'))
 
@@ -168,3 +180,5 @@ class WorldManager:
         self.game.enemy_manager.health_multiplier += 0.2
         self.game.player.floor_value = self.game.player.rect.y
         self.game.player.fall(-1000)
+        self.game.player2.floor_value = self.game.player2.rect.y
+        self.game.player2.fall(-1000)

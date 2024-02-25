@@ -38,12 +38,12 @@ class HealthBar:
         elif(self.name == "player2"):
             self.max_hp_color = (0, 10, 47)
             self.hp_color = (0, 191, 255)
-            pygame.draw.rect(self.game.screen, self.max_hp_color, (225, 10, max_hp + max_hp / 2, 20))
+            pygame.draw.rect(self.game.screen, self.max_hp_color, (275, 10, max_hp + max_hp / 2, 20))
             num_of_blocks = int(current_hp // 10)
             end_position = None
             for i in range(num_of_blocks):
-                pygame.draw.rect(self.game.screen, self.hp_color, (225 + i * 15, 15, 10, 15))
-                end_position = (225 + i * 15 + 15)
+                pygame.draw.rect(self.game.screen, self.hp_color, (275 + i * 15, 15, 10, 15))
+                end_position = (275 + i * 15 + 15)
             if end_position:
                 pygame.draw.rect(self.game.screen, self.hp_color, (end_position, 15, current_hp % 10, 15))
             self.draw()
@@ -58,10 +58,10 @@ class HealthBar:
                 end_position = (i * 15 + 40, 0)
             self.game.screen.blit(self.end, end_position)
         elif(self.name == "player2"):
-            self.game.screen.blit(self.start, (200, 0))
+            self.game.screen.blit(self.start, (250, 0))
             for i in range(self.player.max_hp // 10):
-                self.game.screen.blit(self.block, (i * 15 + 240, 0))
-                end_position = (i * 15 + 240, 0)
+                self.game.screen.blit(self.block, (i * 15 + 290, 0))
+                end_position = (i * 15 + 290, 0)
             self.game.screen.blit(self.end, end_position)
             
 
@@ -93,9 +93,9 @@ class PlayerGold:
             surface.blit(text_surface, (25, 55))
         elif(self.name == "player2"):
             self.update()
-            surface.blit(self.image, (200, 50))
+            surface.blit(self.image, (250, 50))
             text_surface = pygame.font.Font(utils.font, 24).render(self.text, True, (255, 255, 255))
-            surface.blit(text_surface, (225, 55))
+            surface.blit(text_surface, (275, 55))
 
 
 class PlayerShield:
@@ -112,8 +112,8 @@ class PlayerShield:
             self.image_position = (0, 80)
             self.text_position = (25, 85)
         else:
-            self.image_position = (200, 80)
-            self.text_position = (225, 85)
+            self.image_position = (250, 80)
+            self.text_position = (275, 85)
 
     def load_image(self):
         self.image = pygame.transform.scale(
@@ -139,8 +139,8 @@ class PlayerAttack(PlayerShield):
             self.image_position = (0, 110)
             self.text_position = (25, 110)
         elif(self.player.name == "player2"):
-            self.image_position = (200, 110)
-            self.text_position = (225, 110)
+            self.image_position = (250, 110)
+            self.text_position = (275, 110)
 
     def update(self):
         self.text = f'x{round(self.player.strength,2)}'

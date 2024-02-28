@@ -15,6 +15,7 @@ from PIL import Image
 from .object import Object
 from src.particles import ParticleManager, Fire
 from src.bullet import StaffBullet
+from src.localization import capture_frame
 
 cap = cv.VideoCapture(0)
 #img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
@@ -83,7 +84,8 @@ class WeaponSwing:
         upper_color = upper_blue
 
         if(self.swing_side == 1):
-            _, frame = cap.read()
+            _,frame = cap.read()
+            #frame = capture_frame()
 
             angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
             angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
@@ -126,7 +128,8 @@ class WeaponSwing:
 
             self.angle = angle
         else:
-            _, frame = cap.read() 
+            _,frame = cap.read()
+            #frame = capture_frame()
 
             angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
             angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
@@ -168,7 +171,7 @@ class WeaponSwing:
             angle = weaponAngle(angle330_mask,0,96,0,213,angle)
 
             self.angle = angle
-
+            
         #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         position = self.weapon.player.hitbox.center
         if weapon:
@@ -184,7 +187,7 @@ class WeaponSwing:
     def swing(self):
         #weapon swing range
         #-----------------
-        swingrange = 8
+        swingrange = 7
         #----------------
         self.angle += swingrange * self.swing_side
         position = self.weapon.player.hitbox.center

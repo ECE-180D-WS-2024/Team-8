@@ -7,6 +7,8 @@ from src.objects.power_up import ShieldPowerUp, AttackPowerUp
 from src.objects.flask import GreenFlask, RedFlask
 import numpy
 from src.entities.entity import Entity
+from src.utils import time_passed
+
 
 class Merchant(Entity):
     name = 'merchant'
@@ -24,6 +26,7 @@ class Merchant(Entity):
         self.animation_frame = 0
         self.items_position = [(670, 400), (770, 400), (870, 400)]
         self.items = []
+        self.weapon_hurt_cooldown = 0
         self.add_items()
         self.texts = ['Hello there', 'How you doin?', 'I\'m a merchant orc']
         self.dialog = ShowName(self)
@@ -78,6 +81,9 @@ class Merchant(Entity):
     def detect_collision(self):
         self.interaction = bool(self.game.player.hitbox.colliderect(self.hitbox))
 
+    def can_get_hurt_from_weapon(self):
+        if time_passed(self.weapon_hurt_cooldown, self.game.player.attack_cooldown):
+            return True
 
     def draw(self):
         # self.draw_shadow(self.room.tile_map.map_surface)

@@ -1,9 +1,3 @@
-#OpenCV
-import cv2 as cv
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-
 #Pygame
 import pygame
 from math import sqrt
@@ -11,18 +5,6 @@ from src.objects.p import Poop
 from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
-
-cap = cv.VideoCapture(0)
-#img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
-def AttackDetection(img_mask,pre_attack):
-    detectArea = 1000
-    attack = pre_attack
-    contours,hierarchy = cv.findContours(img_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-    for cnt in contours:
-        area = cv.contourArea(cnt) 
-        if(area > detectArea):
-            attack = True
-    return attack
 
 class Player(Entity):
     name = 'player'
@@ -116,62 +98,14 @@ class Player(Entity):
         '''
         #'''
         attackspeed = 1.5
-        k = attackspeed
-        
-        if pygame.time.get_ticks() - self.time > k*self.attack_cooldown and self.weapon:
+        attackArea = 100
+        if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
             self.time = pygame.time.get_ticks()   
+            if(self.weapon.weapon_swing.attack_area > attackArea):
+                self.attacking = True
+            else:
+                self.attacking = False
 
-            '''     
-            lower_yellow = np.array([20,100,100])
-            upper_yellow = np.array([40,255,255]) 
-            lower_green = np.array([50,100,100])
-            upper_green = np.array([70,255,255])
-
-            lower_color = lower_yellow
-            upper_color = upper_yellow
-            
-            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
-            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
-            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
-            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
-            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
-            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
-            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
-            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
-            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
-            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
-            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
-            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
-
-            angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
-            angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)
-            angle90_mask = cv.inRange(angle90_hsv,lower_color, upper_color)
-            angle120_mask = cv.inRange(angle120_hsv,lower_color, upper_color)
-            angle150_mask = cv.inRange(angle150_hsv,lower_color, upper_color)
-            angle0_mask = cv.inRange(angle0_hsv,lower_color, upper_color)
-            angle180_mask = cv.inRange(angle180_hsv,lower_color, upper_color)
-            angle210_mask = cv.inRange(angle210_hsv,lower_color, upper_color)  
-            angle240_mask = cv.inRange(angle240_hsv,lower_color, upper_color)
-            angle270_mask = cv.inRange(angle270_hsv,lower_color, upper_color)
-            angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
-            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)  
-
-            attack = AttackDetection(angle30_mask,self.attacking)
-            attack = AttackDetection(angle60_mask,attack)
-            attack = AttackDetection(angle90_mask,attack)
-            attack = AttackDetection(angle120_mask,attack)
-            attack = AttackDetection(angle150_mask,attack)
-            attack = AttackDetection(angle0_mask,attack)
-            attack = AttackDetection(angle180_mask,attack)
-            attack = AttackDetection(angle210_mask,attack)
-            attack = AttackDetection(angle240_mask,attack)
-            attack = AttackDetection(angle270_mask,attack)
-            attack = AttackDetection(angle300_mask,attack)
-            attack = AttackDetection(angle330_mask,attack)
-
-            self.attacking = attack
-            '''
-            self.attacking = True
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)                 
         #'''

@@ -20,7 +20,7 @@ cap = cv.VideoCapture(0)
 #img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
 def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
     angle = pre_angle
-    detectArea = 1000
+    detectArea = 100
     contours,hierarchy = cv.findContours(img_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
     for cnt in contours:
         area = cv.contourArea(cnt) 
@@ -74,9 +74,13 @@ class WeaponSwing:
         upper_yellow = np.array([40,255,255]) 
         lower_green = np.array([50,100,100])
         upper_green = np.array([70,255,255])
+        lower_red = np.array([245,255,255])
+        upper_red = np.array([10,255,255])
+        lower_blue = np.array([110,255,255])
+        upper_blue = np.array([130,255,255])
 
-        lower_color = lower_yellow
-        upper_color = upper_yellow
+        lower_color = lower_blue
+        upper_color = upper_blue
 
         if(self.swing_side == 1):
             _, frame = cap.read()

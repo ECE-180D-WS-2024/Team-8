@@ -97,8 +97,8 @@ class Player(Entity):
                 self.weapon.weapon_swing.swing_side *= (-1) 
         '''
         #'''
-        attackspeed = 1.5
-        attackArea = 100
+        attackspeed = 1.6
+        attackArea = 10
         if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
             self.time = pygame.time.get_ticks()   
             if(self.weapon.weapon_swing.attack_area > attackArea):

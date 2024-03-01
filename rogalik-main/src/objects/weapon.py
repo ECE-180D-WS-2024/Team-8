@@ -82,6 +82,8 @@ class WeaponSwing:
         upper_red = np.array([10,255,255])
         lower_blue = np.array([110,255,255])
         upper_blue = np.array([130,255,255])
+        lower_yellow_ult = np.array([20,255,153])
+        upper_yellow_ult = np.array([40,102,255]) 
 
         lower_color = lower_yellow
         upper_color = upper_yellow
@@ -386,12 +388,25 @@ class Staff(Weapon):
             self.images.append(image)
         self.image = self.images[0]
 
+    #Calculate_firing_position-----------------------------------------------------------------------------------------------------------------------------------------------
+    '''
     def calculate_firing_position(self):
         if 0 <= self.weapon_swing.angle < 90:
             self.firing_position = self.hitbox.topleft
         elif 90 <= self.weapon_swing.angle < 180:
             self.firing_position = (self.hitbox.bottomleft[0], self.hitbox.bottomleft[1] - 15)
         elif 0 > self.weapon_swing.angle > -90:
+            self.firing_position = self.hitbox.topright
+        else:
+            self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
+    '''
+
+    def calculate_firing_position(self):
+        if 0 <= self.weapon_swing.angle < 90:
+            self.firing_position = self.hitbox.topleft
+        elif 90 <= self.weapon_swing.angle < 180:
+            self.firing_position = (self.hitbox.bottomleft[0], self.hitbox.bottomleft[1] - 15)
+        elif 270 <= self.weapon_swing.angle < 360:
             self.firing_position = self.hitbox.topright
         else:
             self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
@@ -468,7 +483,6 @@ class Staff(Weapon):
             self.show_name.draw(surface, self.rect)
         self.show_price.draw(surface)
         self.draw_shadow(surface)
-
 
 class AnimeSword(Weapon):
     name = 'anime_sword'

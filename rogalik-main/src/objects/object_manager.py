@@ -3,7 +3,7 @@ import pygame
 
 class ObjectManager:
     def __init__(self, game):
-        self.current_objects = []
+        self.current_objects = []       #a list that stores all the current objects that can be interacted with players
         self.game = game
         self.interaction = True
         self.up = 0
@@ -50,8 +50,8 @@ class ObjectManager:
 
     def interact(self):
         for o in self.current_objects:
-            if o.interaction:
-                if not o.for_sale:
+            if o.interaction: 
+                if not o.for_sale: #(here can insert speech processing conditions )
                     o.interact()
                 else:
                     o.buy()

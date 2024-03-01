@@ -39,7 +39,7 @@ class Player(Entity):
             self.direction = 'left'
         if pressed[pygame.K_d]:
             self.direction = 'right'
-        if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
+        if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:           #speech processing
             self.time = pygame.time.get_ticks()
             self.game.object_manager.interact()
         if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
@@ -96,9 +96,9 @@ class Player(Entity):
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1) 
         '''
-        #'''
-        attackspeed = 1.6
-        attackArea = 10
+
+        attackspeed = 1.7
+        attackArea = 100
         if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
             self.time = pygame.time.get_ticks()   
             if(self.weapon.weapon_swing.attack_area > attackArea):
@@ -108,7 +108,6 @@ class Player(Entity):
 
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)                 
-        #'''
         #----------------------------------------------------------------------------------------------------------------------------------------------
 
     def shift_items_right(self):

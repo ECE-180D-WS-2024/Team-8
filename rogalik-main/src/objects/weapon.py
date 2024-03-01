@@ -19,9 +19,9 @@ from src.bullet import StaffBullet
 
 cap = cv.VideoCapture(0)
 #img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
-def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle,pre_area):
+def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
     angle = pre_angle
-    area = pre_area
+    area = 0
     swingArea = 500
     contours,hierarchy = cv.findContours(img_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
     for cnt in contours:
@@ -78,12 +78,8 @@ class WeaponSwing:
         upper_yellow = np.array([40,255,255]) 
         lower_green = np.array([50,100,100])
         upper_green = np.array([70,255,255])
-        lower_red = np.array([245,255,255])
-        upper_red = np.array([10,255,255])
         lower_blue = np.array([110,255,255])
         upper_blue = np.array([130,255,255])
-        lower_yellow_ult = np.array([20,255,153])
-        upper_yellow_ult = np.array([40,102,255]) 
 
         lower_color = lower_yellow
         upper_color = upper_yellow
@@ -117,40 +113,21 @@ class WeaponSwing:
             angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
             angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)              
 
-            '''
-            angle,area = weaponAngle(angle30_mask,0,96,426,640,self.angle)
-            angle,area = weaponAngle(angle60_mask,96,192,426,640,angle)
-            angle,area = weaponAngle(angle90_mask,192,288,426,640,angle)
-            angle,area = weaponAngle(angle120_mask,288,384,426,640,angle)
-            angle,area = weaponAngle(angle150_mask,384,480,426,640,angle)
-            angle,area = weaponAngle(angle0_mask,0,160,213,426,angle)
-            angle,area = weaponAngle(angle180_mask,320,480,213,426,angle)
-            angle,area = weaponAngle(angle210_mask,384,480,0,213,angle)
-            angle,area = weaponAngle(angle240_mask,288,384,0,213,angle)
-            angle,area = weaponAngle(angle270_mask,192,288,0,213,angle)
-            angle,area = weaponAngle(angle300_mask,96,192,0,213,angle)
-            angle,area = weaponAngle(angle330_mask,0,96,0,213,angle)
-            '''
+            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
+            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
+            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
+            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
+            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
+            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
+            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
+            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
 
-            #'''
-            angle,area = weaponAngle(angle30_mask,0,96,426,640,self.angle,self.attack_area)
-            angle,area = weaponAngle(angle60_mask,96,192,426,640,angle,area)
-            angle,area = weaponAngle(angle90_mask,192,288,426,640,angle,area)
-            angle,area = weaponAngle(angle120_mask,288,384,426,640,angle,area)
-            angle,area = weaponAngle(angle150_mask,384,480,426,640,angle,area)
-            angle,area = weaponAngle(angle0_mask,0,160,213,426,angle,area)
-            angle,area = weaponAngle(angle180_mask,320,480,213,426,angle,area)
-            angle,area = weaponAngle(angle210_mask,384,480,0,213,angle,area)
-            angle,area = weaponAngle(angle240_mask,288,384,0,213,angle,area)
-            angle,area = weaponAngle(angle270_mask,192,288,0,213,angle,area)
-            angle,area = weaponAngle(angle300_mask,96,192,0,213,angle,area)
-            angle,area = weaponAngle(angle330_mask,0,96,0,213,angle,area)
-            #'''
-
-            self.attack_area = area
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
             self.angle = angle
-            #print(self.attack_area)
-
         else:
             _,frame = cap.read()
 
@@ -180,40 +157,21 @@ class WeaponSwing:
             angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
             angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)
             
-            '''
-            angle,area = weaponAngle(angle30_mask,0,96,426,640,self.angle)
-            angle,area = weaponAngle(angle60_mask,96,192,426,640,angle)
-            angle,area = weaponAngle(angle90_mask,192,288,426,640,angle)
-            angle,area = weaponAngle(angle120_mask,288,384,426,640,angle)
-            angle,area = weaponAngle(angle150_mask,384,480,426,640,angle)
-            angle,area = weaponAngle(angle0_mask,0,160,213,426,angle)
-            angle,area = weaponAngle(angle180_mask,320,480,213,426,angle)
-            angle,area = weaponAngle(angle210_mask,384,480,0,213,angle)
-            angle,area = weaponAngle(angle240_mask,288,384,0,213,angle)
-            angle,area = weaponAngle(angle270_mask,192,288,0,213,angle)
-            angle,area = weaponAngle(angle300_mask,96,192,0,213,angle)
-            angle,area = weaponAngle(angle330_mask,0,96,0,213,angle)
-            '''
+            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
+            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
+            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
+            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
+            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
+            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
+            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
+            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
 
-            #'''
-            angle,area = weaponAngle(angle30_mask,0,96,426,640,self.angle,self.attack_area)
-            angle,area = weaponAngle(angle60_mask,96,192,426,640,angle,area)
-            angle,area = weaponAngle(angle90_mask,192,288,426,640,angle,area)
-            angle,area = weaponAngle(angle120_mask,288,384,426,640,angle,area)
-            angle,area = weaponAngle(angle150_mask,384,480,426,640,angle,area)
-            angle,area = weaponAngle(angle0_mask,0,160,213,426,angle,area)
-            angle,area = weaponAngle(angle180_mask,320,480,213,426,angle,area)
-            angle,area = weaponAngle(angle210_mask,384,480,0,213,angle,area)
-            angle,area = weaponAngle(angle240_mask,288,384,0,213,angle,area)
-            angle,area = weaponAngle(angle270_mask,192,288,0,213,angle,area)
-            angle,area = weaponAngle(angle300_mask,96,192,0,213,angle,area)
-            angle,area = weaponAngle(angle330_mask,0,96,0,213,angle,area)
-            #'''
-
-            self.attack_area = area
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
             self.angle = angle
-            #print(self.attack_area)
-
         #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         position = self.weapon.player.hitbox.center
         if weapon:
@@ -228,9 +186,9 @@ class WeaponSwing:
 
     def swing(self):
         #weapon swing range
-        #-----------------
-        swingrange = 7
-        #----------------
+        #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        swingrange = 6
+        #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.angle += swingrange * self.swing_side
         position = self.weapon.player.hitbox.center
         self.weapon.image = pygame.transform.rotozoom(self.weapon.original_image, self.angle, 1)
@@ -389,18 +347,6 @@ class Staff(Weapon):
         self.image = self.images[0]
 
     #Calculate_firing_position-----------------------------------------------------------------------------------------------------------------------------------------------
-    '''
-    def calculate_firing_position(self):
-        if 0 <= self.weapon_swing.angle < 90:
-            self.firing_position = self.hitbox.topleft
-        elif 90 <= self.weapon_swing.angle < 180:
-            self.firing_position = (self.hitbox.bottomleft[0], self.hitbox.bottomleft[1] - 15)
-        elif 0 > self.weapon_swing.angle > -90:
-            self.firing_position = self.hitbox.topright
-        else:
-            self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
-    '''
-
     def calculate_firing_position(self):
         if 0 <= self.weapon_swing.angle < 90:
             self.firing_position = self.hitbox.topleft
@@ -443,6 +389,7 @@ class Staff(Weapon):
             pos = [1157,215]
         if(self.weapon_swing.angle == 330):
             pos = [888,11]
+        #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         self.update_hitbox()
         self.calculate_firing_position()

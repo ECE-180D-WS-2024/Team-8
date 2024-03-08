@@ -68,6 +68,7 @@ class WeaponSwing:
         self.counter = 0
         self.attack_area = 0
         self.swing_side = 1
+        
 
     def reset(self):
         self.counter = 0
@@ -86,6 +87,7 @@ class WeaponSwing:
 
         if(self.swing_side == 1):
             _,frame = cap.read()
+            #self.clock.tick(self.fps)
 
             angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
             angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
@@ -130,7 +132,7 @@ class WeaponSwing:
             self.angle = angle
         else:
             _,frame = cap.read()
-
+            #self.clock.tick(self.fps)
             angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
             angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
             angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
@@ -172,6 +174,7 @@ class WeaponSwing:
 
             self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
             self.angle = angle
+
         #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         position = self.weapon.player.hitbox.center
         if weapon:

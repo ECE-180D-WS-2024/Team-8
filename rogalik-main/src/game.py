@@ -1,4 +1,5 @@
 import pygame
+import paho.mqtt.client as mqtt
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
@@ -19,6 +20,31 @@ pygame.mixer.init()
 world_size = (21 * 64, 14 * 64)
 
 
+# class MQTTClient:
+#     def __init__(self):
+#         self.client = mqtt.Client()
+#         self.counter = 0  # Use a class attribute instead of a global variable
+#         self.client.on_connect = self.on_connect
+#         self.client.on_message = self.on_message
+
+#     def on_connect(self, client, userdata, flags, rc):
+#         print("Connected with result code " + str(rc))
+#         client.subscribe("lol123")
+
+#     def on_message(self, client, userdata, msg):
+#         try:
+#             # Attempt to convert the message payload to an integer
+#             self.counter = int(msg.payload)
+#             #print(f"Integer received: {self.counter}")
+#         except ValueError:
+#             dummy = 0
+
+#     def connect(self):
+#         self.client.connect_async('mqtt.eclipseprojects.io')
+#         self.client.loop_start()
+
+#     def counter(self):
+#         return self._counter
 
 class Game:
     def __init__(self):
@@ -44,6 +70,8 @@ class Game:
         self.dt = 0
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
+        # self.mqtt_client = MQTTClient()
+        # self.mqtt_client.connect()
 
     def refresh(self):
         pygame.mixer.Sound.stop(self.sound)
@@ -114,4 +142,6 @@ class Game:
             self.display.blit(self.screen, self.screen_position)
             if self.running:
                 pygame.display.flip()
+        self.client.loop_stop()
+        self.client.disconnect()
         pygame.quit()

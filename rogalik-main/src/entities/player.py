@@ -1,10 +1,36 @@
 import pygame
+import paho.mqtt.client as mqtt
 from math import sqrt
 from src.objects.p import Poop
 from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
 
+class MQTTClient:
+    def __init__(self):
+        self.client = mqtt.Client()
+        self.counter = 0  # Use a class attribute instead of a global variable
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+
+    def on_connect(self, client, userdata, flags, rc):
+        print("Connected with result code " + str(rc))
+        client.subscribe("lol123")
+
+    def on_message(self, client, userdata, msg):
+        try:
+            # Attempt to convert the message payload to an integer
+            self.counter = int(msg.payload)
+            
+        except ValueError:
+            dummy = 0
+
+    def connect(self):
+        self.client.connect_async('mqtt.eclipseprojects.io')
+        self.client.loop_start()
+
+    def counter(self):
+        return self._counter
 
 class Player(Entity):
     name = 'player'
@@ -28,16 +54,28 @@ class Player(Entity):
         self.falling = False
         self.floor_value = self.rect.y
         self.fall(-100)
+        self.mqtt_client = MQTTClient()
+        self.mqtt_client.connect()
+        self.keydeterm = {"K_w":False, "K_s":False, "K_a":False, "K_d":False}
 
     def input(self):
+        print(f"Integer received: {self.mqtt_client.counter}")
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
+        if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
+            self.keydeterm["K_w"] = True
+        if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
+            self.keydeterm["K_s"] = True
+        if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
+            self.keydeterm["K_a"] = True
+        if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
+            self.keydeterm["K_d"] = True
+        if self.keydeterm["K_w"]:
             self.direction = 'up'
-        if pressed[pygame.K_s]:
+        if self.keydeterm["K_s"]:
             self.direction = 'down'
-        if pressed[pygame.K_a]:
+        if self.keydeterm["K_a"]:
             self.direction = 'left'
-        if pressed[pygame.K_d]:
+        if self.keydeterm["K_d"]:
             self.direction = 'right'
         if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
@@ -66,13 +104,13 @@ class Player(Entity):
         # constant_dt = 0.06
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]
-        vel_up = [i * pressed[pygame.K_w] for i in vel_up]
+        vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
         vel_down = [0, self.speed * constant_dt]
-        vel_down = [i * pressed[pygame.K_s] for i in vel_down]
+        vel_down = [i * self.keydeterm["K_s"] for i in vel_down]
         vel_left = [-self.speed * constant_dt, 0]
-        vel_left = [i * pressed[pygame.K_a] for i in vel_left]
+        vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
         vel_right = [self.speed * constant_dt, 0]
-        vel_right = [i * pressed[pygame.K_d] for i in vel_right]
+        vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
         vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 

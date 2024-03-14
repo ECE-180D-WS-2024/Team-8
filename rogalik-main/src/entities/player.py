@@ -66,14 +66,15 @@ class Player(Entity):
             self.keydeterm["K_s"] = False
             self.keydeterm["K_d"] = False
             self.keydeterm["K_a"] = False
-        if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
-            self.keydeterm["K_w"] = True
-        if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
-            self.keydeterm["K_s"] = True
-        if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
-            self.keydeterm["K_a"] = True
-        if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
-            self.keydeterm["K_d"] = True
+        else:
+            if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
+                self.keydeterm["K_w"] = True
+            if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
+                self.keydeterm["K_s"] = True
+            if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
+                self.keydeterm["K_a"] = True
+            if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
+                self.keydeterm["K_d"] = True
         if self.keydeterm["K_w"]:
             self.direction = 'up'
         if self.keydeterm["K_s"]:

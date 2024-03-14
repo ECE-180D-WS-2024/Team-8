@@ -1,6 +1,12 @@
+#OpenCV
+import cv2 as cv
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+#Pygame
 import math
 import random
-
 import pygame
 from pygame.math import Vector2
 from src.utils import get_mask_rect
@@ -10,31 +16,165 @@ from .object import Object
 from src.particles import ParticleManager, Fire
 from src.bullet import StaffBullet
 
+cap = cv.VideoCapture(0)
+#img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
+def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
+    angle = pre_angle
+    area = 0
+    swingArea = 500
+    contours,hierarchy = cv.findContours(img_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+    for cnt in contours:
+        area = cv.contourArea(cnt) 
+        #Try increase the sensitivity by increase the diversity of angle (orientation) 180/6=30
+        if(area > swingArea):
+            if(x1 == 0 and x2 == 213 and y1 == 0 and y2 == 96):
+                angle = 330
+            if(x1 == 0 and x2 == 213 and y1 == 96 and y2 == 192):
+                angle = 300
+            if(x1 == 0 and x2 == 213 and y1 == 192 and y2 == 288):
+                angle = 270
+            if(x1 == 0 and x2 == 213 and y1 == 288 and y2 == 384):
+                angle = 240
+            if(x1 == 0 and x2 == 213 and y1 == 384 and y2 == 480):
+                angle = 210
+            if(x1 == 213 and x2 == 426 and y1 == 320 and y2 == 480):
+                angle = 180
+            if(x1 == 213 and x2 == 426 and y1 == 0 and y2 == 160):
+                angle = 0
+            if(x1 == 426 and x2 == 640 and y1 == 384 and y2 == 480):
+                angle = 150
+            if(x1 == 426 and x2 == 640 and y1 == 288 and y2 == 384):
+                angle = 120
+            if(x1 == 426 and x2 == 640 and y1 == 192 and y2 == 288):
+                angle = 90
+            if(x1 == 426 and x2 == 640 and y1 == 96 and y2 == 192):
+                angle = 60
+            if(x1 == 426 and x2 == 640 and y1 == 0 and y2 == 96):
+                angle = 30
 
+    return angle,area
+
+#Weapon Control(Localization)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class WeaponSwing:
-    left_swing = 10
-    right_swing = -190
-
     def __init__(self, weapon):
         self.weapon = weapon
         self.angle = 0
         self.offset = Vector2(0, -50)
         self.offset_rotated = Vector2(0, -25)
         self.counter = 0
+        self.attack_area = 0
         self.swing_side = 1
+        
 
     def reset(self):
         self.counter = 0
 
     def rotate(self, weapon=None):
-        mx, my = pygame.mouse.get_pos()
-        dx = mx - self.weapon.player.hitbox.centerx  # - 64
-        dy = my - self.weapon.player.hitbox.centery  # - 32
-        if self.swing_side == 1:
-            self.angle = (180 / math.pi) * math.atan2(-self.swing_side * dy, dx) + self.left_swing
-        else:
-            self.angle = (180 / math.pi) * math.atan2(self.swing_side * dy, dx) + self.right_swing
+        # define range of blue color in HSV
+        lower_yellow = np.array([20,100,100])
+        upper_yellow = np.array([40,255,255]) 
+        lower_green = np.array([50,100,100])
+        upper_green = np.array([70,255,255])
+        lower_blue = np.array([110,255,255])
+        upper_blue = np.array([130,255,255])
 
+        lower_color = lower_yellow
+        upper_color = upper_yellow
+
+        if(self.swing_side == 1):
+            _,frame = cap.read()
+            #self.clock.tick(self.fps)
+
+            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
+            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
+            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
+            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
+            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
+            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
+            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
+            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
+            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
+            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
+            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
+            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
+
+            angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
+            angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)
+            angle90_mask = cv.inRange(angle90_hsv,lower_color, upper_color)
+            angle120_mask = cv.inRange(angle120_hsv,lower_color, upper_color)
+            angle150_mask = cv.inRange(angle150_hsv,lower_color, upper_color)
+            angle0_mask = cv.inRange(angle0_hsv,lower_color, upper_color)
+            angle180_mask = cv.inRange(angle180_hsv,lower_color, upper_color)
+            angle210_mask = cv.inRange(angle210_hsv,lower_color, upper_color)  
+            angle240_mask = cv.inRange(angle240_hsv,lower_color, upper_color)
+            angle270_mask = cv.inRange(angle270_hsv,lower_color, upper_color)
+            angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
+            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)              
+
+            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
+            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
+            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
+            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
+            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
+            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
+            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
+            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
+
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
+            self.angle = angle
+        else:
+            _,frame = cap.read()
+            #self.clock.tick(self.fps)
+            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
+            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
+            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
+            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
+            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
+            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
+            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
+            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
+            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
+            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
+            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
+            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
+
+            angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
+            angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)
+            angle90_mask = cv.inRange(angle90_hsv,lower_color, upper_color)
+            angle120_mask = cv.inRange(angle120_hsv,lower_color, upper_color)
+            angle150_mask = cv.inRange(angle150_hsv,lower_color, upper_color)
+            angle0_mask = cv.inRange(angle0_hsv,lower_color, upper_color)
+            angle180_mask = cv.inRange(angle180_hsv,lower_color, upper_color)
+            angle210_mask = cv.inRange(angle210_hsv,lower_color, upper_color)  
+            angle240_mask = cv.inRange(angle240_hsv,lower_color, upper_color)
+            angle270_mask = cv.inRange(angle270_hsv,lower_color, upper_color)
+            angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
+            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)
+            
+            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
+            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
+            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
+            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
+            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
+            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
+            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
+            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
+
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
+            self.angle = angle
+
+        #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         position = self.weapon.player.hitbox.center
         if weapon:
             self.weapon.image = pygame.transform.rotozoom(self.weapon.image, self.angle, 1)
@@ -47,16 +187,22 @@ class WeaponSwing:
         self.offset_rotated = Vector2(0, -35).rotate(-self.angle)
 
     def swing(self):
-        self.angle += 20 * self.swing_side
+        #weapon swing range
+        #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        swingrange = 6
+        #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        self.angle += swingrange * self.swing_side
         position = self.weapon.player.hitbox.center
         self.weapon.image = pygame.transform.rotozoom(self.weapon.original_image, self.angle, 1)
         offset_rotated = self.offset.rotate(-self.angle)
         self.weapon.rect = self.weapon.image.get_rect(center=position + offset_rotated)
-        # self.rect_mask = get_mask_rect(self.image, *self.rect.topleft)
         self.weapon.hitbox = pygame.mask.from_surface(self.weapon.image)
         self.counter += 1
 
-
+#Weapon Interaction
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Weapon(Object):
     def __init__(self, game, name=None, size=None, room=None, position=None):
         self.scale = 3
@@ -176,7 +322,10 @@ class Weapon(Object):
         self.show_price.draw(surface)
         self.draw_shadow(surface)
 
-
+#Weapon Types
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Staff(Weapon):
     name = 'staff'
     damage = 10
@@ -199,18 +348,51 @@ class Staff(Weapon):
             self.images.append(image)
         self.image = self.images[0]
 
+    #Calculate_firing_position-----------------------------------------------------------------------------------------------------------------------------------------------
     def calculate_firing_position(self):
         if 0 <= self.weapon_swing.angle < 90:
             self.firing_position = self.hitbox.topleft
         elif 90 <= self.weapon_swing.angle < 180:
             self.firing_position = (self.hitbox.bottomleft[0], self.hitbox.bottomleft[1] - 15)
-        elif 0 > self.weapon_swing.angle > -90:
+        elif 270 <= self.weapon_swing.angle < 360:
             self.firing_position = self.hitbox.topright
         else:
             self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
 
     def fire(self):
+        #Mouse cursor attacking orientation control-------------------------------------------------------------------------------------------------------------------------------------------
+        '''
         pos = pygame.mouse.get_pos()
+        print(self.weapon_swing.angle)
+        '''
+        #Opencv attacking orientation control ------------------------------------------------------------------------------------------------------------------------------------------
+
+        if(self.weapon_swing.angle == 0):
+            pos = [658,10]
+        if(self.weapon_swing.angle == 30):
+            pos = [414,9]
+        if(self.weapon_swing.angle == 60):
+            pos = [31,135]
+        if(self.weapon_swing.angle == 90):
+            pos = [10,420]
+        if(self.weapon_swing.angle == 120):
+            pos = [16,701]
+        if(self.weapon_swing.angle == 150):
+            pos = [499,719]
+        if(self.weapon_swing.angle == 180):
+            pos = [685,716]
+        if(self.weapon_swing.angle == 210):
+            pos = [868,721]
+        if(self.weapon_swing.angle == 240):
+            pos = [1144,669]
+        if(self.weapon_swing.angle == 270):
+            pos = [1188,427]
+        if(self.weapon_swing.angle == 300):
+            pos = [1157,215]
+        if(self.weapon_swing.angle == 330):
+            pos = [888,11]
+        #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
         self.update_hitbox()
         self.calculate_firing_position()
         self.game.bullet_manager.add_bullet(
@@ -250,7 +432,6 @@ class Staff(Weapon):
             self.show_name.draw(surface, self.rect)
         self.show_price.draw(surface)
         self.draw_shadow(surface)
-
 
 class AnimeSword(Weapon):
     name = 'anime_sword'
@@ -305,7 +486,7 @@ class AnimeSword(Weapon):
             self.weapon_swing.swing()
             self.enemy_collision()
             self.game.sound_manager.play_sword_sound()
-            self.screen_shake()
+            #self.screen_shake()
         else:
             self.weapon_swing.rotate()
 

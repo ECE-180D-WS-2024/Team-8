@@ -135,7 +135,7 @@ class Player(Entity):
         else:
             self.set_velocity(vel_list)
 
-    '''
+    
         attackspeed = 1.7
         attackArea = 100
         if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
@@ -147,7 +147,7 @@ class Player(Entity):
 
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)   
-    '''
+    
     def callback_speech(self, command):
         if command == "pick up":
             #print("pickup recognized callback function")

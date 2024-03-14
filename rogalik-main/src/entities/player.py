@@ -61,6 +61,11 @@ class Player(Entity):
     def input(self):
         print(f"Integer received: {self.mqtt_client.counter}")
         pressed = pygame.key.get_pressed()
+        if self.mqtt_client.counter == 0:
+            self.keydeterm["K_w"] = False
+            self.keydeterm["K_s"] = False
+            self.keydeterm["K_d"] = False
+            self.keydeterm["K_a"] = False
         if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
             self.keydeterm["K_w"] = True
         if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:

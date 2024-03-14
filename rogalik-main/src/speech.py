@@ -1,0 +1,66 @@
+import threading
+import speech_recognition as sr
+
+class Speech:
+    def __init__(self, callback=None):
+        self.recognizer = sr.Recognizer()
+        self.microphone = sr.Microphone()
+        self.callback = callback
+        self.listening = False
+        self.thread = None
+        self.stop_event = threading.Event()
+        self.last_command = None
+
+    def _listen(self):
+        with self.microphone as source:
+            self.recognizer.adjust_for_ambient_noise(source)
+            try:
+                print("Say Command")
+                audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
+                command = self.recognizer.recognize_google(audio).lower()
+                print(f"Recognized: {command}")
+                if self.pickup_command(command):
+                    #print("speech command recognized")
+                    if self.callback:
+                        self.callback(command)
+                else:
+                    print("Recognition Failed. Press e and try again.")
+            except sr.RequestError as e:
+                # Handle request error, log, or retry logic
+                print(f"API unavailable, {e}")
+            except sr.UnknownValueError as e:
+                # Handle unknown value error, log, or retry logic
+                print(f"Could not understand audio {e}")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+        self.listening = False
+        self.stop_event.set()
+        if self.listening == False:
+            print("Thread Stopped")
+    #     time.sleep(1)
+
+    def toggle_listening(self):
+        """Toggle the listening state and manage the listening thread accordingly."""
+        if not self.listening:
+            print("Please wait for speech recognition...")
+            self.listening = True
+            self.stop_event.clear()
+            self.thread = threading.Thread(target=self._listen)
+            self.thread.start()
+        else:
+            print("Stopping speech recognition thread...")
+            self.listening = False
+            self.stop_event.set()
+            self.thread.join()
+            self.thread = None
+    
+    def pickup_command(self, command):
+        if command == "pick up":
+            self.last_command = command
+            return True
+        return False
+    
+    def get_last_command(self):
+        command = self.last_command
+        self.last_command = None
+        return command

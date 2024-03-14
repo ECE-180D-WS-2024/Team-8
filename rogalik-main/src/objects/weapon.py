@@ -56,7 +56,6 @@ class WeaponSwing:
         self.weapon.hitbox = pygame.mask.from_surface(self.weapon.image)
         self.counter += 1
 
-
 class Weapon(Object):
     def __init__(self, game, name=None, size=None, room=None, position=None):
         self.scale = 3
@@ -81,7 +80,35 @@ class Weapon(Object):
         self.image = self.original_image
         self.rect = self.image.get_rect()
         self.hitbox = get_mask_rect(self.original_image, *self.rect.topleft)
+    
+    # def detect_collision(self):
+    #     if self.game.player.hitbox.colliderect(self.rect):
+            #fix the position of the player
+    #         self.game.player.rect.x = self.rect.x
+    #         self.game.player.rect.y = self.rect.y
+    #         command = self.game.speech.listen_for_commands()#listen  #store speech into string
+    #         if command == "pick up" and pygame.time.get_ticks() - self.time > 300:# IF pick up, then pick up
+    #             self.time = pygame.time.get_ticks()
+    #             self.image = self.image_picked
+    #             self.interaction = True# else != NO then interaction   #then free the player to continue
+    #         elif command not in ['no', 'No']:# if command != 'No' or 'no':  #     self.game.player.rect.x = self.game.player.rect.x#     self.game.player.rect.y = self.game.player.rect.y
+    #             pass# else:            #     self.image = self.original_image            #     self.interaction = False            #     self.show_name.reset_line_length()
 
+    # def detect_collision(self):
+    #     if self.game.player.hitbox.colliderect(self.rect):
+    #         self.game.player.rect.x = self.rect.x
+    #         self.game.player.rect.y = self.rect.y
+    #         #listen  #store speech into string
+    #         command = self.game.speech.listen_for_commands()
+    #         # IF pick up, then pick up
+    #         if command == "pick up" and pygame.time.get_ticks() - self.time > 300:
+    #             self.time = pygame.time.get_ticks()
+    #             self.image = self.image_picked
+    #     else:
+    #         self.image = self.original_image
+    #         self.interaction = False
+    #         self.show_name.reset_line_length()
+        
     def detect_collision(self):
         if self.game.player.hitbox.colliderect(self.rect):
             self.image = self.image_picked
@@ -89,7 +116,7 @@ class Weapon(Object):
         else:
             self.image = self.original_image
             self.interaction = False
-            self.show_name.reset_line_length()
+            self.show_name.reset_line_length()        
 
     def interact(self):
         self.weapon_swing.reset()

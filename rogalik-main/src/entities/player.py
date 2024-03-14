@@ -4,7 +4,7 @@ from src.objects.p import Poop
 from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
-
+from src.speech import Speech
 
 class Player(Entity):
     name = 'player'
@@ -28,9 +28,13 @@ class Player(Entity):
         self.falling = False
         self.floor_value = self.rect.y
         self.fall(-100)
+        self.last_e_press = 0
+        self.speech = Speech(callback=self.callback_speech)
 
     def input(self):
         pressed = pygame.key.get_pressed()
+        # command = self.game.speech.listen_for_commands()
+        current_time = pygame.time.get_ticks()
         if pressed[pygame.K_w]:
             self.direction = 'up'
         if pressed[pygame.K_s]:
@@ -39,9 +43,14 @@ class Player(Entity):
             self.direction = 'left'
         if pressed[pygame.K_d]:
             self.direction = 'right'
-        if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
-            self.time = pygame.time.get_ticks()
-            self.game.object_manager.interact()
+        # if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
+        #     self.time = pygame.time.get_ticks()
+        #     self.game.object_manager.interact()
+        #     # Initiate listening for a speech command
+        if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
+            self.last_e_press = current_time
+            self.speech.toggle_listening()
+            self.callback_speech = 0
         if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
             self.weapon.drop()
@@ -91,6 +100,11 @@ class Player(Entity):
             self.attacking = True
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)
+    
+    def callback_speech(self, command):
+        if command == "pick up":
+            #print("pickup recognized callback function")
+            self.game.object_manager.interact()
 
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]

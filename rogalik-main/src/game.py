@@ -15,10 +15,9 @@ from .bullet import BulletManager
 from .sound_manager import SoundManager
 pygame.init()
 pygame.mixer.init()
+#from src.speech import Speech
 
 world_size = (21 * 64, 14 * 64)
-
-
 
 class Game:
     def __init__(self):
@@ -31,7 +30,10 @@ class Game:
         self.object_manager = ObjectManager(self)
         self.bullet_manager = BulletManager(self)
         self.sound_manager = SoundManager(self)
+#        self.speech = Speech()
+        # print("Speech initialized:", self.speech)  # This confirms speech is initialized
         self.player = Player(self)
+        # print("Player initialized with speech:", self.speech)  # This checks if speech is accessible after player initialization
         self.hud = Hud(self)
         self.running = True
         self.menu = MainMenu(self)
@@ -44,6 +46,7 @@ class Game:
         self.dt = 0
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
+        
 
     def refresh(self):
         pygame.mixer.Sound.stop(self.sound)

@@ -276,13 +276,13 @@ void printScaledAGMT(ICM_20948_I2C *sensor)
       prev_gyr_Z = sensor->gyrZ();
       sector = fmod((angular_position + 360),360);
       sector = int(fmod((sector + 22.5) / 45,8) + 1);
-      //Serial.println(angular_position);
+      Serial.println(angular_position);
    }
    if(abs(sensor->accZ())>1000)
    {
       sector = 0;
    }
-   //Serial.println(sector);
+   Serial.println(sector);
    if(prev_sector != sector)
    {
       char msg_out[2];

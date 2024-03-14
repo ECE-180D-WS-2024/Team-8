@@ -20,7 +20,6 @@ pygame.mixer.init()
 world_size = (21 * 64, 14 * 64)
 
 
-
 class Game:
     def __init__(self):
         self.display = pygame.display.set_mode(world_size)

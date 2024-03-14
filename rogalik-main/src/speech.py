@@ -10,6 +10,10 @@ class Speech:
         self.thread = None
         self.stop_event = threading.Event()
         self.last_command = None
+        self.command_alternatives = {
+            "pick up": ["pick up", "wake up", "pickup"],
+            #add more here
+        }
 
     def _listen(self):
         with self.microphone as source:
@@ -19,7 +23,7 @@ class Speech:
                 audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
                 command = self.recognizer.recognize_google(audio).lower()
                 print(f"Recognized: {command}")
-                if self.pickup_command(command):
+                if self.process_command(command):
                     #print("speech command recognized")
                     if self.callback:
                         self.callback(command)
@@ -54,13 +58,25 @@ class Speech:
             self.thread.join()
             self.thread = None
     
-    def pickup_command(self, command):
-        if command == "pick up":
-            self.last_command = command
-            return True
+    def process_command(self, command):
+        # check to see if the command is a key in word bank
+        for primary_command, alternatives in self.command_alternatives.items():
+            if command in alternatives:
+                self.last_command = primary_command
+                return True
         return False
+    
+    # def pickup_command(self, command):
+    #     if command == "pick up":
+    #         self.last_command = command
+    #         return True
+    #     return False
     
     def get_last_command(self):
         command = self.last_command
         self.last_command = None
         return command
+
+# Citations
+# https://realpython.com/intro-to-python-threading/
+# 

@@ -1,4 +1,5 @@
 import pygame
+import paho.mqtt.client as mqtt
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
@@ -118,9 +119,6 @@ class Game:
             self.draw_groups()
             self.game_time = pygame.time.get_ticks()
             self.display.blit(self.screen, self.screen_position)
-
-            if(self.player.weapon == 1):
-                self.clock.tick(self.fps)
 
             if self.running:
                 pygame.display.flip()

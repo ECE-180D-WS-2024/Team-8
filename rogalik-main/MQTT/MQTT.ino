@@ -278,7 +278,7 @@ void printScaledAGMT(ICM_20948_I2C *sensor)
       sector = int(fmod((sector + 22.5) / 45,8) + 1);
       Serial.println(angular_position);
    }
-   if(abs(sensor->accZ())>1000)
+   if(abs(sensor->accZ())>1300)
    {
       sector = 0;
    }

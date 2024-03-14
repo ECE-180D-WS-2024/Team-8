@@ -1,4 +1,5 @@
 import pygame
+import paho.mqtt.client as mqtt
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
@@ -114,4 +115,12 @@ class Game:
             self.display.blit(self.screen, self.screen_position)
             if self.running:
                 pygame.display.flip()
+
+                #frame rate
+                #------------------------------------------------------------------------------------------------------------------------------------------------------------
+                self.clock.tick(self.fps)
+                #------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        self.client.loop_stop()
+        self.client.disconnect()
         pygame.quit()

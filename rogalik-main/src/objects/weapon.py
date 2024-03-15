@@ -77,13 +77,13 @@ class WeaponSwing:
         # define range of blue color in HSV
         lower_yellow = np.array([20,100,100])
         upper_yellow = np.array([40,255,255]) 
-        lower_green = np.array([50,100,100])
-        upper_green = np.array([70,255,255])
+        lower_green = np.array([65,100,100])
+        upper_green = np.array([85,255,255])
         lower_blue = np.array([110,255,255])
         upper_blue = np.array([130,255,255])
 
-        lower_color = lower_yellow
-        upper_color = upper_yellow
+        lower_color = lower_green
+        upper_color = upper_green
 
         if(self.swing_side == 1):
             _,frame = cap.read()

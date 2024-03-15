@@ -17,15 +17,7 @@ from .sound_manager import SoundManager
 pygame.init()
 pygame.mixer.init()
 
-world_size = (21 * 64, 14 * 64)
-
-# Define constants for the screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-
-# Create the screen object
-# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+world_size = (18 * 64, 12 * 64)
 
 class Game:
     def __init__(self):

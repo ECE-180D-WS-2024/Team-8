@@ -65,29 +65,38 @@ class Player(Entity):
     def input(self):
         pressed = pygame.key.get_pressed()
         current_time = pygame.time.get_ticks()
-
-        if self.mqtt_client.counter == 0:
-            self.keydeterm["K_w"] = False
-            self.keydeterm["K_s"] = False
-            self.keydeterm["K_d"] = False
-            self.keydeterm["K_a"] = False
+        if pressed[pygame.K_SPACE]:
+            if self.mqtt_client.counter == 0:
+                self.keydeterm["K_w"] = False
+                self.keydeterm["K_s"] = False
+                self.keydeterm["K_d"] = False
+                self.keydeterm["K_a"] = False
+            else:
+                if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
+                    self.keydeterm["K_w"] = True
+                if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
+                    self.keydeterm["K_s"] = True
+                if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
+                    self.keydeterm["K_a"] = True
+                if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
+                    self.keydeterm["K_d"] = True
+            if self.keydeterm["K_w"]:
+                self.direction = 'up'
+            if self.keydeterm["K_s"]:
+                self.direction = 'down'
+            if self.keydeterm["K_a"]:
+                self.direction = 'left'
+            if self.keydeterm["K_d"]:
+                self.direction = 'right'
         else:
-            if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
-                self.keydeterm["K_w"] = True
-            if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
-                self.keydeterm["K_s"] = True
-            if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
-                self.keydeterm["K_a"] = True
-            if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
-                self.keydeterm["K_d"] = True
-        if self.keydeterm["K_w"]:
-            self.direction = 'up'
-        if self.keydeterm["K_s"]:
-            self.direction = 'down'
-        if self.keydeterm["K_a"]:
-            self.direction = 'left'
-        if self.keydeterm["K_d"]:
-            self.direction = 'right'
+            if self.keydeterm[pygame.K_w]:
+                self.direction = 'up'
+            if self.keydeterm[pygame.K_s]:
+                self.direction = 'down'
+            if self.keydeterm[pygame.K_a]:
+                self.direction = 'left'
+            if self.keydeterm[pygame.K_d]:
+                self.direction = 'right'
         if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
             self.last_e_press = current_time
             self.speech.toggle_listening()
@@ -115,15 +124,26 @@ class Player(Entity):
 
         # constant_dt = 0.06
         constant_dt = self.game.dt
-        vel_up = [0, -self.speed * constant_dt]
-        vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
-        vel_down = [0, self.speed * constant_dt]
-        vel_down = [i * self.keydeterm["K_s"] for i in vel_down]
-        vel_left = [-self.speed * constant_dt, 0]
-        vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
-        vel_right = [self.speed * constant_dt, 0]
-        vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
-        vel = zip(vel_up, vel_down, vel_left, vel_right)
+        if pressed[pygame.K_SPACE]:
+            vel_up = [0, -self.speed * constant_dt]
+            vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
+            vel_down = [0, self.speed * constant_dt]
+            vel_down = [i * self.keydeterm["K_s"] for i in vel_down]
+            vel_left = [-self.speed * constant_dt, 0]
+            vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
+            vel_right = [self.speed * constant_dt, 0]
+            vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
+            vel = zip(vel_up, vel_down, vel_left, vel_right)
+        else:
+            vel_up = [0, -self.speed * constant_dt]
+            vel_up = [i * self.keydeterm[pygame.K_w] for i in vel_up]
+            vel_down = [0, self.speed * constant_dt]
+            vel_down = [i * self.keydeterm[pygame.K_s] for i in vel_down]
+            vel_left = [-self.speed * constant_dt, 0]
+            vel_left = [i * self.keydeterm[pygame.K_a] for i in vel_left]
+            vel_right = [self.speed * constant_dt, 0]
+            vel_right = [i * self.keydeterm[pygame.K_d] for i in vel_right]
+            vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 
         x = sqrt(pow(vel_list[0], 2) + pow(vel_list[1], 2))

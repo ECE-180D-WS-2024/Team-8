@@ -29,6 +29,7 @@ class Player(Entity):
         self.floor_value = self.rect.y
         self.fall(-100)
         self.last_e_press = 0
+        self.last_q_press = 0
         self.speech = Speech(callback=self.callback_speech)
 
     def input(self):
@@ -51,11 +52,15 @@ class Player(Entity):
             self.last_e_press = current_time
             self.speech.toggle_listening()
             self.callback_speech = 0
-        if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
-            self.time = pygame.time.get_ticks()
-            self.weapon.drop()
-            if self.items:
-                self.weapon = self.items[0]
+        # if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
+        #     self.time = pygame.time.get_ticks()
+        #     self.weapon.drop()
+        #     if self.items:
+        #         self.weapon = self.items[0]
+        if pressed[pygame.K_q] and self.weapon and not self.speech.listening and (current_time - self.last_q_press > 300):
+            self.last_q_press = current_time
+            self.speech.toggle_listening()
+            self.callback_speech = 0
         if pressed[pygame.K_TAB]:
             self.game.mini_map.draw_all(self.game.screen)
             self.game.mini_map.draw_mini_map = False
@@ -102,9 +107,19 @@ class Player(Entity):
                 self.weapon.weapon_swing.swing_side *= (-1)
     
     def callback_speech(self, command):
-        if command == "pick up":
+        if command in self.speech.command_alternatives ["pick up"]:
             #print("pickup recognized callback function")
             self.game.object_manager.interact()
+        if command in self.speech.command_alternatives ["drop it"]:
+            self.weapon.drop()
+            if self.items:
+                self.weapon = self.items[0]
+
+    # def drop_speech(self, command):
+    #     if command in self.speech.command_alternatives ["drop it"]:
+    #         self.weapon.drop()
+    #         if self.items:
+    #             self.weapon = self.items[0]
 
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]

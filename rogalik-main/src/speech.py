@@ -11,7 +11,8 @@ class Speech:
         self.stop_event = threading.Event()
         self.last_command = None
         self.command_alternatives = {
-            "pick up": ["pick up", "wake up", "pickup"],
+            "pick up": ["pick up", "wake up", "pickup", "wakeup", "pick it up", "can you pick it up", "pick that up" ],
+            "drop it": ["drop", "drop it", "dropit", "stopit", "stop it", "dropp it", "droppit" ]
             #add more here
         }
 
@@ -20,7 +21,7 @@ class Speech:
             self.recognizer.adjust_for_ambient_noise(source)
             try:
                 print("Say Command")
-                audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
+                audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1)
                 command = self.recognizer.recognize_google(audio).lower()
                 print(f"Recognized: {command}")
                 if self.process_command(command):
@@ -28,7 +29,7 @@ class Speech:
                     if self.callback:
                         self.callback(command)
                 else:
-                    print("Recognition Failed. Press e and try again.")
+                    print("Recognition Failed. Press key to try again.")
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
                 print(f"API unavailable, {e}")

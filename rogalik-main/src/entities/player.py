@@ -89,13 +89,13 @@ class Player(Entity):
             if self.keydeterm["K_d"]:
                 self.direction = 'right'
         else:
-            if self.keydeterm[pygame.K_w]:
+            if pressed[pygame.K_w]:
                 self.direction = 'up'
-            if self.keydeterm[pygame.K_s]:
+            if pressed[pygame.K_s]:
                 self.direction = 'down'
-            if self.keydeterm[pygame.K_a]:
+            if pressed[pygame.K_a]:
                 self.direction = 'left'
-            if self.keydeterm[pygame.K_d]:
+            if pressed[pygame.K_d]:
                 self.direction = 'right'
         if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
             self.last_e_press = current_time
@@ -136,13 +136,13 @@ class Player(Entity):
             vel = zip(vel_up, vel_down, vel_left, vel_right)
         else:
             vel_up = [0, -self.speed * constant_dt]
-            vel_up = [i * self.keydeterm[pygame.K_w] for i in vel_up]
+            vel_up = [i * pressed[pygame.K_w] for i in vel_up]
             vel_down = [0, self.speed * constant_dt]
-            vel_down = [i * self.keydeterm[pygame.K_s] for i in vel_down]
+            vel_down = [i * pressed[pygame.K_s] for i in vel_down]
             vel_left = [-self.speed * constant_dt, 0]
-            vel_left = [i * self.keydeterm[pygame.K_a] for i in vel_left]
+            vel_left = [i * pressed[pygame.K_a] for i in vel_left]
             vel_right = [self.speed * constant_dt, 0]
-            vel_right = [i * self.keydeterm[pygame.K_d] for i in vel_right]
+            vel_right = [i * pressed[pygame.K_d] for i in vel_right]
             vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 

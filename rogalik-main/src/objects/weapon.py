@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from src.localization import capture_frame
 
 #Pygame
 import math
@@ -81,8 +82,8 @@ class WeaponSwing:
         lower_blue = np.array([110,255,255])
         upper_blue = np.array([130,255,255])
 
-        lower_color = lower_yellow
-        upper_color = upper_yellow
+        lower_color = lower_green
+        upper_color = upper_green
 
         if(self.swing_side == 1):
             _,frame = cap.read()

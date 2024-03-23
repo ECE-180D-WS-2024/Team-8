@@ -28,30 +28,54 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
         area = cv.contourArea(cnt) 
         #Try increase the sensitivity by increase the diversity of angle (orientation) 180/6=30
         if(area > swingArea):
-            if(x1 == 0 and x2 == 213 and y1 == 0 and y2 == 96):
+            if(x1 == 0 and x2 == 250 and y1 == 0 and y2 == 43):
+                angle = 345
+            if(x1 == 0 and x2 == 250 and y1 == 43 and y2 == 86):
                 angle = 330
-            if(x1 == 0 and x2 == 213 and y1 == 96 and y2 == 192):
+            if(x1 == 0 and x2 == 250 and y1 == 86 and y2 == 129):
+                angle = 315
+            if(x1 == 0 and x2 == 250 and y1 == 129 and y2 == 172):
                 angle = 300
-            if(x1 == 0 and x2 == 213 and y1 == 192 and y2 == 288):
+            if(x1 == 0 and x2 == 250 and y1 == 172 and y2 == 215):
+                angle = 285
+            if(x1 == 0 and x2 == 250 and y1 == 215 and y2 == 258):
                 angle = 270
-            if(x1 == 0 and x2 == 213 and y1 == 288 and y2 == 384):
+            if(x1 == 0 and x2 == 250 and y1 == 258 and y2 == 301):
+                angle = 255
+            if(x1 == 0 and x2 == 250 and y1 == 301 and y2 == 344):
                 angle = 240
-            if(x1 == 0 and x2 == 213 and y1 == 384 and y2 == 480):
+            if(x1 == 0 and x2 == 250 and y1 == 344 and y2 == 387):
+                angle = 225
+            if(x1 == 0 and x2 == 250 and y1 == 387 and y2 == 430):
                 angle = 210
-            if(x1 == 213 and x2 == 426 and y1 == 320 and y2 == 480):
+            if(x1 == 0 and x2 == 250 and y1 == 430 and y2 == 480):
+                angle = 195
+            if(x1 == 250 and x2 == 390 and y1 == 240 and y2 == 480):
                 angle = 180
-            if(x1 == 213 and x2 == 426 and y1 == 0 and y2 == 160):
+            if(x1 == 250 and x2 == 390 and y1 == 0 and y2 == 240):
                 angle = 0
-            if(x1 == 426 and x2 == 640 and y1 == 384 and y2 == 480):
-                angle = 150
-            if(x1 == 426 and x2 == 640 and y1 == 288 and y2 == 384):
-                angle = 120
-            if(x1 == 426 and x2 == 640 and y1 == 192 and y2 == 288):
-                angle = 90
-            if(x1 == 426 and x2 == 640 and y1 == 96 and y2 == 192):
-                angle = 60
-            if(x1 == 426 and x2 == 640 and y1 == 0 and y2 == 96):
+            if(x1 == 390 and x2 == 640 and y1 == 0 and y2 == 43):
+                angle = 15
+            if(x1 == 390 and x2 == 640 and y1 == 43 and y2 == 86):
                 angle = 30
+            if(x1 == 390 and x2 == 640 and y1 == 86 and y2 == 129):
+                angle = 45
+            if(x1 == 390 and x2 == 640 and y1 == 129 and y2 == 172):
+                angle = 60
+            if(x1 == 390 and x2 == 640 and y1 == 172 and y2 == 215):
+                angle = 75
+            if(x1 == 390 and x2 == 640 and y1 == 215 and y2 == 258):
+                angle = 90
+            if(x1 == 390 and x2 == 640 and y1 == 258 and y2 == 301):
+                angle = 105
+            if(x1 == 390 and x2 == 640 and y1 == 301 and y2 == 344):
+                angle = 120
+            if(x1 == 390 and x2 == 640 and y1 == 344 and y2 == 387):
+                angle = 135
+            if(x1 == 390 and x2 == 640 and y1 == 387 and y2 == 430):
+                angle = 150
+            if(x1 == 390 and x2 == 640 and y1 == 430 and y2 == 480):
+                angle = 165
 
     return angle,area
 
@@ -100,7 +124,20 @@ class WeaponSwing:
             angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
             angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
             angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
-            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
+            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)           
+            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
+            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
+            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
+            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
+            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
+            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
+            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
+            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
+            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
+            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
+            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
+            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)  
+
 
             angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
             angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)

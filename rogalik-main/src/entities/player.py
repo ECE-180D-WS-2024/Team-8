@@ -87,20 +87,10 @@ class Player(Entity):
 
         #Auto Attack
         #----------------------------------------------------------------------------------------------------------------------------------------------
-        '''
-        attackspeed = 1.5
-        k = attackspeed
-        if pygame.time.get_ticks() - self.time > k*self.attack_cooldown and self.weapon:
-            self.time = pygame.time.get_ticks()
-            self.attacking = True
-            if self.weapon.name != 'staff':
-                self.weapon.weapon_swing.swing_side *= (-1) 
-        '''
-
         attackspeed = 1.7
         attackArea = 10
         if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
-            self.time = pygame.time.get_ticks()   
+            self.time = pygame.time.get_ticks()  
             if(self.weapon.weapon_swing.attack_area > attackArea):
                 self.attacking = True
             else:

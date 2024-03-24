@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-
 #Pygame
 import math
 import random
@@ -28,30 +27,54 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
         area = cv.contourArea(cnt) 
         #Try increase the sensitivity by increase the diversity of angle (orientation) 180/6=30
         if(area > swingArea):
-            if(x1 == 0 and x2 == 213 and y1 == 0 and y2 == 96):
+            if(x1 == 0 and x2 == 250 and y1 == 0 and y2 == 43):
+                angle = 345
+            if(x1 == 0 and x2 == 250 and y1 == 43 and y2 == 86):
                 angle = 330
-            if(x1 == 0 and x2 == 213 and y1 == 96 and y2 == 192):
+            if(x1 == 0 and x2 == 250 and y1 == 86 and y2 == 129):
+                angle = 315
+            if(x1 == 0 and x2 == 250 and y1 == 129 and y2 == 172):
                 angle = 300
-            if(x1 == 0 and x2 == 213 and y1 == 192 and y2 == 288):
+            if(x1 == 0 and x2 == 250 and y1 == 172 and y2 == 215):
+                angle = 285
+            if(x1 == 0 and x2 == 250 and y1 == 215 and y2 == 258):
                 angle = 270
-            if(x1 == 0 and x2 == 213 and y1 == 288 and y2 == 384):
+            if(x1 == 0 and x2 == 250 and y1 == 258 and y2 == 301):
+                angle = 255
+            if(x1 == 0 and x2 == 250 and y1 == 301 and y2 == 344):
                 angle = 240
-            if(x1 == 0 and x2 == 213 and y1 == 384 and y2 == 480):
+            if(x1 == 0 and x2 == 250 and y1 == 344 and y2 == 387):
+                angle = 225
+            if(x1 == 0 and x2 == 250 and y1 == 387 and y2 == 430):
                 angle = 210
-            if(x1 == 213 and x2 == 426 and y1 == 320 and y2 == 480):
+            if(x1 == 0 and x2 == 250 and y1 == 430 and y2 == 480):
+                angle = 195
+            if(x1 == 250 and x2 == 390 and y1 == 240 and y2 == 480):
                 angle = 180
-            if(x1 == 213 and x2 == 426 and y1 == 0 and y2 == 160):
+            if(x1 == 250 and x2 == 390 and y1 == 0 and y2 == 240):
                 angle = 0
-            if(x1 == 426 and x2 == 640 and y1 == 384 and y2 == 480):
-                angle = 150
-            if(x1 == 426 and x2 == 640 and y1 == 288 and y2 == 384):
-                angle = 120
-            if(x1 == 426 and x2 == 640 and y1 == 192 and y2 == 288):
-                angle = 90
-            if(x1 == 426 and x2 == 640 and y1 == 96 and y2 == 192):
-                angle = 60
-            if(x1 == 426 and x2 == 640 and y1 == 0 and y2 == 96):
+            if(x1 == 390 and x2 == 640 and y1 == 0 and y2 == 43):
+                angle = 15
+            if(x1 == 390 and x2 == 640 and y1 == 43 and y2 == 86):
                 angle = 30
+            if(x1 == 390 and x2 == 640 and y1 == 86 and y2 == 129):
+                angle = 45
+            if(x1 == 390 and x2 == 640 and y1 == 129 and y2 == 172):
+                angle = 60
+            if(x1 == 390 and x2 == 640 and y1 == 172 and y2 == 215):
+                angle = 75
+            if(x1 == 390 and x2 == 640 and y1 == 215 and y2 == 258):
+                angle = 90
+            if(x1 == 390 and x2 == 640 and y1 == 258 and y2 == 301):
+                angle = 105
+            if(x1 == 390 and x2 == 640 and y1 == 301 and y2 == 344):
+                angle = 120
+            if(x1 == 390 and x2 == 640 and y1 == 344 and y2 == 387):
+                angle = 135
+            if(x1 == 390 and x2 == 640 and y1 == 387 and y2 == 430):
+                angle = 150
+            if(x1 == 390 and x2 == 640 and y1 == 430 and y2 == 480):
+                angle = 165
 
     return angle,area
 
@@ -89,19 +112,44 @@ class WeaponSwing:
             _,frame = cap.read()
             #self.clock.tick(self.fps)
 
-            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
-            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
-            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
-            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
-            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
-            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
-            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
-            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
-            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
-            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
-            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
-            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
+            angle15_hsv = cv.cvtColor(frame[0:43,390:640], cv.COLOR_BGR2HSV)
+            angle30_hsv = cv.cvtColor(frame[43:86,390:640], cv.COLOR_BGR2HSV)
+            angle45_hsv = cv.cvtColor(frame[86:129,390:640], cv.COLOR_BGR2HSV)
+            angle60_hsv = cv.cvtColor(frame[129:172,390:640], cv.COLOR_BGR2HSV)
+            angle75_hsv = cv.cvtColor(frame[172:215,390:640], cv.COLOR_BGR2HSV)
+            angle90_hsv = cv.cvtColor(frame[215:258,390:426], cv.COLOR_BGR2HSV)
+            angle105_hsv = cv.cvtColor(frame[258:301,390:640], cv.COLOR_BGR2HSV)
+            angle120_hsv = cv.cvtColor(frame[301:344,390:640], cv.COLOR_BGR2HSV)
+            angle135_hsv = cv.cvtColor(frame[344:387,390:640], cv.COLOR_BGR2HSV)
+            angle150_hsv = cv.cvtColor(frame[387:430,390:640], cv.COLOR_BGR2HSV)
+            angle165_hsv = cv.cvtColor(frame[430:480,390:640], cv.COLOR_BGR2HSV)
+            angle0_hsv = cv.cvtColor(frame[0:240,250:390], cv.COLOR_BGR2HSV)
+            angle180_hsv = cv.cvtColor(frame[0:240,250:390], cv.COLOR_BGR2HSV)
+            angle195_hsv = cv.cvtColor(frame[430:480,0:250], cv.COLOR_BGR2HSV) 
+            angle210_hsv = cv.cvtColor(frame[387:430,0:250], cv.COLOR_BGR2HSV)
+            angle225_hsv = cv.cvtColor(frame[344:387,0:250], cv.COLOR_BGR2HSV)
+            angle240_hsv = cv.cvtColor(frame[301:344,0:250], cv.COLOR_BGR2HSV)           
+            angle255_hsv = cv.cvtColor(frame[258:301,0:250], cv.COLOR_BGR2HSV)
+            angle270_hsv = cv.cvtColor(frame[215:258,0:250], cv.COLOR_BGR2HSV)
+            angle285_hsv = cv.cvtColor(frame[172:215,0:250], cv.COLOR_BGR2HSV)
+            angle300_hsv = cv.cvtColor(frame[129:172,0:250], cv.COLOR_BGR2HSV)
+            angle315_hsv = cv.cvtColor(frame[86:129,0:250], cv.COLOR_BGR2HSV)
+            angle330_hsv = cv.cvtColor(frame[43:86,0:250], cv.COLOR_BGR2HSV)
+            angle345_hsv = cv.cvtColor(frame[0:43,0:250], cv.COLOR_BGR2HSV)
 
+
+            angle15_mask = cv.inRange(angle15_hsv,lower_color, upper_color)
+            angle45_mask = cv.inRange(angle45_hsv,lower_color, upper_color)
+            angle75_mask = cv.inRange(angle75_hsv,lower_color, upper_color)
+            angle105_mask = cv.inRange(angle105_hsv,lower_color, upper_color)
+            angle135_mask = cv.inRange(angle135_hsv,lower_color, upper_color)
+            angle165_mask = cv.inRange(angle165_hsv,lower_color, upper_color)
+            angle195_mask = cv.inRange(angle195_hsv,lower_color, upper_color)
+            angle225_mask = cv.inRange(angle225_hsv,lower_color, upper_color)  
+            angle255_mask = cv.inRange(angle255_hsv,lower_color, upper_color)
+            angle285_mask = cv.inRange(angle285_hsv,lower_color, upper_color)
+            angle315_mask = cv.inRange(angle315_hsv,lower_color, upper_color)
+            angle345_mask = cv.inRange(angle345_hsv,lower_color, upper_color)           
             angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
             angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)
             angle90_mask = cv.inRange(angle90_hsv,lower_color, upper_color)
@@ -113,39 +161,76 @@ class WeaponSwing:
             angle240_mask = cv.inRange(angle240_hsv,lower_color, upper_color)
             angle270_mask = cv.inRange(angle270_hsv,lower_color, upper_color)
             angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
-            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)              
+            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color) 
 
-            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
-            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
-            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
-            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
-            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
-            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
-            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
-            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
-            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
-            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
-            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
-            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
-
-            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
+            angle,area15 = weaponAngle(angle15_mask,0,43,390,640,self.angle)
+            angle,area30 = weaponAngle(angle30_mask,43,86,390,640,angle)
+            angle,area45 = weaponAngle(angle45_mask,86,129,390,640,angle)
+            angle,area60 = weaponAngle(angle60_mask,129,172,390,640,angle)
+            angle,area75 = weaponAngle(angle75_mask,172,215,390,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,215,258,390,640,angle)
+            angle,area105 = weaponAngle(angle105_mask,258,301,390,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,301,344,390,640,angle)
+            angle,area135 = weaponAngle(angle135_mask,344,387,390,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,430,480,390,640,angle)
+            angle,area165 = weaponAngle(angle165_mask,430,480,390,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,240,250,390,angle)
+            angle,area180 = weaponAngle(angle180_mask,240,480,0,250,angle)
+            angle,area195 = weaponAngle(angle195_mask,430,480,0,250,angle)
+            angle,area210 = weaponAngle(angle210_mask,387,430,0,250,angle)
+            angle,area225 = weaponAngle(angle225_mask,344,387,0,250,angle)
+            angle,area240 = weaponAngle(angle240_mask,301,344,0,250,angle)
+            angle,area255 = weaponAngle(angle255_mask,258,301,0,250,angle)
+            angle,area270 = weaponAngle(angle270_mask,215,258,0,250,angle)
+            angle,area285 = weaponAngle(angle285_mask,172,215,0,250,angle)
+            angle,area300 = weaponAngle(angle300_mask,129,172,0,250,angle)
+            angle,area315 = weaponAngle(angle315_mask,86,129,0,250,angle)
+            angle,area330 = weaponAngle(angle330_mask,43,86,0,250,angle)
+            angle,area345 = weaponAngle(angle345_mask,0,43,0,250,angle)             
+        
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330,area15,area45,area75,area105,area135,area165,area195,area225,area255,area285,area315,area345)
             self.angle = angle
         else:
             _,frame = cap.read()
             #self.clock.tick(self.fps)
-            angle30_hsv = cv.cvtColor(frame[0:96,426:640], cv.COLOR_BGR2HSV)
-            angle60_hsv = cv.cvtColor(frame[96:192,426:640], cv.COLOR_BGR2HSV)
-            angle90_hsv = cv.cvtColor(frame[192:288,426:640], cv.COLOR_BGR2HSV)
-            angle120_hsv = cv.cvtColor(frame[288:384,426:640], cv.COLOR_BGR2HSV)
-            angle150_hsv = cv.cvtColor(frame[384:480,426:640], cv.COLOR_BGR2HSV)
-            angle0_hsv = cv.cvtColor(frame[0:160,213:426], cv.COLOR_BGR2HSV)
-            angle180_hsv = cv.cvtColor(frame[320:480,213:426], cv.COLOR_BGR2HSV)
-            angle210_hsv = cv.cvtColor(frame[384:480,0:213], cv.COLOR_BGR2HSV)
-            angle240_hsv = cv.cvtColor(frame[288:384,0:213], cv.COLOR_BGR2HSV) 
-            angle270_hsv = cv.cvtColor(frame[192:288,0:213], cv.COLOR_BGR2HSV)
-            angle300_hsv = cv.cvtColor(frame[96:192,0:213], cv.COLOR_BGR2HSV)
-            angle330_hsv = cv.cvtColor(frame[0:96,0:213], cv.COLOR_BGR2HSV)                 
+            angle15_hsv = cv.cvtColor(frame[0:43,390:640], cv.COLOR_BGR2HSV)
+            angle30_hsv = cv.cvtColor(frame[43:86,390:640], cv.COLOR_BGR2HSV)
+            angle45_hsv = cv.cvtColor(frame[86:129,390:640], cv.COLOR_BGR2HSV)
+            angle60_hsv = cv.cvtColor(frame[129:172,390:640], cv.COLOR_BGR2HSV)
+            angle75_hsv = cv.cvtColor(frame[172:215,390:640], cv.COLOR_BGR2HSV)
+            angle90_hsv = cv.cvtColor(frame[215:258,390:426], cv.COLOR_BGR2HSV)
+            angle105_hsv = cv.cvtColor(frame[258:301,390:640], cv.COLOR_BGR2HSV)
+            angle120_hsv = cv.cvtColor(frame[301:344,390:640], cv.COLOR_BGR2HSV)
+            angle135_hsv = cv.cvtColor(frame[344:387,390:640], cv.COLOR_BGR2HSV)
+            angle150_hsv = cv.cvtColor(frame[387:430,390:640], cv.COLOR_BGR2HSV)
+            angle165_hsv = cv.cvtColor(frame[430:480,390:640], cv.COLOR_BGR2HSV)
+            angle0_hsv = cv.cvtColor(frame[0:240,250:390], cv.COLOR_BGR2HSV)
+            angle180_hsv = cv.cvtColor(frame[0:240,250:390], cv.COLOR_BGR2HSV)
+            angle195_hsv = cv.cvtColor(frame[430:480,0:250], cv.COLOR_BGR2HSV) 
+            angle210_hsv = cv.cvtColor(frame[387:430,0:250], cv.COLOR_BGR2HSV)
+            angle225_hsv = cv.cvtColor(frame[344:387,0:250], cv.COLOR_BGR2HSV)
+            angle240_hsv = cv.cvtColor(frame[301:344,0:250], cv.COLOR_BGR2HSV)           
+            angle255_hsv = cv.cvtColor(frame[258:301,0:250], cv.COLOR_BGR2HSV)
+            angle270_hsv = cv.cvtColor(frame[215:258,0:250], cv.COLOR_BGR2HSV)
+            angle285_hsv = cv.cvtColor(frame[172:215,0:250], cv.COLOR_BGR2HSV)
+            angle300_hsv = cv.cvtColor(frame[129:172,0:250], cv.COLOR_BGR2HSV)
+            angle315_hsv = cv.cvtColor(frame[86:129,0:250], cv.COLOR_BGR2HSV)
+            angle330_hsv = cv.cvtColor(frame[43:86,0:250], cv.COLOR_BGR2HSV)
+            angle345_hsv = cv.cvtColor(frame[0:43,0:250], cv.COLOR_BGR2HSV)
 
+
+            angle15_mask = cv.inRange(angle15_hsv,lower_color, upper_color)
+            angle45_mask = cv.inRange(angle45_hsv,lower_color, upper_color)
+            angle75_mask = cv.inRange(angle75_hsv,lower_color, upper_color)
+            angle105_mask = cv.inRange(angle105_hsv,lower_color, upper_color)
+            angle135_mask = cv.inRange(angle135_hsv,lower_color, upper_color)
+            angle165_mask = cv.inRange(angle165_hsv,lower_color, upper_color)
+            angle195_mask = cv.inRange(angle195_hsv,lower_color, upper_color)
+            angle225_mask = cv.inRange(angle225_hsv,lower_color, upper_color)  
+            angle255_mask = cv.inRange(angle255_hsv,lower_color, upper_color)
+            angle285_mask = cv.inRange(angle285_hsv,lower_color, upper_color)
+            angle315_mask = cv.inRange(angle315_hsv,lower_color, upper_color)
+            angle345_mask = cv.inRange(angle345_hsv,lower_color, upper_color)           
             angle30_mask = cv.inRange(angle30_hsv,lower_color, upper_color)
             angle60_mask = cv.inRange(angle60_hsv,lower_color, upper_color)
             angle90_mask = cv.inRange(angle90_hsv,lower_color, upper_color)
@@ -157,22 +242,34 @@ class WeaponSwing:
             angle240_mask = cv.inRange(angle240_hsv,lower_color, upper_color)
             angle270_mask = cv.inRange(angle270_hsv,lower_color, upper_color)
             angle300_mask = cv.inRange(angle300_hsv,lower_color, upper_color)
-            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color)
-            
-            angle,area30 = weaponAngle(angle30_mask,0,96,426,640,self.angle)
-            angle,area60 = weaponAngle(angle60_mask,96,192,426,640,angle)
-            angle,area90 = weaponAngle(angle90_mask,192,288,426,640,angle)
-            angle,area120 = weaponAngle(angle120_mask,288,384,426,640,angle)
-            angle,area150 = weaponAngle(angle150_mask,384,480,426,640,angle)
-            angle,area0 = weaponAngle(angle0_mask,0,160,213,426,angle)
-            angle,area180 = weaponAngle(angle180_mask,320,480,213,426,angle)
-            angle,area210 = weaponAngle(angle210_mask,384,480,0,213,angle)
-            angle,area240 = weaponAngle(angle240_mask,288,384,0,213,angle)
-            angle,area270 = weaponAngle(angle270_mask,192,288,0,213,angle)
-            angle,area300 = weaponAngle(angle300_mask,96,192,0,213,angle)
-            angle,area330 = weaponAngle(angle330_mask,0,96,0,213,angle)
+            angle330_mask = cv.inRange(angle330_hsv,lower_color, upper_color) 
 
-            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330)
+            angle,area15 = weaponAngle(angle15_mask,0,43,390,640,self.angle)
+            angle,area30 = weaponAngle(angle30_mask,43,86,390,640,angle)
+            angle,area45 = weaponAngle(angle45_mask,86,129,390,640,angle)
+            angle,area60 = weaponAngle(angle60_mask,129,172,390,640,angle)
+            angle,area75 = weaponAngle(angle75_mask,172,215,390,640,angle)
+            angle,area90 = weaponAngle(angle90_mask,215,258,390,640,angle)
+            angle,area105 = weaponAngle(angle105_mask,258,301,390,640,angle)
+            angle,area120 = weaponAngle(angle120_mask,301,344,390,640,angle)
+            angle,area135 = weaponAngle(angle135_mask,344,387,390,640,angle)
+            angle,area150 = weaponAngle(angle150_mask,430,480,390,640,angle)
+            angle,area165 = weaponAngle(angle165_mask,430,480,390,640,angle)
+            angle,area0 = weaponAngle(angle0_mask,0,240,250,390,angle)
+            angle,area180 = weaponAngle(angle180_mask,240,480,0,250,angle)
+            angle,area195 = weaponAngle(angle195_mask,430,480,0,250,angle)
+            angle,area210 = weaponAngle(angle210_mask,387,430,0,250,angle)
+            angle,area225 = weaponAngle(angle225_mask,344,387,0,250,angle)
+            angle,area240 = weaponAngle(angle240_mask,301,344,0,250,angle)
+            angle,area255 = weaponAngle(angle255_mask,258,301,0,250,angle)
+            angle,area270 = weaponAngle(angle270_mask,215,258,0,250,angle)
+            angle,area285 = weaponAngle(angle285_mask,172,215,0,250,angle)
+            angle,area300 = weaponAngle(angle300_mask,129,172,0,250,angle)
+            angle,area315 = weaponAngle(angle315_mask,86,129,0,250,angle)
+            angle,area330 = weaponAngle(angle330_mask,43,86,0,250,angle)
+            angle,area345 = weaponAngle(angle345_mask,0,43,0,250,angle) 
+
+            self.attack_area = max(area30,area60,area90,area120,area150,area180,area0,area210,area240,area270,area300,area330,area15,area45,area75,area105,area135,area165,area195,area225,area255,area285,area315,area345)
             self.angle = angle
 
         #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -365,33 +462,59 @@ class Staff(Weapon):
         '''
         pos = pygame.mouse.get_pos()
         print(self.weapon_swing.angle)
+        print(pos)
         '''
-        #Opencv attacking orientation control ------------------------------------------------------------------------------------------------------------------------------------------
 
+        #Opencv attacking orientation control ------------------------------------------------------------------------------------------------------------------------------------------
         if(self.weapon_swing.angle == 0):
-            pos = [658,10]
+            pos = [677,7]
+        if(self.weapon_swing.angle == 15):
+            pos = [522,12]
         if(self.weapon_swing.angle == 30):
-            pos = [414,9]
+            pos = [423,14]
+        if(self.weapon_swing.angle == 45):
+            pos = [308,13]
         if(self.weapon_swing.angle == 60):
-            pos = [31,135]
+            pos = [38,19]
+        if(self.weapon_swing.angle == 75):
+            pos = [5,278]
         if(self.weapon_swing.angle == 90):
-            pos = [10,420]
+            pos = [2,417]
+        if(self.weapon_swing.angle == 105):
+            pos = [5,554]
         if(self.weapon_swing.angle == 120):
-            pos = [16,701]
+            pos = [0,633]
+        if(self.weapon_swing.angle == 135):
+            pos = [409,708]
         if(self.weapon_swing.angle == 150):
-            pos = [499,719]
+            pos = [492,711]
+        if(self.weapon_swing.angle == 165):
+            pos = [588,694]
         if(self.weapon_swing.angle == 180):
-            pos = [685,716]
+            pos = [657,707]
+        if(self.weapon_swing.angle == 195):
+            pos = [765,709]
         if(self.weapon_swing.angle == 210):
-            pos = [868,721]
+            pos = [835,708]
+        if(self.weapon_swing.angle == 225):
+            pos = [959,708]
         if(self.weapon_swing.angle == 240):
-            pos = [1144,669]
+            pos = [1076,653]
+        if(self.weapon_swing.angle == 255):
+            pos = [1074,494]
         if(self.weapon_swing.angle == 270):
-            pos = [1188,427]
+            pos = [1076,429]
+        if(self.weapon_swing.angle == 285):
+            pos = [1074,364]
         if(self.weapon_swing.angle == 300):
-            pos = [1157,215]
+            pos = [1074,225]
+        if(self.weapon_swing.angle == 315):
+            pos = [1074,48]    
         if(self.weapon_swing.angle == 330):
-            pos = [888,11]
+            pos = [931,4]
+        if(self.weapon_swing.angle == 345):
+            pos = [794,5]  
+
         #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         self.update_hitbox()

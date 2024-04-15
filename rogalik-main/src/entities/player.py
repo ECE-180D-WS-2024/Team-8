@@ -6,7 +6,6 @@ from .entity import Entity
 from src.particles import Dust
 
 
-pygame.init()
 class Player(Entity):
     name = 'player'
     speed = 360
@@ -42,7 +41,7 @@ class Player(Entity):
             self.direction = 'right'
         if pressed[pygame.K_e] and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
-            self.game.object_manager.interact(self.name)
+            self.game.object_manager.interact()
         if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
             self.time = pygame.time.get_ticks()
             self.weapon.drop()

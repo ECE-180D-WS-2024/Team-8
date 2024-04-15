@@ -225,10 +225,7 @@ class Object:
         self.image = self.original_image
 
     def detect_collision(self):
-        if (self.game.player.hitbox.colliderect(self.rect) and self.game.player.interaction):
-            self.image = self.image_picked
-            self.interaction = True
-        elif (self.game.player2.hitbox.colliderect(self.rect) and self.game.player2.interaction):
+        if self.game.player.hitbox.colliderect(self.rect) and self.game.player.interaction:
             self.image = self.image_picked
             self.interaction = True
         else:
@@ -253,24 +250,18 @@ class Object:
         self.hitbox = get_mask_rect(self.image, *self.rect.topleft)
         self.hitbox.midbottom = self.rect.midbottom
 
-    def interact(self,name):
+    def interact(self):
         pass
 
     def remove_object(self):
         self.room.objects.remove(self)
 
-    def buy(self, name):
-        if(name == "player"):
-            if self.game.player.gold >= self.value:
-                self.game.player.gold -= self.value
-                self.interact(name)
-                self.for_sale = False
-        elif(name == "player2"):
-            if self.game.player2.gold >= self.value:
-                self.game.player2.gold -= self.value
-                self.interact(name)
-                self.for_sale = False
-                
+    def buy(self):
+        if self.game.player.gold >= self.value:
+            self.game.player.gold -= self.value
+            self.interact()
+            self.for_sale = False
+
     def draw(self):
         surface = self.room.tile_map.map_surface
         # self.room.tile_map.map_surface.blit(self.image, (self.rect.x + 64, self.rect.y + 32))

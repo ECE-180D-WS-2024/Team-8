@@ -57,11 +57,11 @@ class EnemyManager:
         num_of_demons = random.randint(1 + level, 4 + level)
         num_of_imps = random.randint(0 + level, 4 + level)
         for _ in range(num_of_imps):
-            room.enemy_list.append(Imp(self.game, random.randint(100, 150) / 10, 100, room))
+            room.enemy_list.append(Imp(self.game, random.randint(100, 150) / 10, 50, room))
             self.upgrade_enemy(room.enemy_list[-1])
             room.enemy_list[-1].spawn()
         for _ in range(num_of_demons):
-            room.enemy_list.append(Demon(self.game, 100, room))
+            room.enemy_list.append(Demon(self.game, 50, room))
             self.upgrade_enemy(room.enemy_list[-1])
             room.enemy_list[-1].spawn()
 

@@ -85,13 +85,13 @@ class MainMenu:
             self.game.running = False
 
     def update(self):
-        self.game.background.update()
+        #self.game.background.update()
         self.play_button.update()
         self.exit_button.update()
 
     def draw(self):
         self.game.screen.fill((0, 0, 0))
-        self.game.background.draw(self.game.screen)
+        #self.game.background.draw(self.game.screen)
         self.play_button.draw(self.game.screen)
         self.exit_button.draw(self.game.screen)
         self.game.screen.blit(self.rogalik, self.rogalik_rect)

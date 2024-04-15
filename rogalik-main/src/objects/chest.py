@@ -82,7 +82,7 @@ class Chest(Object):
         self.room.tile_map.map_surface.blit(self.image, self.rect)
 
     def detect_collision(self):
-        if self.game.player.hitbox.colliderect(self.rect) or self.game.player2.hitbox.colliderect(self.rect):
+        if self.game.player.hitbox.colliderect(self.rect):
             self.image = pygame.image.load('./assets/objects/chest/full/chest_picked.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (64, 64))
             self.interaction = True
@@ -97,7 +97,7 @@ class Chest(Object):
         if any(self.hitbox.collidepoint(point) for point in collide_points):
             self.game.player.velocity = [0, 0]
 
-    def interact(self,name):
+    def interact(self):
         self.open = True
         self.interaction = False
 

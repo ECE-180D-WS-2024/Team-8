@@ -41,7 +41,7 @@ class Coin(Object):
     def update(self):
         self.update_animation_frame()
         self.update_bounce()
-        #self.magnet()
+        self.magnet()
         self.update_hitbox()
         self.rect.y += 0.1
 
@@ -50,12 +50,8 @@ class Coin(Object):
             self.game.player.gold += self.value
             self.game.world_manager.current_room.objects.remove(self)
             self.play_sound()
-        elif self.game.player2.hitbox.colliderect(self.rect):
-            self.game.player2.gold += self.value
-            self.game.world_manager.current_room.objects.remove(self)
-            self.play_sound()
 
-    '''def magnet(self):
+    def magnet(self):
         dir_vector = pygame.math.Vector2(self.game.player.hitbox.center[0] - self.rect.x,
                                          self.game.player.hitbox.center[1] - self.rect.y)
         if 0 < dir_vector.length() < 200:
@@ -66,7 +62,7 @@ class Coin(Object):
                 dir_vector[0] = math.ceil(dir_vector[0])
             if dir_vector[1] < 1:
                 dir_vector[1] = math.ceil(dir_vector[1])
-            self.rect.move_ip(*dir_vector)'''
+            self.rect.move_ip(*dir_vector)
 
     def draw_shadow(self, surface):
         color = (0, 0, 0, 120)

@@ -32,7 +32,7 @@ class Hole:
             self.animate = False
         self.image = self.images[int(self.animation_frame)]
 
-    def interact(self,name):
+    def interact(self):
         self.game.world_manager.load_new_level()
         self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Explosion3.wav'))
 

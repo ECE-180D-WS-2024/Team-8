@@ -38,7 +38,7 @@ class Boss(Enemy):
 
     def update(self):
         self.basic_update()
-        if not self.dead and not self.game.player.dead and not self.game.player2.dead:
+        if not self.dead and not self.game.player.dead:
             if self.can_move:
                 self.move()
             else:
@@ -50,24 +50,11 @@ class Boss(Enemy):
 
     def move(self):
         if not self.dead and self.hp > 0:
-            self.move_towards_player(self.game.player, self.game.player2)
+            self.move_towards_player()
 
-    def move_towards_player(self,player,player2):
-        if(player.death_counter == 0 and player2.death_counter != 0):
-            dir_vector = pygame.math.Vector2(player2.hitbox.x - self.hitbox.x,
-                                            player2.hitbox.y - self.hitbox.y)
-        elif(player2.death_counter == 0 and player.death_counter != 0):
-            dir_vector = pygame.math.Vector2(player.hitbox.x - self.hitbox.x,
-                                            player.hitbox.y - self.hitbox.y)
-        else:
-            d1 = pygame.math.Vector2(player.hitbox.x - self.hitbox.x,
-                                            player.hitbox.y - self.hitbox.y)
-            d2 = pygame.math.Vector2(player2.hitbox.x - self.hitbox.x,
-                                            player2.hitbox.y - self.hitbox.y)
-            if(d1.magnitude() < d2.magnitude()):
-                dir_vector = d1
-            else:
-                dir_vector = d2
+    def move_towards_player(self):
+        dir_vector = pygame.math.Vector2(self.game.player.hitbox.x - self.hitbox.x,
+                                         self.game.player.hitbox.y - self.hitbox.y)
         if dir_vector.length_squared() > 0:  # cant normalize vector of length 0
             dir_vector.normalize_ip()
             dir_vector.scale_to_length(self.speed / 4)
@@ -135,56 +122,25 @@ class Shooting:
         if self.time_passed(self.shoot_time, 1000):
             self.shoot_time = pygame.time.get_ticks()
             self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Impact5.wav'))
-            d1 = pygame.math.Vector2(self.game.player.hitbox.x - self.hitbox.x,
-                                                 self.game.player.hitbox.y - self.hitbox.y).length()
-            d2 = pygame.math.Vector2(self.game.player2.hitbox.x - self.hitbox.x,
-                                                 self.game.player2.hitbox.y - self.hitbox.y).length()
-            if((d1 < d2 and self.game.player.death_counter != 0) or self.game.player2.death_counter == 0):
-                self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
-                                                                    self.boss.hitbox.center[0], self.boss.hitbox.center[1],
-                                                                    self.boss.game.player.hitbox.center))
-            else:
-                self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
-                                                                    self.boss.hitbox.center[0], self.boss.hitbox.center[1],
-                                                                    self.boss.game.player2.hitbox.center))  
+            self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
+                                                                self.boss.hitbox.center[0], self.boss.hitbox.center[1],
+                                                                self.boss.game.player.hitbox.center))
 
     def machine_gun(self):
         if self.time_passed(self.machine_time, 100):
             self.machine_time = pygame.time.get_ticks()
             self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Impact5.wav'))
-            d1 = pygame.math.Vector2(self.game.player.hitbox.x - self.hitbox.x,
-                                                 self.game.player.hitbox.y - self.hitbox.y).length()
-            d2 = pygame.math.Vector2(self.game.player2.hitbox.x - self.hitbox.x,
-                                                 self.game.player2.hitbox.y - self.hitbox.y).length()
-            if((d1 < d2 and self.game.player.death_counter != 0) or self.game.player2.death_counter == 0):
-                self.boss.game.bullet_manager.add_bullet(MachineGunBullet(self.boss.game, self.boss, self.boss.room,
-                                                                        self.boss.hitbox.center[0],
-                                                                        self.boss.hitbox.center[1],
-                                                                        self.boss.game.player.hitbox.center))
-            else:
-                self.boss.game.bullet_manager.add_bullet(MachineGunBullet(self.boss.game, self.boss, self.boss.room,
-                                                                        self.boss.hitbox.center[0],
-                                                                        self.boss.hitbox.center[1],
-                                                                        self.boss.game.player2.hitbox.center))               
+            self.boss.game.bullet_manager.add_bullet(MachineGunBullet(self.boss.game, self.boss, self.boss.room,
+                                                                      self.boss.hitbox.center[0],
+                                                                      self.boss.hitbox.center[1],
+                                                                      self.boss.game.player.hitbox.center))
 
     def half_circle_shoot(self):
         if self.time_passed(self.circle_time, self.circle_shooting_timer):
             self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Impact1.wav'))
             self.circle_time = pygame.time.get_ticks()
-            d1 = pygame.math.Vector2(self.game.player.hitbox.x - self.hitbox.x,
-                                                 self.game.player.hitbox.y - self.hitbox.y).length()
-            d2 = pygame.math.Vector2(self.game.player2.hitbox.x - self.hitbox.x,
-                                                 self.game.player2.hitbox.y - self.hitbox.y).length()
-            if((d1 < d2 and self.game.player.death_counter != 0) or self.game.player2.death_counter == 0):
-                for i in range(-12, 12):
-                    self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
-                                                                        self.boss.hitbox.center[0],
-                                                                        self.boss.hitbox.center[1],
-                                                                        self.boss.game.player.hitbox.center, 15 * i))
-            else:
-                for i in range(-12, 12):
-                    self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
-                                                                        self.boss.hitbox.center[0],
-                                                                        self.boss.hitbox.center[1],
-                                                                        self.boss.game.player2.hitbox.center, 15 * i))
-
+            for i in range(-12, 12):
+                self.boss.game.bullet_manager.add_bullet(BossBullet(self.boss.game, self.boss, self.boss.room,
+                                                                    self.boss.hitbox.center[0],
+                                                                    self.boss.hitbox.center[1],
+                                                                    self.boss.game.player.hitbox.center, 15 * i))

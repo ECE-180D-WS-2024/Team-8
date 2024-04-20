@@ -28,13 +28,12 @@ import struct
 pygame.init()
 pygame.mixer.init()
 
-world_size = (18*64, 12*64)
-smaller_size = (16*64, 10*64)
+world_size = (20*64, 12*64)
 
 
 class Game:
     def __init__(self):
-        self.display = pygame.display.set_mode(smaller_size)
+        self.display = pygame.display.set_mode(world_size)
         self.screen = pygame.Surface(world_size).convert()
         self.clock = pygame.time.Clock()
         self.enemy_manager = EnemyManager(self)
@@ -54,7 +53,8 @@ class Game:
         self.game_over = GameOver(self)
         pygame.mixer.init()
         self.dt = 0
-        self.inputs = []
+        self.inputs = {"gesture": 0,
+                       "speech": " "}
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
 
@@ -126,7 +126,7 @@ class Game:
                 continue
             
         self.enemy_manager.add_enemies()
-        prev_time = time.time()
+        prev_time = time.time() 
         pygame.mixer.Sound.play(self.sound, loops=-1)
         while self.running:
             self.clock.tick(self.fps)
@@ -139,7 +139,6 @@ class Game:
             self.update_groups()
             self.draw_groups()
             self.game_time = pygame.time.get_ticks()
-            self.screen = self.screen.convert(smaller_size)
             data = pygame.image.tobytes(self.screen, "RGB")
             data = zlib.compress(data)
             size = len(data)
@@ -147,9 +146,10 @@ class Game:
             size_data = struct.pack("!I", size)
             client.sendall(size_data)
             client.sendall(data)
-
             self.display.blit(self.screen, self.screen_position)
             client.recv(1)
+            input_data = client.recv(1024)
+            self.inputs = pickle.loads(input_data)
             if self.running:
                 pygame.display.flip()
         pygame.quit()

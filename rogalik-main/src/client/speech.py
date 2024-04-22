@@ -18,21 +18,21 @@ class Speech:
         }
         self.show_status = ""
     
-    def show_speech(self, message):
-        self.show_status = message
-        if self.callback:
-            self.callback(message)
+    # def show_speech(self, message):
+    #     self.show_status = message
+    #     if self.callback:
+    #         self.callback(message)
 
     def _listen(self, ECE180_input):
         with self.microphone as source:
             self.recognizer.adjust_for_ambient_noise(source)
             try:
-                self.show_speech("Say Command")
+                #self.show_speech("Say Command")
                 print("Say Command")
                 audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1)
                 #duration
                 command = self.recognizer.recognize_google(audio).lower()
-                self.show_speech(f"Recognized: {command}")
+                #self.show_speech(f"Recognized: {command}")
                 print(f"Recognized: {command}")
                 if self.process_command(command):
                     #print("speech command recognized")
@@ -42,14 +42,14 @@ class Speech:
                     print("Recognition Failed. Press key to try again.")
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
-                self.show_speech(f"API unavailable, {e}")
+                #self.show_speech(f"API unavailable, {e}")
                 print(f"API unavailable, {e}")
             except sr.UnknownValueError as e:
                 # Handle unknown value error, log, or retry logic
-                self.show_speech(f"Could not understand audio {e}")
+                #self.show_speech(f"Could not understand audio {e}")
                 print(f"Could not understand audio {e}")
             except Exception as e:
-                self.show_speech(f"An unexpected error occurred: {e}")
+                #self.show_speech(f"An unexpected error occurred: {e}")
                 print(f"An unexpected error occurred: {e}")
         self.listening = False
         self.stop_event.set()
@@ -64,7 +64,7 @@ class Speech:
             print("Please wait for speech recognition...")
             self.listening = True
             self.stop_event.clear()
-            self.thread = threading.Thread(target=self._listen, args=ECE180_input)
+            self.thread = threading.Thread(target=self._listen, args=(ECE180_input,))
             self.thread.start()
         else:
             self.show_speech("Stopping speech recognition thread...")

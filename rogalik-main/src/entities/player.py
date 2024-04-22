@@ -5,6 +5,61 @@ from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
 
+def recovery(client_angle):
+    angle = 0
+    attack_area = 1
+    if(client_angle == 1):
+        angle = 345
+    elif(client_angle == 2):
+        angle = 330
+    elif(client_angle == 3):
+        angle = 315    
+    elif(client_angle == 4):
+        angle = 300
+    elif(client_angle == 5):
+        angle = 285    
+    elif(client_angle == 6):
+        angle = 270    
+    elif(client_angle == 7):
+        angle = 255
+    elif(client_angle == 8):
+        angle = 240    
+    elif(client_angle == 9):
+        angle = 225    
+    elif(client_angle == 10):
+        angle = 210
+    elif(client_angle == 11):
+        angle = 195    
+    elif(client_angle == 12):
+        angle = 180    
+    elif(client_angle == 13):
+        angle = 0
+    elif(client_angle == 14):
+        angle = 15    
+    elif(client_angle == 15):
+        angle = 30    
+    elif(client_angle == 16): 
+        angle = 45
+    elif(client_angle == 17):
+        angle = 60
+    elif(client_angle == 18):
+        angle = 75    
+    elif(client_angle == 19):
+        angle = 90
+    elif(client_angle == 20):
+        angle = 105
+    elif(client_angle == 21):
+        angle = 120
+    elif(client_angle == 22):
+        angle = 135
+    elif(client_angle == 23):  
+        angle = 150
+    elif(client_angle == 24):      
+        angle = 165
+    elif(client_angle == 25):
+        attack_area = 0
+    
+    return attack_area,angle
 
 class Player(Entity):
     name = 'player'
@@ -32,6 +87,15 @@ class Player(Entity):
 
     def input(self):
         pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_w]:
+            self.direction = 'up'
+        if pressed[pygame.K_s]:
+            self.direction = 'down'
+        if pressed[pygame.K_a]:
+            self.direction = 'left'
+        if pressed[pygame.K_d]:
+            self.direction = 'right'
+        '''
         if self.game.inputs["gesture"] == 1 or self.game.inputs["gesture"] == 2 or self.game.inputs["gesture"] == 8:
             self.keydeterm["K_w"] = True
         if self.game.inputs["gesture"] == 4 or self.game.inputs["gesture"] == 5 or self.game.inputs["gesture"] == 6:
@@ -49,6 +113,8 @@ class Player(Entity):
             self.direction = 'left'
         if self.keydeterm["K_d"]:
             self.direction = 'right'
+        '''
+
         if self.game.inputs["speech"] != " " and self.game.inputs["speech"] == "pick up":
             self.game.object_manager.interact()
         if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
@@ -72,7 +138,7 @@ class Player(Entity):
                     self.shift_items_right()
                     self.weapon = self.items[0]
 
-        # constant_dt = 0.06
+        '''
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]
         vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
@@ -82,6 +148,18 @@ class Player(Entity):
         vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
         vel_right = [self.speed * constant_dt, 0]
         vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
+        vel = zip(vel_up, vel_down, vel_left, vel_right)
+        vel_list = [sum(item) for item in vel]
+        '''
+        constant_dt = self.game.dt
+        vel_up = [0, -self.speed * constant_dt]
+        vel_up = [i * pressed[pygame.K_w] for i in vel_up]
+        vel_down = [0, self.speed * constant_dt]
+        vel_down = [i * pressed[pygame.K_s] for i in vel_down]
+        vel_left = [-self.speed * constant_dt, 0]
+        vel_left = [i * pressed[pygame.K_a] for i in vel_left]
+        vel_right = [self.speed * constant_dt, 0]
+        vel_right = [i * pressed[pygame.K_d] for i in vel_right]
         vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 
@@ -94,12 +172,21 @@ class Player(Entity):
         else:
             self.set_velocity(vel_list)
 
-        if pygame.mouse.get_pressed()[0] and pygame.time.get_ticks() - self.time > self.attack_cooldown \
-                and self.weapon:
-            self.time = pygame.time.get_ticks()
-            self.attacking = True
-            if self.weapon.name != 'staff':
-                self.weapon.weapon_swing.swing_side *= (-1)
+#Localizaion ---------------
+        if(self.weapon):
+            attack_area,angle = recovery(self.game.inputs["localization"])
+            attackspeed = 1.7
+            if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
+                self.time = pygame.time.get_ticks()  
+                if(attack_area == 1):
+                    self.attacking = True
+                    self.weapon.angle = angle
+                else:
+                    self.attacking = False
+
+                if self.weapon.name != 'staff':
+                    self.weapon.weapon_swing.swing_side *= (-1) 
+#Localizaion ---------------
 
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]

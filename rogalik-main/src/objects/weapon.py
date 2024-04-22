@@ -10,7 +10,6 @@ from .object import Object
 from src.particles import ParticleManager, Fire
 from src.bullet import StaffBullet
 
-
 class WeaponSwing:
     left_swing = 10
     right_swing = -190
@@ -27,14 +26,6 @@ class WeaponSwing:
         self.counter = 0
 
     def rotate(self, weapon=None):
-        mx, my = pygame.mouse.get_pos()
-        dx = mx - self.weapon.player.hitbox.centerx  # - 64
-        dy = my - self.weapon.player.hitbox.centery  # - 32
-        if self.swing_side == 1:
-            self.angle = (180 / math.pi) * math.atan2(-self.swing_side * dy, dx) + self.left_swing
-        else:
-            self.angle = (180 / math.pi) * math.atan2(self.swing_side * dy, dx) + self.right_swing
-
         position = self.weapon.player.hitbox.center
         if weapon:
             self.weapon.image = pygame.transform.rotozoom(self.weapon.image, self.angle, 1)
@@ -55,7 +46,6 @@ class WeaponSwing:
         # self.rect_mask = get_mask_rect(self.image, *self.rect.topleft)
         self.weapon.hitbox = pygame.mask.from_surface(self.weapon.image)
         self.counter += 1
-
 
 class Weapon(Object):
     def __init__(self, game, name=None, size=None, room=None, position=None):

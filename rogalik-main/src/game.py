@@ -30,7 +30,6 @@ pygame.mixer.init()
 
 world_size = (20*64, 12*64)
 
-
 class Game:
     def __init__(self):
         self.display = pygame.display.set_mode(world_size)
@@ -110,7 +109,7 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '192.168.137.1'
+        host = '172.26.193.221'
         port = 12347
         server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         server.bind((host, port))

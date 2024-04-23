@@ -13,9 +13,10 @@ import select
 import gzip
 import struct
 from speech import Speech
+pygame.init()
 
 world_size = (20* 64, 12*64)
-host = '172.26.173.57'
+host = '131.179.15.93'
 port = 12347
 
 cap = cv.VideoCapture(0)
@@ -82,11 +83,10 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 
     return angle
 
-def process_inputs(ECE180_input, speech):
+def process_inputs(ECE180_input, current_time, last_e_press):
     pressed = pygame.key.get_pressed()
-    current_time = pygame.time.get_ticks()
-    last_e_press = 0
-    if pressed[pygame.K_w]:
+    speech = Speech(callback=callback_speech)
+    '''if pressed[pygame.K_w]:
         ECE180_input["gesture"] = 1
     elif pressed[pygame.K_w] and pressed[pygame.K_a]:
         ECE180_input["gesture"] = 2
@@ -102,9 +102,11 @@ def process_inputs(ECE180_input, speech):
         ECE180_input["gesture"] = 7
     elif pressed[pygame.K_d] and pressed[pygame.K_w]:
         ECE180_input["gesture"] = 8
-    elif pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
+    '''
+    if pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
         last_e_press = current_time
         speech.toggle_listening(ECE180_input)
+
     return ECE180_input
 
 def callback_speech(list, ECE180_input, command):
@@ -116,6 +118,7 @@ def callback_speech(list, ECE180_input, command):
         ECE180_input["speech"] = " "
 
 def main():
+    
     screen = pygame.display.set_mode(world_size)
 
     clientsocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -134,9 +137,16 @@ def main():
     upper_color = upper_yellow
     pre_angle = 0
     #---------------------------------------------
-
+    last_e_press = 0
     # loop .recv, it returns empty string when done, then transmitted data is completely received
+    ECE180_input = {
+            #"gesture": 0,
+            "speech": " ",
+            "localization": 0,
+    }   
     while True:
+        current_time = pygame.time.get_ticks()
+        print(current_time)
         _,frame = cap.read()
         #--------
         angle15_hsv = cv.cvtColor(frame[0:43,390:640], cv.COLOR_BGR2HSV)
@@ -215,15 +225,10 @@ def main():
         angle = weaponAngle(angle345_mask,0,43,0,250,angle)             
     
         pre_angle = angle   
+        ECE180_input['localization'] = angle
         #-------------------   
 
-        ECE180_input = {
-            "gesture": 0,
-            "speech": " ",
-            "localization": angle,
-        }   
-
-        speech = Speech(callback=callback_speech)
+  
         size_data = clientsocket.recv(4)
         size = struct.unpack("!I", size_data)[0]
         data = b''
@@ -237,7 +242,8 @@ def main():
         pygame.display.flip()
         clientsocket.send(b'1')
 
-        ECE180_input = process_inputs(ECE180_input, speech)
+        ECE180_input = process_inputs(ECE180_input,current_time, last_e_press)
+        print(ECE180_input)
         input = pickle.dumps(ECE180_input)
         clientsocket.send(input)
 

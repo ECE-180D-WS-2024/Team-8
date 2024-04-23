@@ -87,6 +87,15 @@ class Player(Entity):
 
     def input(self):
         pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_w]:
+            self.direction = 'up'
+        if pressed[pygame.K_s]:
+            self.direction = 'down'
+        if pressed[pygame.K_a]:
+            self.direction = 'left'
+        if pressed[pygame.K_d]:
+            self.direction = 'right'
+        '''
         if self.game.inputs["gesture"] == 1 or self.game.inputs["gesture"] == 2 or self.game.inputs["gesture"] == 8:
             self.keydeterm["K_w"] = True
         if self.game.inputs["gesture"] == 4 or self.game.inputs["gesture"] == 5 or self.game.inputs["gesture"] == 6:
@@ -104,6 +113,8 @@ class Player(Entity):
             self.direction = 'left'
         if self.keydeterm["K_d"]:
             self.direction = 'right'
+        '''
+
         if self.game.inputs["speech"] != " " and self.game.inputs["speech"] == "pick up":
             self.game.object_manager.interact()
         if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
@@ -127,6 +138,7 @@ class Player(Entity):
                     self.shift_items_right()
                     self.weapon = self.items[0]
 
+        '''
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]
         vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
@@ -136,6 +148,18 @@ class Player(Entity):
         vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
         vel_right = [self.speed * constant_dt, 0]
         vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
+        vel = zip(vel_up, vel_down, vel_left, vel_right)
+        vel_list = [sum(item) for item in vel]
+        '''
+        constant_dt = self.game.dt
+        vel_up = [0, -self.speed * constant_dt]
+        vel_up = [i * pressed[pygame.K_w] for i in vel_up]
+        vel_down = [0, self.speed * constant_dt]
+        vel_down = [i * pressed[pygame.K_s] for i in vel_down]
+        vel_left = [-self.speed * constant_dt, 0]
+        vel_left = [i * pressed[pygame.K_a] for i in vel_left]
+        vel_right = [self.speed * constant_dt, 0]
+        vel_right = [i * pressed[pygame.K_d] for i in vel_right]
         vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
 

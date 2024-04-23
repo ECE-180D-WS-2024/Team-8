@@ -53,7 +53,8 @@ class Game:
         pygame.mixer.init()
         self.dt = 0
         self.inputs = {"gesture": 0,
-                       "speech": " "}
+                       "speech": " ",
+                       "localization": 0}
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
 

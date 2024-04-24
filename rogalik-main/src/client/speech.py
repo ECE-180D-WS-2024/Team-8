@@ -60,14 +60,14 @@ class Speech:
     def toggle_listening(self, ECE180_input):
         """Toggle the listening state and manage the listening thread accordingly."""
         if not self.listening:
-            self.show_speech("Please wait for speech recognition...")
+            #self.show_speech("Please wait for speech recognition...")
             print("Please wait for speech recognition...")
             self.listening = True
             self.stop_event.clear()
             self.thread = threading.Thread(target=self._listen, args=(ECE180_input,))
             self.thread.start()
         else:
-            self.show_speech("Stopping speech recognition thread...")
+            #self.show_speech("Stopping speech recognition thread...")
             print("Stopping speech recognition thread...")
             self.listening = False
             self.stop_event.set()

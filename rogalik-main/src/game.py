@@ -52,7 +52,7 @@ class Game:
         self.game_over = GameOver(self)
         pygame.mixer.init()
         self.dt = 0
-        self.inputs = {#"gesture": 0,
+        self.inputs = {"gesture": 0,
                        "speech": " ",
                        "localization": 0}
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
@@ -110,7 +110,7 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '131.179.15.93'
+        host = '131.179.15.231'
         port = 12347
         server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         server.bind((host, port))

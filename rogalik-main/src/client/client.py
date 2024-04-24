@@ -16,7 +16,7 @@ from speech import Speech
 pygame.init()
 
 world_size = (20* 64, 12*64)
-host = '131.179.15.93'
+host = '131.179.35.69'
 port = 12347
 
 cap = cv.VideoCapture(0)
@@ -86,7 +86,8 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 def process_inputs(ECE180_input, current_time, last_e_press):
     pressed = pygame.key.get_pressed()
     speech = Speech(callback=callback_speech)
-    '''if pressed[pygame.K_w]:
+    ECE180_input["gesture"] = 0
+    if pressed[pygame.K_w]:
         ECE180_input["gesture"] = 1
     elif pressed[pygame.K_w] and pressed[pygame.K_a]:
         ECE180_input["gesture"] = 2
@@ -102,10 +103,10 @@ def process_inputs(ECE180_input, current_time, last_e_press):
         ECE180_input["gesture"] = 7
     elif pressed[pygame.K_d] and pressed[pygame.K_w]:
         ECE180_input["gesture"] = 8
-    '''
     if pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
         last_e_press = current_time
         speech.toggle_listening(ECE180_input)
+ 
 
     return ECE180_input
 
@@ -114,8 +115,8 @@ def callback_speech(list, ECE180_input, command):
         ECE180_input["speech"] = "pick up"
     elif command in list["drop it"]:
         ECE180_input["speech"] = "drop it"
-    else:
-        ECE180_input["speech"] = " "
+    # else:
+    #     ECE180_input["speech"] = " "
 
 def main():
     
@@ -140,13 +141,13 @@ def main():
     last_e_press = 0
     # loop .recv, it returns empty string when done, then transmitted data is completely received
     ECE180_input = {
-            #"gesture": 0,
+            "gesture": 0,
             "speech": " ",
             "localization": 0,
     }   
     while True:
         current_time = pygame.time.get_ticks()
-        print(current_time)
+        # print(current_time)
         _,frame = cap.read()
         #--------
         angle15_hsv = cv.cvtColor(frame[0:43,390:640], cv.COLOR_BGR2HSV)
@@ -243,9 +244,10 @@ def main():
         clientsocket.send(b'1')
 
         ECE180_input = process_inputs(ECE180_input,current_time, last_e_press)
-        print(ECE180_input)
+        # print(ECE180_input)
         input = pickle.dumps(ECE180_input)
         clientsocket.send(input)
+        ECE180_input["speech"] = " "
 
         # check for quit events
         for event in pygame.event.get():

@@ -26,6 +26,7 @@ class WeaponSwing:
         self.counter = 0
 
     def rotate(self, weapon=None):
+        print("weapon_wing file angle " + str(self.angle))
         position = self.weapon.player.hitbox.center
         if weapon:
             self.weapon.image = pygame.transform.rotozoom(self.weapon.image, self.angle, 1)
@@ -59,6 +60,7 @@ class Weapon(Object):
         self.time = 0
         self.weapon_swing = WeaponSwing(self)
         self.starting_position = [self.hitbox.bottomleft[0] - 1, self.hitbox.bottomleft[1]]
+        self.angle = 0
 
     def load_image(self):
         """Load weapon image and initialize instance variables"""
@@ -194,13 +196,61 @@ class Staff(Weapon):
             self.firing_position = self.hitbox.topleft
         elif 90 <= self.weapon_swing.angle < 180:
             self.firing_position = (self.hitbox.bottomleft[0], self.hitbox.bottomleft[1] - 15)
-        elif 0 > self.weapon_swing.angle > -90:
+        elif 270 <= self.weapon_swing.angle < 360:
             self.firing_position = self.hitbox.topright
         else:
             self.firing_position = (self.hitbox.bottomright[0], self.hitbox.bottomright[1] - 15)
 
     def fire(self):
-        pos = pygame.mouse.get_pos()
+        if(self.weapon_swing.angle == 0):
+            pos = [677,7]
+        if(self.weapon_swing.angle == 15):
+            pos = [522,12]
+        if(self.weapon_swing.angle == 30):
+            pos = [423,14]
+        if(self.weapon_swing.angle == 45):
+            pos = [308,13]
+        if(self.weapon_swing.angle == 60):
+            pos = [38,19]
+        if(self.weapon_swing.angle == 75):
+            pos = [5,278]
+        if(self.weapon_swing.angle == 90):
+            pos = [2,417]
+        if(self.weapon_swing.angle == 105):
+            pos = [5,554]
+        if(self.weapon_swing.angle == 120):
+            pos = [0,633]
+        if(self.weapon_swing.angle == 135):
+            pos = [409,708]
+        if(self.weapon_swing.angle == 150):
+            pos = [492,711]
+        if(self.weapon_swing.angle == 165):
+            pos = [588,694]
+        if(self.weapon_swing.angle == 180):
+            pos = [657,707]
+        if(self.weapon_swing.angle == 195):
+            pos = [765,709]
+        if(self.weapon_swing.angle == 210):
+            pos = [835,708]
+        if(self.weapon_swing.angle == 225):
+            pos = [959,708]
+        if(self.weapon_swing.angle == 240):
+            pos = [1076,653]
+        if(self.weapon_swing.angle == 255):
+            pos = [1074,494]
+        if(self.weapon_swing.angle == 270):
+            pos = [1076,429]
+        if(self.weapon_swing.angle == 285):
+            pos = [1074,364]
+        if(self.weapon_swing.angle == 300):
+            pos = [1074,225]
+        if(self.weapon_swing.angle == 315):
+            pos = [1074,48]    
+        if(self.weapon_swing.angle == 330):
+            pos = [931,4]
+        if(self.weapon_swing.angle == 345):
+            pos = [794,5]  
+
         self.update_hitbox()
         self.calculate_firing_position()
         self.game.bullet_manager.add_bullet(

@@ -83,7 +83,7 @@ class Enemy(Entity):
     def change_speed(self):  # changes speed every 1.5s
         if time_passed(self.move_time, 1500):
             self.move_time = pygame.time.get_ticks()
-            self.speed = random.randint(250, 300)
+            self.speed = random.randint(10, 60)
             return True
 
     def move(self):

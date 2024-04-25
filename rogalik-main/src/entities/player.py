@@ -1,38 +1,89 @@
 import pygame
-import paho.mqtt.client as mqtt
-
 from math import sqrt
 from src.objects.p import Poop
 from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
-from src.speech import Speech
 
-class MQTTClient:
-    def __init__(self):
-        self.client = mqtt.Client()
-        self.counter = 0  # Use a class attribute instead of a global variable
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-
-    def on_connect(self, client, userdata, flags, rc):
-        print("Connected with result code " + str(rc))
-        client.subscribe("lol123")
-
-    def on_message(self, client, userdata, msg):
-        try:
-            # Attempt to convert the message payload to an integer
-            self.counter = int(msg.payload)
-            
-        except ValueError:
-            dummy = 0
-
-    def connect(self):
-        self.client.connect_async('mqtt.eclipseprojects.io')
-        self.client.loop_start()
-
-    def counter(self):
-        return self._counter
+def recovery(client_angle):
+    angle = 0
+    attack_area = 0
+    if(client_angle == 1):
+        angle = 345
+        attack_area = 1
+    elif(client_angle == 2):
+        angle = 330
+        attack_area = 1
+    elif(client_angle == 3):
+        angle = 315  
+        attack_area = 1  
+    elif(client_angle == 4):
+        angle = 300
+        attack_area = 1
+    elif(client_angle == 5):
+        angle = 285  
+        attack_area = 1  
+    elif(client_angle == 6):
+        angle = 270  
+        attack_area = 1  
+    elif(client_angle == 7):
+        angle = 255
+        attack_area = 1
+    elif(client_angle == 8):
+        angle = 240 
+        attack_area = 1   
+    elif(client_angle == 9):
+        angle = 225   
+        attack_area = 1 
+    elif(client_angle == 10):
+        angle = 210
+        attack_area = 1
+    elif(client_angle == 11):
+        angle = 195 
+        attack_area = 1   
+    elif(client_angle == 12):
+        angle = 180  
+        attack_area = 1  
+    elif(client_angle == 13):
+        angle = 0
+        attack_area = 1
+    elif(client_angle == 14):
+        angle = 15 
+        attack_area = 1   
+    elif(client_angle == 15):
+        angle = 30  
+        attack_area = 1  
+    elif(client_angle == 16): 
+        angle = 45
+        attack_area = 1
+    elif(client_angle == 17):
+        angle = 60
+        attack_area = 1
+    elif(client_angle == 18):
+        angle = 75 
+        attack_area = 1
+    elif(client_angle == 19):
+        angle = 90
+        attack_area = 1
+    elif(client_angle == 20):
+        angle = 105
+        attack_area = 1
+    elif(client_angle == 21):
+        angle = 120
+        attack_area = 1
+    elif(client_angle == 22):
+        angle = 135
+        attack_area = 1
+    elif(client_angle == 23):  
+        angle = 150
+        attack_area = 1
+    elif(client_angle == 24):      
+        angle = 165
+        attack_area = 1
+    elif(client_angle == 25):
+        attack_area = 0
+    
+    return attack_area,angle
 
 class Player(Entity):
     name = 'player'
@@ -56,53 +107,42 @@ class Player(Entity):
         self.falling = False
         self.floor_value = self.rect.y
         self.fall(-100)
-        self.mqtt_client = MQTTClient()
-        self.mqtt_client.connect()
         self.keydeterm = {"K_w":False, "K_s":False, "K_a":False, "K_d":False}
-        self.last_e_press = 0
-        self.speech = Speech(callback=self.callback_speech)
 
     def input(self):
         pressed = pygame.key.get_pressed()
-        current_time = pygame.time.get_ticks()
-        if pressed[pygame.K_SPACE]:
-            if self.mqtt_client.counter == 0:
-                self.keydeterm["K_w"] = False
-                self.keydeterm["K_s"] = False
-                self.keydeterm["K_d"] = False
-                self.keydeterm["K_a"] = False
-            else:
-                if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
-                    self.keydeterm["K_w"] = True
-                if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:
-                    self.keydeterm["K_s"] = True
-                if self.mqtt_client.counter == 2 or self.mqtt_client.counter == 3 or self.mqtt_client.counter == 4:
-                    self.keydeterm["K_a"] = True
-                if self.mqtt_client.counter == 6 or self.mqtt_client.counter == 7 or self.mqtt_client.counter == 8:
-                    self.keydeterm["K_d"] = True
-            if self.keydeterm["K_w"]:
-                self.direction = 'up'
-            if self.keydeterm["K_s"]:
-                self.direction = 'down'
-            if self.keydeterm["K_a"]:
-                self.direction = 'left'
-            if self.keydeterm["K_d"]:
-                self.direction = 'right'
-        else:
-            if pressed[pygame.K_w]:
-                self.direction = 'up'
-            if pressed[pygame.K_s]:
-                self.direction = 'down'
-            if pressed[pygame.K_a]:
-                self.direction = 'left'
-            if pressed[pygame.K_d]:
-                self.direction = 'right'
-        if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
-            self.last_e_press = current_time
-            self.speech.toggle_listening()
-            self.callback_speech = 0
-        if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
-            self.time = pygame.time.get_ticks()
+        '''
+        if pressed[pygame.K_w]:
+            self.direction = 'up'
+        if pressed[pygame.K_s]:
+            self.direction = 'down'
+        if pressed[pygame.K_a]:
+            self.direction = 'left'
+        if pressed[pygame.K_d]:
+            self.direction = 'right'
+        '''
+        self.keydeterm = {"K_w":False, "K_s":False, "K_a":False, "K_d":False}
+        if self.game.inputs["gesture"] == 1 or self.game.inputs["gesture"] == 2 or self.game.inputs["gesture"] == 8:
+            self.keydeterm["K_w"] = True
+        if self.game.inputs["gesture"] == 4 or self.game.inputs["gesture"] == 5 or self.game.inputs["gesture"] == 6:
+            self.keydeterm["K_s"] = True
+        if self.game.inputs["gesture"] == 2 or self.game.inputs["gesture"] == 3 or self.game.inputs["gesture"] == 4:
+            self.keydeterm["K_a"] = True
+        if self.game.inputs["gesture"] == 6 or self.game.inputs["gesture"] == 7 or self.game.inputs["gesture"] == 8:
+            self.keydeterm["K_d"] = True
+
+        if self.keydeterm["K_w"]:
+            self.direction = 'up'
+        if self.keydeterm["K_s"]:
+            self.direction = 'down'
+        if self.keydeterm["K_a"]:
+            self.direction = 'left'
+        if self.keydeterm["K_d"]:
+            self.direction = 'right'
+
+        if self.game.inputs["speech"] != " " and self.game.inputs["speech"] == "pick up":
+            self.game.object_manager.interact()
+        if self.game.inputs["speech"] == "drop it" and self.weapon:
             self.weapon.drop()
             if self.items:
                 self.weapon = self.items[0]
@@ -122,30 +162,30 @@ class Player(Entity):
                     self.shift_items_right()
                     self.weapon = self.items[0]
 
-        # constant_dt = 0.06
         constant_dt = self.game.dt
-        if pressed[pygame.K_SPACE]:
-            vel_up = [0, -self.speed * constant_dt]
-            vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
-            vel_down = [0, self.speed * constant_dt]
-            vel_down = [i * self.keydeterm["K_s"] for i in vel_down]
-            vel_left = [-self.speed * constant_dt, 0]
-            vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
-            vel_right = [self.speed * constant_dt, 0]
-            vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
-            vel = zip(vel_up, vel_down, vel_left, vel_right)
-        else:
-            vel_up = [0, -self.speed * constant_dt]
-            vel_up = [i * pressed[pygame.K_w] for i in vel_up]
-            vel_down = [0, self.speed * constant_dt]
-            vel_down = [i * pressed[pygame.K_s] for i in vel_down]
-            vel_left = [-self.speed * constant_dt, 0]
-            vel_left = [i * pressed[pygame.K_a] for i in vel_left]
-            vel_right = [self.speed * constant_dt, 0]
-            vel_right = [i * pressed[pygame.K_d] for i in vel_right]
-            vel = zip(vel_up, vel_down, vel_left, vel_right)
+        vel_up = [0, -self.speed * constant_dt]
+        vel_up = [i * self.keydeterm["K_w"] for i in vel_up]
+        vel_down = [0, self.speed * constant_dt]
+        vel_down = [i * self.keydeterm["K_s"] for i in vel_down]
+        vel_left = [-self.speed * constant_dt, 0]
+        vel_left = [i * self.keydeterm["K_a"] for i in vel_left]
+        vel_right = [self.speed * constant_dt, 0]
+        vel_right = [i * self.keydeterm["K_d"] for i in vel_right]
+        vel = zip(vel_up, vel_down, vel_left, vel_right)
         vel_list = [sum(item) for item in vel]
-
+        '''
+        constant_dt = self.game.dt
+        vel_up = [0, -self.speed * constant_dt]
+        vel_up = [i * pressed[pygame.K_w] for i in vel_up]
+        vel_down = [0, self.speed * constant_dt]
+        vel_down = [i * pressed[pygame.K_s] for i in vel_down]
+        vel_left = [-self.speed * constant_dt, 0]
+        vel_left = [i * pressed[pygame.K_a] for i in vel_left]
+        vel_right = [self.speed * constant_dt, 0]
+        vel_right = [i * pressed[pygame.K_d] for i in vel_right]
+        vel = zip(vel_up, vel_down, vel_left, vel_right)
+        vel_list = [sum(item) for item in vel]
+        '''
         x = sqrt(pow(vel_list[0], 2) + pow(vel_list[1], 2))
 
         if 0 not in vel_list:
@@ -155,24 +195,22 @@ class Player(Entity):
         else:
             self.set_velocity(vel_list)
 
-    
-        attackspeed = 1.7
-        attackArea = 10
-        if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
-            self.time = pygame.time.get_ticks()   
-            if(self.weapon.weapon_swing.attack_area > attackArea):
-                self.attacking = True
-            else:
-                self.attacking = False
+#Localizaion ---------------
+        if(self.weapon):
+            attack_area,angle = recovery(self.game.inputs["localization"])
+            attackspeed = 1.7
+            if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
+                self.time = pygame.time.get_ticks()  
+                if(attack_area == 1):
+                    self.attacking = True
+                    self.weapon.weapon_swing.angle = angle
+                else:
+                    self.attacking = False
 
-            if self.weapon.name != 'staff':
-                self.weapon.weapon_swing.swing_side *= (-1)   
-    
-    def callback_speech(self, command):
-        if command == "pick up":
-            #print("pickup recognized callback function")
-            self.game.object_manager.interact()
-    
+                if self.weapon.name != 'staff':
+                    self.weapon.weapon_swing.swing_side *= (-1)
+#Localizaion ---------------
+
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]
 

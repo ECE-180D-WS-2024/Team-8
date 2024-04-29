@@ -1,6 +1,5 @@
 import math
 import random
-
 import pygame
 from pygame.math import Vector2
 from src.utils import get_mask_rect
@@ -75,7 +74,7 @@ class Weapon(Object):
         self.hitbox = get_mask_rect(self.original_image, *self.rect.topleft)
 
     def detect_collision(self):
-        if self.game.player.hitbox.colliderect(self.rect):
+        if self.game.player.hitbox.colliderect(self.rect) or self.game.player2.hitbox.colliderect(self.rect):
             self.image = self.image_picked
             self.interaction = True
         else:
@@ -83,9 +82,12 @@ class Weapon(Object):
             self.interaction = False
             self.show_name.reset_line_length()
 
-    def interact(self):
+    def interact(self,name):
         self.weapon_swing.reset()
-        self.player = self.game.player
+        if(name == "player"):
+            self.player = self.game.player
+        elif(name == "player2"):
+            self.player = self.game.player2
         self.player.items.append(self)
         if not self.player.weapon:
             self.player.weapon = self
@@ -117,10 +119,23 @@ class Weapon(Object):
                     pygame.sprite.collide_mask(self.game.player.weapon, enemy)
                     and enemy.dead is False
                     and enemy.can_get_hurt_from_weapon()
-            ):
-                self.game.player.weapon.special_effect(enemy)
+            ):  
+                if(self.game.player.weapon.name != "staff"):
+                    self.game.player.weapon.special_effect(enemy)
                 enemy.hurt = True
                 enemy.hp -= self.game.player.weapon.damage * self.game.player.strength
+                enemy.entity_animation.hurt_timer = pygame.time.get_ticks()
+                self.game.sound_manager.play_hit_sound()
+                enemy.weapon_hurt_cooldown = pygame.time.get_ticks()
+            elif(
+                    pygame.sprite.collide_mask(self.game.player2.weapon, enemy)
+                    and enemy.dead is False
+                    and enemy.can_get_hurt_from_weapon()
+            ):
+                if(self.game.player2.weapon.name != "staff"):
+                    self.game.player2.weapon.special_effect(enemy)
+                enemy.hurt = True
+                enemy.hp -= self.game.player2.weapon.damage * self.game.player2.strength
                 enemy.entity_animation.hurt_timer = pygame.time.get_ticks()
                 self.game.sound_manager.play_hit_sound()
                 enemy.weapon_hurt_cooldown = pygame.time.get_ticks()
@@ -167,7 +182,6 @@ class Weapon(Object):
             self.show_name.draw(surface, self.rect)
         self.show_price.draw(surface)
         self.draw_shadow(surface)
-
 
 class Staff(Weapon):
     name = 'staff'
@@ -250,12 +264,11 @@ class Staff(Weapon):
             pos = [931,4]
         if(self.weapon_swing.angle == 345):
             pos = [794,5]  
-
         self.update_hitbox()
         self.calculate_firing_position()
         self.game.bullet_manager.add_bullet(
             StaffBullet(self.game, self, self.game.world_manager.current_room, self.firing_position[0],
-                        self.firing_position[1], pos))
+                        self.firing_position[1], pos, self.player.name))
         self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/Shoot6.wav'))
 
     def player_update(self):
@@ -318,9 +331,11 @@ class AnimeSword(Weapon):
 
         def draw(self):
             pass
-
+    
+    '''
     def screen_shake(self):
         self.game.screen_position = (random.randint(-3, 3), random.randint(-3, 3))
+    '''
 
     def enemy_in_list(self, enemy):
         for e in self.damage_enemies:
@@ -345,7 +360,7 @@ class AnimeSword(Weapon):
             self.weapon_swing.swing()
             self.enemy_collision()
             self.game.sound_manager.play_sword_sound()
-            self.screen_shake()
+            #self.screen_shake()
         else:
             self.weapon_swing.rotate()
 

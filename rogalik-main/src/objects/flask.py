@@ -17,7 +17,7 @@ class Flask(Object):
     def activate_bounce(self):
         self.bounce = Bounce(self.rect.x, self.rect.y, self.rect.y + 20)
 
-    def interact(self):
+    def interact(self, name):
         self.interaction = False
         self.show_name.reset_line_length()
         self.image = self.original_image
@@ -43,6 +43,9 @@ class Flask(Object):
         if self in self.game.player.items:
             self.bounce.reset()
             self.rect.bottomright = self.game.player.hitbox.topleft
+        elif self in self.game.player2.items:
+            self.bounce.reset()
+            self.rect.bottomright = self.game.player2.hitbox.topleft
 
 
 class GreenFlask(Flask):
@@ -59,10 +62,16 @@ class GreenFlask(Flask):
     def apply_effect(self):
         # if self.game.player.hp == self.game.player.max_hp:
         #     return
-        if self.game.player.hp <= self.game.player.max_hp - 20:
-            self.game.player.hp += 20
-        else:
-            self.game.player.hp = self.game.player.max_hp
+        if(self.game.player.name == "player"):
+            if self.game.player.hp <= self.game.player.max_hp - 20:
+                self.game.player.hp += 20
+            else:
+                self.game.player.hp = self.game.player.max_hp
+        elif(self.game.player.name == "player2"):
+            if self.game.player2.hp <= self.game.player2.max_hp - 20:
+                self.game.player2.hp += 20
+            else:
+                self.game.player2.hp = self.game.player2.max_hp
         if self.room == self.game.world_manager.current_room:
             self.room.objects.remove(self)
 
@@ -80,8 +89,12 @@ class RedFlask(Flask):
 
 
     def apply_effect(self):
-        self.game.player.hp += 20
-        self.game.player.max_hp += 20
+        if(self.game.player.name == "player"):
+            self.game.player.hp += 20
+            self.game.player.max_hp += 20
+        elif(self.game.player.name == "player2"):
+            self.game.player2.hp += 20
+            self.game.player2.max_hp += 20
         if self.room == self.game.world_manager.current_room:
             self.room.objects.remove(self)
 

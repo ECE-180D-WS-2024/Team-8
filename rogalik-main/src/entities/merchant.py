@@ -76,7 +76,8 @@ class Merchant(Entity):
             self.dialog.reset_line_length()
 
     def detect_collision(self):
-        self.interaction = bool(self.game.player.hitbox.colliderect(self.hitbox))
+        self.interaction = bool(self.game.player.hitbox.colliderect(self.hitbox) or self.game.player2.hitbox.colliderect(self.hitbox))
+
 
 
     def draw(self):

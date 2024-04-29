@@ -25,7 +25,7 @@ class PowerUp(Object):
         self.image = image
 
     def detect_collision(self):
-        if self.game.player.rect.colliderect(self.rect):
+        if self.game.player.rect.colliderect(self.rect) or self.game.player2.rect.colliderect(self.rect):
             self.image = pygame.image.load(
                 f'./assets/objects/power_ups/{self.name}/{self.name}_picked.png').convert_alpha()
             self.interaction = True
@@ -63,8 +63,11 @@ class AttackPowerUp(PowerUp):
         super().__init__(game, room, self.name, position)
         self.value = 250
 
-    def interact(self):
-        self.game.player.strength *= 1.1
+    def interact(self, name):
+        if(name == "player"):
+            self.game.player.strength *= 1.1
+        elif(name == "player2"):
+            self.game.player2.strength *= 1.1
         self.room.objects.remove(self)
         self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/PowerUp.wav'))
 
@@ -82,8 +85,11 @@ class ShieldPowerUp(PowerUp):
         super().__init__(game, room, self.name, position)
         self.value = 150
 
-    def interact(self):
-        self.game.player.shield += 1
+    def interact(self, name):
+        if(name == "player"):
+            self.game.player.shield += 1
+        elif(name == "player2"):
+            self.game.player2.shield += 1
         self.room.objects.remove(self)
         self.game.sound_manager.play(pygame.mixer.Sound('./assets/sound/PowerUp.wav'))
 

@@ -2,6 +2,9 @@ import pygame
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
+
+from .entities.player2 import Player2
+
 from .menu import MainMenu
 from .mini_map import MiniMap
 from .particles import ParticleManager
@@ -42,11 +45,15 @@ class Game:
         self.bullet_manager = BulletManager(self)
         self.sound_manager = SoundManager(self)
         self.player = Player(self)
-        self.hud = Hud(self)
+        self.player2 = Player2(self)
+        self.hud1 = Hud(self, "player")
+        self.hud2 = Hud(self, "player2")
+
         self.running = True
         self.menu = MainMenu(self)
         self.mini_map = MiniMap(self)
         self.game_time = None
+
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)
@@ -55,6 +62,7 @@ class Game:
         self.inputs = {"gesture": 0,
                        "speech": " ",
                        "localization": 0}
+
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
 
@@ -68,6 +76,7 @@ class Game:
         self.enemy_manager.update_enemies()
         self.object_manager.update()
         self.player.update()
+        self.player2.update()
         self.particle_manager.update_particles()
         self.particle_manager.update_fire_particles()
         self.bullet_manager.update()
@@ -77,19 +86,20 @@ class Game:
         self.mini_map.update()
 
     def draw_groups(self):
-        #self.background.draw(self.screen)
         self.world_manager.draw_map(self.screen)
         if self.player:
             self.player.draw(self.screen)
+        if self.player2:
+            self.player2.draw(self.screen)
         self.enemy_manager.draw_enemies(self.screen)
         self.object_manager.draw()
         self.bullet_manager.draw()
         self.mini_map.draw(self.screen)
-        self.hud.draw()
+        self.hud1.draw()
+        self.hud2.draw()
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
-        #self.particle_manager.draw_fire_particles()
+        self.particle_manager.draw_fire_particles()
         self.game_over.draw()
-
     def input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -99,6 +109,7 @@ class Game:
                 self.object_manager.hover = True
 
         self.player.input()
+        self.player2.input()
         pressed = pygame.key.get_pressed()
         # if pressed[pygame.K_r]:
         #     self.refresh()
@@ -110,7 +121,7 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '131.179.15.231'
+        host = '192.168.137.1'
         port = 12347
         server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         server.bind((host, port))

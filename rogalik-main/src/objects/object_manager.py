@@ -28,6 +28,7 @@ class ObjectManager:
                 self.game.world_manager.current_room.type == 'starting_room'
                 and self.game.world_manager.level == 1
                 and self.game.player.weapon
+                and self.game.player2.weapon
         ):
             self.delete_items()
 
@@ -48,10 +49,10 @@ class ObjectManager:
             if o.name != 'next_level':
                 o.draw()
 
-    def interact(self):
+    def interact(self, name):
         for o in self.current_objects:
             if o.interaction:
                 if not o.for_sale:
-                    o.interact()
+                    o.interact(name)
                 else:
-                    o.buy()
+                    o.buy(name)

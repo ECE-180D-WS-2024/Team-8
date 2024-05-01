@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import socket
 import pygame
+import paho.mqtt.client as mqtt
 import sys
 import io
 import base64
@@ -13,6 +14,33 @@ import select
 import gzip
 import struct
 from speech import Speech
+
+class MQTTClient:
+    def __init__(self):
+        self.client = mqtt.Client()
+        self.counter = 0  # Use a class attribute instead of a global variable
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+
+    def on_connect(self, client, userdata, flags, rc):
+        print("Connected with result code " + str(rc))
+        client.subscribe("lol123")
+
+    def on_message(self, client, userdata, msg):
+        try:
+            # Attempt to convert the message payload to an integer
+            self.counter = int(msg.payload)
+            
+        except ValueError:
+            dummy = 0
+
+    def connect(self):
+        self.client.connect_async('mqtt.eclipseprojects.io')
+        self.client.loop_start()
+
+    def counter(self):
+        return self._counter
+
 pygame.init()
 
 world_size = (20* 64, 12*64)
@@ -86,23 +114,23 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 def process_inputs(ECE180_input, current_time, last_e_press):
     pressed = pygame.key.get_pressed()
     speech = Speech(callback=callback_speech)
-    ECE180_input["gesture"] = 0
-    if pressed[pygame.K_w]:
-        ECE180_input["gesture"] = 1
-    elif pressed[pygame.K_w] and pressed[pygame.K_a]:
-        ECE180_input["gesture"] = 2
-    elif pressed[pygame.K_a]:
-        ECE180_input["gesture"] = 3
-    elif pressed[pygame.K_s] and pressed[pygame.K_a]:
-        ECE180_input["gesture"] = 4
-    elif pressed[pygame.K_s]:
-        ECE180_input["gesture"] = 5
-    elif pressed[pygame.K_s] and pressed[pygame.K_d]:
-        ECE180_input["gesture"] = 6
-    elif pressed[pygame.K_d]:
-        ECE180_input["gesture"] = 7
-    elif pressed[pygame.K_d] and pressed[pygame.K_w]:
-        ECE180_input["gesture"] = 8
+    # ECE180_input["gesture"] = 0
+    # if pressed[pygame.K_w]:
+    #     ECE180_input["gesture"] = 1
+    # elif pressed[pygame.K_w] and pressed[pygame.K_a]:
+    #     ECE180_input["gesture"] = 2
+    # elif pressed[pygame.K_a]:
+    #     ECE180_input["gesture"] = 3
+    # elif pressed[pygame.K_s] and pressed[pygame.K_a]:
+    #     ECE180_input["gesture"] = 4
+    # elif pressed[pygame.K_s]:
+    #     ECE180_input["gesture"] = 5
+    # elif pressed[pygame.K_s] and pressed[pygame.K_d]:
+    #     ECE180_input["gesture"] = 6
+    # elif pressed[pygame.K_d]:
+    #     ECE180_input["gesture"] = 7
+    # elif pressed[pygame.K_d] and pressed[pygame.K_w]:
+    #     ECE180_input["gesture"] = 8
     if pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
         last_e_press = current_time
         speech.toggle_listening(ECE180_input)
@@ -121,7 +149,8 @@ def callback_speech(list, ECE180_input, command):
 def main():
     
     screen = pygame.display.set_mode(world_size)
-
+    mqtt_client = MQTTClient()
+    mqtt_client.connect()
     clientsocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     clientsocket.connect((host, port))
 
@@ -229,7 +258,7 @@ def main():
         ECE180_input['localization'] = angle
         #-------------------   
 
-  
+        ECE180_input["gesture"] = mqtt_client.counter
         size_data = clientsocket.recv(4)
         size = struct.unpack("!I", size_data)[0]
         data = b''

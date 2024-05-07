@@ -121,7 +121,7 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '192.168.137.1'
+        host = '172.26.235.141'
         port = 12347
         server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         server.bind((host, port))

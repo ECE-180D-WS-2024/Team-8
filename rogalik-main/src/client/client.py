@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-host = '172.26.235.141'
+host = '192.168.137.1'
 port = 12347
 
 cap = cv.VideoCapture(0)

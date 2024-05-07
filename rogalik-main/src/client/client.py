@@ -47,6 +47,7 @@ pygame.init()
 world_size = (20* 64, 12*64)
 host = '192.168.137.1'
 port = 12347
+white = (255, 255, 255)
 
 cap = cv.VideoCapture(0)
 #img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
@@ -112,17 +113,18 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 
     return angle
 
-def process_inputs(ECE180_input, current_time, last_e_press):
+def process_inputs(ECE180_input, current_time, last_e_press, message):
     pressed = pygame.key.get_pressed()
     speech = Speech(callback=callback_speech)
     if pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
         last_e_press = current_time
-        speech.toggle_listening(ECE180_input)
+        speech.toggle_listening(ECE180_input, message)
+    message = message
  
 
-    return ECE180_input
+    return ECE180_input, message
 
-def callback_speech(list, ECE180_input, command):
+def callback_speech(list, ECE180_input, command, message):
     if command in list["pick up"]:
         ECE180_input["speech"] = "pick up"
     elif command in list["drop it"]:
@@ -131,13 +133,12 @@ def callback_speech(list, ECE180_input, command):
     #     ECE180_input["speech"] = " "
 
 def main():
-    
+    font = pygame.font.Font('freesansbold.ttf', 16)
     screen = pygame.display.set_mode(world_size)
     mqtt_client = MQTTClient()
     mqtt_client.connect()
     clientsocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     clientsocket.connect((host, port))
-
     #Localization
     # define range of blue color in HSV
     lower_yellow = np.array([20,100,100])
@@ -158,7 +159,13 @@ def main():
             "speech": " ",
             "localization": 0,
     }   
+    message = {
+            "1": "Press E & say: pick up/drop it"
+    }
     while True:
+        text = font.render(message["1"], True, white)
+        textRect = text.get_rect()
+        textRect.center = (805, 60)
         current_time = pygame.time.get_ticks()
         # print(current_time)
         _,frame = cap.read()
@@ -253,11 +260,13 @@ def main():
         data = zlib.decompress(data)
         image = pygame.image.frombytes(data, world_size, "RGB")
         screen.blit(image,(0,0)) # "show image" on the screen
+        screen.blit(text, textRect)
         pygame.display.flip()
         clientsocket.send(b'1')
 
-        ECE180_input = process_inputs(ECE180_input,current_time, last_e_press)
-        # print(ECE180_input)
+        ECE180_input, message = process_inputs(ECE180_input,current_time, last_e_press, message)
+        if(ECE180_input["speech"] != " "):
+            message["1"] = "Press E & say: pick up/drop it"
         input = pickle.dumps(ECE180_input)
         clientsocket.send(input)
         ECE180_input["speech"] = " "

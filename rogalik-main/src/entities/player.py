@@ -143,16 +143,16 @@ class Player(Entity):
             self.game.mini_map.draw_mini_map = False
         else:
             self.game.mini_map.draw_mini_map = True
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and self.items:
-                if event.button == 4:
-                    self.weapon = self.items[self.items.index(self.weapon) - 1]
-                    self.shift_items_left()
-                    self.weapon = self.items[0]
-                elif event.button == 5:
-                    self.weapon = self.items[(self.items.index(self.weapon) + 1) % len(self.items)]
-                    self.shift_items_right()
-                    self.weapon = self.items[0]
+        # for event in pygame.event.get():
+        #     if event.type == pygame.MOUSEBUTTONDOWN and self.items:
+        #         if event.button == 4:
+        #             self.weapon = self.items[self.items.index(self.weapon) - 1]
+        #             self.shift_items_left()
+        #             self.weapon = self.items[0]
+        #         elif event.button == 5:
+        #             self.weapon = self.items[(self.items.index(self.weapon) + 1) % len(self.items)]
+        #             self.shift_items_right()
+        #             self.weapon = self.items[0]
 
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]

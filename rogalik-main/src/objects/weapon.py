@@ -25,8 +25,16 @@ class WeaponSwing:
         self.counter = 0
 
     def rotate(self, weapon=None):
-        print("weapon_wing file angle " + str(self.angle))
         position = self.weapon.player.hitbox.center
+        if(self.weapon.player.name == "player2"):
+            mx, my = pygame.mouse.get_pos()
+            dx = mx - self.weapon.player.hitbox.centerx  # - 64
+            dy = my - self.weapon.player.hitbox.centery  # - 32
+            if self.swing_side == 1:
+                self.angle = (180 / math.pi) * math.atan2(-self.swing_side * dy, dx) + self.left_swing
+            else:
+                self.angle = (180 / math.pi) * math.atan2(self.swing_side * dy, dx) + self.right_swing
+
         if weapon:
             self.weapon.image = pygame.transform.rotozoom(self.weapon.image, self.angle, 1)
         else:

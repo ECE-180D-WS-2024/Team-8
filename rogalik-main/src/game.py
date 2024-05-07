@@ -98,7 +98,7 @@ class Game:
         self.hud1.draw()
         self.hud2.draw()
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
-        self.particle_manager.draw_fire_particles()
+        #self.particle_manager.draw_fire_particles()
         self.game_over.draw()
     def input(self):
         for event in pygame.event.get():
@@ -120,20 +120,12 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '192.168.137.1'
-        port = 12347
-        server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        server.bind((host, port))
-        server.listen()
-        server.settimeout(1.0)  # Allow timeout to process KeyboardInterrupt
         counter = 0
-        while True:
-            try:
-                client, address = server.accept()
-                if(client):
-                    break
-            except socket.timeout:
-                continue
+        white = (255, 255, 255)
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render('Waiting for the second player', True, white)
+        textRect = text.get_rect()
+        textRect.center = (20*64 // 2, 12*64 // 2)
             
         self.enemy_manager.add_enemies()
         prev_time = time.time() 
@@ -144,6 +136,26 @@ class Game:
             self.dt = now - prev_time
             prev_time = now
             self.menu.show()
+            if (self.menu.running == False and counter == 0):
+                host = '192.168.137.1'
+                port = 12347
+                server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+                server.bind((host, port))
+                server.listen()
+                server.settimeout(1.0)
+                while True:
+                    self.screen.fill((0, 0, 0))
+                    self.display.blit(self.screen, self.screen_position)
+                    self.display.blit(text, textRect)
+                    pygame.display.flip()
+                    try:
+                        client, address = server.accept()
+                        if(client):
+                            break
+                    except socket.timeout:
+                        continue
+                counter = counter + 1
+            
             self.screen.fill((0, 0, 0))
             self.input()
             self.update_groups()

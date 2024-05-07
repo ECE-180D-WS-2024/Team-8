@@ -180,7 +180,7 @@ class Enemy(Entity):
 class Demon(Enemy):
     name = 'demon'
     damage = 13
-    speed = 300
+    speed = 100
 
     def __init__(self, game, max_hp, room):
         Enemy.__init__(self, game, max_hp, room, self.name)
@@ -189,7 +189,7 @@ class Demon(Enemy):
 class Imp(Enemy):
     damage = 10
     name = 'imp'
-    speed = 200
+    speed = 50
 
     def __init__(self, game, speed, max_hp, room, ):
         Enemy.__init__(self, game, max_hp, room, self.name)
@@ -198,7 +198,7 @@ class Imp(Enemy):
 
     def shoot(self):
 
-        if not sum(self.velocity) and time_passed(self.time, 750) and (self.game.player.dead is False or self.game.player2.dead is False) and not self.dead:
+        if not sum(self.velocity) and time_passed(self.time, 3000) and (self.game.player.dead is False or self.game.player2.dead is False) and not self.dead:
             self.time = pygame.time.get_ticks()
             d1 = pygame.math.Vector2(self.game.player.hitbox.x - self.hitbox.x,
                                                  self.game.player.hitbox.y - self.hitbox.y).length()

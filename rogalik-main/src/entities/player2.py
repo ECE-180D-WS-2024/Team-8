@@ -9,7 +9,7 @@ from src.particles import Dust
 pygame.init()
 class Player2(Entity):
     name = 'player2'
-    speed = 360
+    speed = 200
     max_hp = 100
     gold = 0
     shield = 1

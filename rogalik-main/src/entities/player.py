@@ -88,7 +88,7 @@ def recovery(client_angle):
 
 class Player(Entity):
     name = 'player'
-    speed = 360
+    speed = 200
     max_hp = 100
     gold = 0
     shield = 1

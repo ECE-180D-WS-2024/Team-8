@@ -107,9 +107,8 @@ class Game:
             if event.type == pygame.USEREVENT:
                 self.object_manager.up += 1
                 self.object_manager.hover = True
-
-        self.player.input()
         self.player2.input()
+        self.player.input()
         pressed = pygame.key.get_pressed()
         # if pressed[pygame.K_r]:
         #     self.refresh()
@@ -121,7 +120,7 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
-        host = '172.26.235.141'
+        host = '192.168.137.1'
         port = 12347
         server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         server.bind((host, port))
@@ -161,7 +160,7 @@ class Game:
             client.recv(1)
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
-            print(self.inputs)
+            #print(self.inputs)
             if self.running:
                 pygame.display.flip()
         pygame.quit()

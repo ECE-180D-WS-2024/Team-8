@@ -48,19 +48,19 @@ class Player(Entity):
         #     self.time = pygame.time.get_ticks()
         #     self.game.object_manager.interact()
         #     # Initiate listening for a speech command
-        if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
-            self.last_e_press = current_time
-            self.speech.toggle_listening()
-            self.callback_speech = 0
+        # if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
+        #     self.last_e_press = current_time
+        #     self.speech.toggle_listening()
+        #     self.callback_speech = 0
         # if pressed[pygame.K_q] and self.weapon and pygame.time.get_ticks() - self.time > 300:
         #     self.time = pygame.time.get_ticks()
         #     self.weapon.drop()
         #     if self.items:
         #         self.weapon = self.items[0]
-        if pressed[pygame.K_q] and self.weapon and not self.speech.listening and (current_time - self.last_q_press > 300):
-            self.last_q_press = current_time
-            self.speech.toggle_listening()
-            self.callback_speech = 0
+        if not (pressed[pygame.K_w] or pressed[pygame.K_s] or pressed[pygame.K_a] or pressed[pygame.K_d]):
+            if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
+                self.last_e_press = current_time
+                self.speech.toggle_listening()
         if pressed[pygame.K_TAB]:
             self.game.mini_map.draw_all(self.game.screen)
             self.game.mini_map.draw_mini_map = False

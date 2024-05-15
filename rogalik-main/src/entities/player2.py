@@ -4,7 +4,7 @@ from src.objects.p import Poop
 from src.objects.flask import GreenFlask
 from .entity import Entity
 from src.particles import Dust
-
+from src.speech import Speech
 
 pygame.init()
 class Player2(Entity):
@@ -29,9 +29,12 @@ class Player2(Entity):
         self.falling = False
         self.floor_value = self.rect.y
         self.fall(-100)
+        self.last_e_press = 0
+        self.speech = Speech(callback=self.callback_speech)
 
     def input(self):
         pressed = pygame.key.get_pressed()
+        current_time = pygame.time.get_ticks()
         if pressed[pygame.K_UP]:
             self.direction = 'up'
         if pressed[pygame.K_DOWN]:
@@ -40,14 +43,18 @@ class Player2(Entity):
             self.direction = 'left'
         if pressed[pygame.K_RIGHT]:
             self.direction = 'right'
-        if pressed[pygame.K_z] and pygame.time.get_ticks() - self.time > 300:
-            self.time = pygame.time.get_ticks()
-            self.game.object_manager.interact(self.name)
-        if pressed[pygame.K_x] and self.weapon and pygame.time.get_ticks() - self.time > 300:
-            self.time = pygame.time.get_ticks()
-            self.weapon.drop()
-            if self.items:
-                self.weapon = self.items[0]
+        # if pressed[pygame.K_z] and pygame.time.get_ticks() - self.time > 300:
+        #     self.time = pygame.time.get_ticks()
+        #     self.game.object_manager.interact(self.name)
+        # if pressed[pygame.K_x] and self.weapon and pygame.time.get_ticks() - self.time > 300:
+        #     self.time = pygame.time.get_ticks()
+        #     self.weapon.drop()
+        #     if self.items:
+        #         self.weapon = self.items[0]
+        if not (pressed[pygame.K_w] or pressed[pygame.K_s] or pressed[pygame.K_a] or pressed[pygame.K_d]):
+            if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
+                self.last_e_press = current_time
+                self.speech.toggle_listening()
         if pressed[pygame.K_TAB]:
             self.game.mini_map.draw_all(self.game.screen)
             self.game.mini_map.draw_mini_map = False
@@ -63,7 +70,7 @@ class Player2(Entity):
                     self.weapon = self.items[(self.items.index(self.weapon) + 1) % len(self.items)]
                     self.shift_items_right()
                     self.weapon = self.items[0]
-
+    
         # constant_dt = 0.06
         constant_dt = self.game.dt
         vel_up = [0, -self.speed * constant_dt]
@@ -92,6 +99,15 @@ class Player2(Entity):
             self.attacking = True
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)
+
+    def callback_speech(self, command):
+        if command in self.speech.command_alternatives ["pick up"]:
+            #print("pickup recognized callback function")
+            self.game.object_manager.interact(self.name)
+        if command in self.speech.command_alternatives ["drop it"]:
+            self.weapon.drop()
+            if self.items:
+                self.weapon = self.items[0]
 
     def shift_items_right(self):
         self.items = [self.items[-1]] + self.items[:-1]

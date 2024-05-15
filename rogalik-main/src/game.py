@@ -137,7 +137,7 @@ class Game:
             prev_time = now
             self.menu.show()
             if (self.menu.running == False and counter == 0):
-                host = '192.168.137.1'
+                host = '172.26.235.206'
                 port = 12347
                 server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 server.bind((host, port))

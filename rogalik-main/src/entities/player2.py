@@ -143,10 +143,14 @@ class Player2(Entity):
         else:
             self.set_velocity(vel_list)
 
-        if pygame.mouse.get_pressed()[0] and pygame.time.get_ticks() - self.time > self.attack_cooldown \
-                and self.weapon:
-            self.time = pygame.time.get_ticks()
-            self.attacking = True
+        attackspeed = 1.7
+        attackArea = 10
+        if pygame.time.get_ticks() - self.time > attackspeed*self.attack_cooldown and self.weapon:
+            self.time = pygame.time.get_ticks()  
+            if(self.weapon.weapon_swing.attack_area > attackArea):
+                self.attacking = True
+            else:
+                self.attacking = False
             if self.weapon.name != 'staff':
                 self.weapon.weapon_swing.swing_side *= (-1)
 

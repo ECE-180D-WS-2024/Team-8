@@ -1,4 +1,5 @@
 import pygame
+import paho.mqtt.client as mqtt
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
@@ -137,7 +138,7 @@ class Game:
             prev_time = now
             self.menu.show()
             if (self.menu.running == False and counter == 0):
-                host = '172.26.235.206'
+                host = '172.26.235.9'
                 port = 12347
                 server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 server.bind((host, port))
@@ -175,4 +176,6 @@ class Game:
             #print(self.inputs)
             if self.running:
                 pygame.display.flip()
+        self.client.loop_stop()
+        self.client.disconnect()
         pygame.quit()

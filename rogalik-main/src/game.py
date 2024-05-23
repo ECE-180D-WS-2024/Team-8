@@ -49,7 +49,7 @@ class Game:
         self.player2 = Player2(self)
         self.hud1 = Hud(self, "player")
         self.hud2 = Hud(self, "player2")
-
+        
         self.running = True
         self.menu = MainMenu(self)
         self.mini_map = MiniMap(self)
@@ -126,6 +126,12 @@ class Game:
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render('Waiting for the second player', True, white)
         textRect = text.get_rect()
+        
+        print(self.player2.speech.message)
+        speech_text = font.render(self.player2.speech.message, True, white)
+        speech_textRect = text.get_rect()
+        speech_textRect.center = (805, 60)
+
         textRect.center = (20*64 // 2, 12*64 // 2)
             
         self.enemy_manager.add_enemies()
@@ -138,7 +144,7 @@ class Game:
             prev_time = now
             self.menu.show()
             if (self.menu.running == False and counter == 0):
-                host = '172.26.235.9'
+                host = '172.26.235.20'
                 port = 12347
                 server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 server.bind((host, port))
@@ -170,9 +176,14 @@ class Game:
             client.sendall(size_data)
             client.sendall(data)
             self.display.blit(self.screen, self.screen_position)
+            self.display.blit(speech_text, speech_textRect)
             client.recv(1)
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
+            if(self.player2.speech.reset != " "):
+                self.player2.speech.message = "Press E and say: 'Pick up/Drop it"
+            self.player2.speech.reset = " "
+
             #print(self.inputs)
             if self.running:
                 pygame.display.flip()

@@ -15,36 +15,42 @@ class Speech:
             "drop it": ["drop", "drop it", "dropit", "stopit", "stop it", "dropp it", "droppit", "trumpet" ]
             #add more here
         }
-        self.speech_display = "Press e and say: 'Pick up/Drop it'"
-        print("Setting initial speech display:", self.speech_display)
+        self.reset = " "
+        self.message = "Press E and say: 'Pick up/Drop it'"
+    
 
     def _listen(self):
         with self.microphone as source:
             self.recognizer.adjust_for_ambient_noise(source)
             try:
                 print("Say Command")
+                self.message = "Say Command"
                 audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1.5)
                 command = self.recognizer.recognize_google(audio).lower()
                 print(f"Recognized: {command}")
-                self.speech_display = f'Recognized: {command}'
+     
                 if self.process_command(command):
                     #print("speech command recognized")
                     if self.callback:
                         self.callback(command)
                 else:
-                    self.speech_display = f'Recognition Failed. Press key to try again.'
+      
                     print("Recognition Failed. Press key to try again.")
+                    self.message = "Press E to Try Again"
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
-                self.speech_display = f"API unavailable, {e}"
+        
                 print(f"API unavailable, {e}")
+                self.message = "Press E to Try Again"
             except sr.UnknownValueError as e:
                 # Handle unknown value error, log, or retry logic
-                self.speech_display = f"Count not understand {e}"
+
                 print(f"Could not understand audio {e}")
+                self.message = "Press E to Try Again"
             except Exception as e:
-                self.speech_display = f"Unexpected Error {e}"
+       
                 print(f"An unexpected error occurred: {e}")
+                self.message = "Press E to Try Again"
         self.listening = False
         self.stop_event.set()
         if self.listening == False:
@@ -54,7 +60,7 @@ class Speech:
     def toggle_listening(self):
         """Toggle the listening state and manage the listening thread accordingly."""
         if not self.listening:
-            self.speech_display = f"Get Ready!"
+  
             print("Please wait for speech recognition...")
             self.listening = True
             self.stop_event.clear()

@@ -156,9 +156,11 @@ class Player2(Entity):
 
     def callback_speech(self, command):
         if command in self.speech.command_alternatives ["pick up"]:
+            self.speech.reset = "pick up"
             #print("pickup recognized callback function")
             self.game.object_manager.interact(self.name)
         if command in self.speech.command_alternatives ["drop it"]:
+            self.speech.reset = "drop it"
             self.weapon.drop()
             if self.items:
                 self.weapon = self.items[0]

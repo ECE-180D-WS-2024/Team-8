@@ -33,6 +33,7 @@ pygame.init()
 pygame.mixer.init()
 
 world_size = (20*64, 12*64)
+ip_address = '192.168.12.249'
 
 class Game:
     def __init__(self):
@@ -124,15 +125,18 @@ class Game:
         counter = 0
         white = (255, 255, 255)
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render('Waiting for the second player', True, white)
-        textRect = text.get_rect()
+        text1 = font.render('Waiting for the second player', True, white)
+        text2 = font.render("Your IP Address is " + ip_address, True, white)
+        textRect1 = text1.get_rect()
+        textRect2 = text2.get_rect()
         
-        print(self.player2.speech.message)
+        #print(self.player2.speech.message)
         speech_text = font.render(self.player2.speech.message, True, white)
-        speech_textRect = text.get_rect()
+        speech_textRect = speech_text.get_rect()
         speech_textRect.center = (805, 60)
 
-        textRect.center = (20*64 // 2, 12*64 // 2)
+        textRect1.center = (20*64 // 2, 12*64 // 2)
+        textRect2.center = (20*64 // 2, 12*64 // 2 - 100)
             
         self.enemy_manager.add_enemies()
         prev_time = time.time() 
@@ -144,7 +148,7 @@ class Game:
             prev_time = now
             self.menu.show()
             if (self.menu.running == False and counter == 0):
-                host = '172.26.235.20'
+                host = ip_address
                 port = 12347
                 server =socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 server.bind((host, port))
@@ -153,7 +157,8 @@ class Game:
                 while True:
                     self.screen.fill((0, 0, 0))
                     self.display.blit(self.screen, self.screen_position)
-                    self.display.blit(text, textRect)
+                    self.display.blit(text1, textRect1)
+                    self.display.blit(text2, textRect2)
                     pygame.display.flip()
                     try:
                         client, address = server.accept()

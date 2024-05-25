@@ -15,6 +15,8 @@ import struct
 import paho.mqtt.client as mqtt
 from speech import Speech
 
+
+
 class MQTTClient:
     def __init__(self):
         self.client = mqtt.Client()
@@ -45,9 +47,11 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-host = '172.26.235.20'
+ip_address = '192.168.12.249'
+host = ip_address
 port = 12347
 white = (255, 255, 255)
+active = False
 
 cap = cv.VideoCapture(0)
 #img_mask = your target detected mask of frame; X's Y's are the coordinate of your target frame
@@ -129,13 +133,87 @@ def callback_speech(list, ECE180_input, command, message):
         ECE180_input["speech"] = "pick up"
     elif command in list["drop it"]:
         ECE180_input["speech"] = "drop it"
-    # else:
-    #     ECE180_input["speech"] = " "
 
 def main():
+    global active
     font = pygame.font.Font('freesansbold.ttf', 16)
     screen = pygame.display.set_mode(world_size)
+    temp_screen1 = pygame.display.set_mode(world_size)
+    temp_screen2 = pygame.display.set_mode(world_size)
+    temp_screen3 = pygame.display.set_mode(world_size)
+    
     mqtt_client = MQTTClient()
+
+#GUI For IP address confirmation ---------------------------------
+    input_text = ''
+    white = (255, 255, 255)
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    
+    text1 = font.render('Please enter your IP Address:', True, white)
+    text2 = font.render('Your IP address is correct', True, white)
+    text4 = font.render('Connecting to the main server.....', True, white)
+    text3 = font.render('Your IP address is wrong', True, white)
+    
+    textRect1 = text1.get_rect()
+    textRect1.center = (20*64 // 2 - 100, 12*64 // 2)
+    textRect2 = text2.get_rect()
+    textRect2.center = (20*64 // 2, 12*64 // 2 - 100)
+    textRect3 = text3.get_rect()
+    textRect3.center = (20*64 // 2, 12*64 // 2)
+    textRect4 = text4.get_rect()
+    textRect4.center = (20*64 // 2, 12*64 // 2 + 100)
+    input_rect = pygame.Rect(785, 365, 140, 32) #(x,y, boxsize of x, boxsize of y)
+    
+    IP_GUI = True
+    while(IP_GUI):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                pygame.quit() 
+                sys.exit() 
+            if event.type == pygame.MOUSEBUTTONDOWN: 
+                if input_rect.collidepoint(event.pos): 
+                    active = True
+                else:
+                    active = False
+            if event.type == pygame.KEYDOWN: 
+                if active == True:
+                    if event.key == pygame.K_BACKSPACE: 
+                        input_text = input_text[:-1] 
+                        print("K_backspace")
+                    elif event.key == pygame.K_RETURN:
+                        print("K_enter")
+                        if(ip_address == input_text):    
+                            screen2_count = 0
+                            screen2_stop = 100
+                            while(screen2_count <= screen2_stop):
+                                temp_screen2.fill((0,0,0))
+                                temp_screen2.blit(text2, textRect2)
+                                temp_screen2.blit(text4, textRect4)
+                                screen2_count = screen2_count + 0.01
+                                pygame.display.flip()
+                            IP_GUI = False
+                        elif(ip_address != input_text):
+                            screen3_count = 0
+                            screen3_stop = 20
+                            while(screen3_count <= screen3_stop):
+                                temp_screen3.fill((0,0,0))
+                                temp_screen3.blit(text3, textRect3)
+                                screen3_count = screen3_count + 0.01
+                                pygame.display.flip()
+                    else: 
+                        input_text += event.unicode
+                        print(input_text)
+
+        if(IP_GUI == True):
+            temp_screen1.fill((0,0,0))
+            #pygame.draw.rect(temp_screen1,white,input_rect,2)
+            input_surface = font.render(input_text, True, (255, 255, 255)) 
+            temp_screen1.blit(text1, textRect1)
+            temp_screen1.blit(input_surface, (input_rect.x+5, input_rect.y+5)) 
+            input_rect.w = max(100, input_surface.get_width()+10) 
+
+            pygame.display.flip()
+#GUI For IP address confirmation ---------------------------------
     mqtt_client.connect()
     clientsocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     clientsocket.connect((host, port))
@@ -162,7 +240,9 @@ def main():
     message = {
             "1": "Press E & say: pick up/drop it"
     }
+
     while True:
+        
         text = font.render(message["1"], True, white)
         textRect = text.get_rect()
         textRect.center = (805, 60)
@@ -247,7 +327,6 @@ def main():
     
         pre_angle = angle   
         ECE180_input['localization'] = angle
-        #-------------------   
         ECE180_input["gesture"] = mqtt_client.counter
   
         size_data = clientsocket.recv(4)
@@ -270,7 +349,7 @@ def main():
         input = pickle.dumps(ECE180_input)
         clientsocket.send(input)
         ECE180_input["speech"] = " "
-
+        
         # check for quit events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -1,11 +1,12 @@
 import pygame
 import paho.mqtt.client as mqtt
+import random
 
 from .entities.enemy_manager import EnemyManager
 from .entities.player import Player
 
 from .entities.player2 import Player2
-
+from .entities.enemy import Imp
 from .menu import MainMenu
 from .mini_map import MiniMap
 from .particles import ParticleManager
@@ -33,7 +34,7 @@ pygame.init()
 pygame.mixer.init()
 
 world_size = (20*64, 12*64)
-ip_address = '172.20.1.19'
+ip_address = '172.20.2.35'
 
 class Game:
     def __init__(self):
@@ -56,7 +57,14 @@ class Game:
         self.mini_map = MiniMap(self)
         self.game_time = None
         self.state_num = 0
-
+        self.last_j_press = 0
+        white = (255, 255, 255)
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        self.text = font.render('Move to weapon', True, white)
+        self.TutorialText = self.text.get_rect()
+        self.TutorialText.center= (805,60)
+        self.tutorial_enemy_spawned = False
+        
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)
@@ -103,7 +111,15 @@ class Game:
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
         #self.particle_manager.draw_fire_particles()
         self.game_over.draw()
+        self.screen.blit(self.text, self.TutorialText)
+
+
     def input(self):
+
+        white = (255, 255, 255)
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        current_time = pygame.time.get_ticks()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -115,7 +131,28 @@ class Game:
         pressed = pygame.key.get_pressed()
         # if pressed[pygame.K_r]:
         #     self.refresh()
-
+        if pressed[pygame.K_j] and ((current_time - self.last_j_press) > 300):
+            self.last_j_press = current_time
+            self.state_num = self.state_num + 1
+        if pressed[pygame.K_k] and (self.state_num > 0):
+            self.state_num = self.state_num - 1
+            print(self.state_num)
+        #pressed = pygame.key.get_pressed()
+        if(self.state_num == 0):
+            self.text = font.render('Hi', True, white)
+        elif(self.state_num == 1):
+            self.text = font.render('Move to weapon', True, white)
+        elif(self.state_num == 2):
+            self.text = font.render('Enemy Spawn', True, white)
+            if not self.tutorial_enemy_spawned:
+                self.world_manager.world.starting_room.enemy_list.append(Imp(self, random.randint(100, 150) / 10, 50, self.world_manager.world.starting_room))
+                self.world_manager.world.starting_room.enemy_list[-1].damage = 0
+                self.enemy_manager.upgrade_enemy(self.world_manager.world.starting_room.enemy_list[-1])
+                self.world_manager.world.starting_room.enemy_list[-1].spawn()
+                print(len(self.world_manager.world.starting_room.enemy_list))
+            self.tutorial_enemy_spawned = True
+        self.TutorialText = self.text.get_rect()
+        self.TutorialText.center= (805,60)
         if pressed[pygame.K_ESCAPE]:
             if self.game_over.game_over:
                 self.refresh()
@@ -130,18 +167,6 @@ class Game:
         text2 = font.render("Your IP Address is " + ip_address, True, white)
         textRect1 = text1.get_rect()
         textRect2 = text2.get_rect()
-        
-        pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_j]:
-            self.state_num = self.state_num + 1
-        if pressed[pygame.K_k] and (self.state_num > 0):
-            self.state_num = self.state_num - 1
-        if(self.state_num == 0):
-            text = font.render('Hi', True, white)
-        if(self.state_num == 1):
-            text = font.render('Move to weapon', True, white)
-        TutorialText = text.get_rect()
-        TutorialText.center= (805,60)
 
         #print(self.player2.speech.message)
         speech_text = font.render(self.player2.speech.message, True, white)
@@ -195,7 +220,6 @@ class Game:
             client.sendall(data)
             self.display.blit(self.screen, self.screen_position)
             self.display.blit(speech_text, speech_textRect)
-            self.display.blit(text, TutorialText)
             client.recv(1)
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)

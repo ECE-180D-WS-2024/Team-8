@@ -4,14 +4,14 @@ from math import ceil
 
 
 class Tutorial:
-    def __init__(self, player, game):
+    def __init__(self, game):
         self.game = game
         # self.load_images()
         self.starting_position = (0, 0)
         self.state_num = 0
         self.white = (255, 255, 255)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.text = self.font.render(self.player2.speech.message, True, self.white)
+        self.text = self.font.render("Hi", True, self.white)
         self.textRect = self.text.get_rect()
         self.textRect.center = (805, 60)
 
@@ -22,15 +22,16 @@ class Tutorial:
 
     def update(self):
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.J]:
-            state_num = state_num + 1
-        if pressed[pygame.K] and (state_num > 0):
-            state_num = state_num - 1
-
-        if(state_num == 0):
+        if pressed[pygame.K_j]:
+            self.state_num = self.state_num + 1
+        if pressed[pygame.K_k] and (self.state_num > 0):
+            self.state_num = self.state_num - 1
+        if(self.state_num == 0):
             self.text = "Hi"
-        if(state_num == 1):
+        if(self.state_num == 1):
              self.text = "Get weapon"
 
     def draw(self):
-            self.game.screen.blit(self.text, self.textRect)
+        self.update()
+        text_surface = pygame.font.Font(utils.font, 15).render(self.text, True, (255, 255, 255))
+        self.game.screen.blit(text_surface, (805, 60))

@@ -55,6 +55,7 @@ class Game:
         self.menu = MainMenu(self)
         self.mini_map = MiniMap(self)
         self.game_time = None
+        self.state_num = 0
 
         self.fps = 30
         #self.background = BackgroundEffects()
@@ -86,7 +87,6 @@ class Game:
         self.world_manager.update()
         self.game_over.update()
         self.mini_map.update()
-        self.tutorial.update()
 
     def draw_groups(self):
         self.world_manager.draw_map(self.screen)
@@ -100,7 +100,6 @@ class Game:
         self.mini_map.draw(self.screen)
         self.hud1.draw()
         self.hud2.draw()
-        self.tutorial.draw()
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
         #self.particle_manager.draw_fire_particles()
         self.game_over.draw()
@@ -132,6 +131,18 @@ class Game:
         textRect1 = text1.get_rect()
         textRect2 = text2.get_rect()
         
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_j]:
+            self.state_num = self.state_num + 1
+        if pressed[pygame.K_k] and (self.state_num > 0):
+            self.state_num = self.state_num - 1
+        if(self.state_num == 0):
+            text = font.render('Hi', True, white)
+        if(self.state_num == 1):
+            text = font.render('Move to weapon', True, white)
+        TutorialText = text.get_rect()
+        TutorialText.center= (805,60)
+
         #print(self.player2.speech.message)
         speech_text = font.render(self.player2.speech.message, True, white)
         speech_textRect = speech_text.get_rect()
@@ -184,6 +195,7 @@ class Game:
             client.sendall(data)
             self.display.blit(self.screen, self.screen_position)
             self.display.blit(speech_text, speech_textRect)
+            self.display.blit(text, TutorialText)
             client.recv(1)
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)

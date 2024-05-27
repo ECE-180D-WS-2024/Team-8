@@ -26,13 +26,12 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
-        client.subscribe("lol123")
+        client.subscribe("lol123Player2")
 
     def on_message(self, client, userdata, msg):
         try:
             # Attempt to convert the message payload to an integer
             self.counter = int(msg.payload)
-
         except ValueError:
             dummy = 0
 
@@ -143,7 +142,6 @@ def main():
     temp_screen3 = pygame.display.set_mode(world_size)
     
     mqtt_client = MQTTClient()
-
 #GUI For IP address confirmation ---------------------------------
     input_text = ''
     white = (255, 255, 255)

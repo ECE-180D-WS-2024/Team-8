@@ -22,7 +22,7 @@ class MQTTClient:
         try:
             # Attempt to convert the message payload to an integer
             self.counter = int(msg.payload)
-
+            print(self.counter)
         except ValueError:
             dummy = 0
 
@@ -65,6 +65,7 @@ class Player2(Entity):
     def input(self):
         pressed = pygame.key.get_pressed()
         current_time = pygame.time.get_ticks()
+        self.keydeterm = {"K_w":False, "K_s":False, "K_a":False, "K_d":False}
         if self.mqtt_client.counter == 1 or self.mqtt_client.counter == 2 or self.mqtt_client.counter == 8:
             self.keydeterm["K_w"] = True
         if self.mqtt_client.counter == 4 or self.mqtt_client.counter == 5 or self.mqtt_client.counter == 6:

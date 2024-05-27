@@ -17,7 +17,7 @@ from .game_over import GameOver
 import time
 from .bullet import BulletManager
 from .sound_manager import SoundManager
-
+from .tutorial import Tutorial
 import socket
 import pickle
 import sys
@@ -33,7 +33,7 @@ pygame.init()
 pygame.mixer.init()
 
 world_size = (20*64, 12*64)
-ip_address = '192.168.12.249'
+ip_address = '172.20.1.19'
 
 class Game:
     def __init__(self):
@@ -50,7 +50,7 @@ class Game:
         self.player2 = Player2(self)
         self.hud1 = Hud(self, "player")
         self.hud2 = Hud(self, "player2")
-        
+        self.tutorial = Tutorial(self)
         self.running = True
         self.menu = MainMenu(self)
         self.mini_map = MiniMap(self)
@@ -86,6 +86,7 @@ class Game:
         self.world_manager.update()
         self.game_over.update()
         self.mini_map.update()
+        self.tutorial.update()
 
     def draw_groups(self):
         self.world_manager.draw_map(self.screen)
@@ -99,6 +100,7 @@ class Game:
         self.mini_map.draw(self.screen)
         self.hud1.draw()
         self.hud2.draw()
+        self.tutorial.draw()
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
         #self.particle_manager.draw_fire_particles()
         self.game_over.draw()
@@ -167,7 +169,7 @@ class Game:
                     except socket.timeout:
                         continue
                 counter = counter + 1
-            
+
             self.screen.fill((0, 0, 0))
             self.input()
             self.update_groups()

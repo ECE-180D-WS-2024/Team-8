@@ -111,13 +111,11 @@ class Game:
         self.particle_manager.draw_particles(self.world_manager.current_map.map_surface)
         #self.particle_manager.draw_fire_particles()
         self.game_over.draw()
-        self.screen.blit(self.text, self.TutorialText)
-
 
     def input(self):
 
         white = (255, 255, 255)
-        font = pygame.font.Font('freesansbold.ttf', 32)
+        font = pygame.font.Font('freesansbold.ttf', 16)
         current_time = pygame.time.get_ticks()
 
         for event in pygame.event.get():
@@ -129,30 +127,32 @@ class Game:
         self.player2.input()
         self.player.input()
         pressed = pygame.key.get_pressed()
-        # if pressed[pygame.K_r]:
-        #     self.refresh()
-        if pressed[pygame.K_j] and ((current_time - self.last_j_press) > 300):
-            self.last_j_press = current_time
-            self.state_num = self.state_num + 1
-        if pressed[pygame.K_k] and (self.state_num > 0):
-            self.state_num = self.state_num - 1
-            print(self.state_num)
-        #pressed = pygame.key.get_pressed()
-        if(self.state_num == 0):
-            self.text = font.render('Hi', True, white)
-        elif(self.state_num == 1):
-            self.text = font.render('Move to weapon', True, white)
-        elif(self.state_num == 2):
-            self.text = font.render('Enemy Spawn', True, white)
-            if not self.tutorial_enemy_spawned:
-                self.world_manager.world.starting_room.enemy_list.append(Imp(self, random.randint(100, 150) / 10, 50, self.world_manager.world.starting_room))
-                self.world_manager.world.starting_room.enemy_list[-1].damage = 0
-                self.enemy_manager.upgrade_enemy(self.world_manager.world.starting_room.enemy_list[-1])
-                self.world_manager.world.starting_room.enemy_list[-1].spawn()
-                print(len(self.world_manager.world.starting_room.enemy_list))
-            self.tutorial_enemy_spawned = True
-        self.TutorialText = self.text.get_rect()
-        self.TutorialText.center= (805,60)
+        if(self.state_num < 5):
+            if pressed[pygame.K_j] and ((current_time - self.last_j_press) > 300):
+                self.last_j_press = current_time
+                self.state_num = self.state_num + 1
+            if pressed[pygame.K_k] and (self.state_num > 0):
+                self.state_num = self.state_num - 1
+            if(self.state_num == 0):
+                self.text = font.render('I am the Rogue Master and welcome to the dungeon. Before you begin exploring these dungeons, I wil have to prepare you to be a warrior. Press J to go next.', True, white)
+            elif(self.state_num == 1):
+                self.text = font.render('First, you must learn how to move. Your character can be controlled with the avatar controller. Tilt it forward to move and rotate your controller in the direction you would like to go. Navigate to the weapon. Press J to go next or K to go back.', True, white)
+            elif(self.state_num == 2):
+                self.text = font.render('Now that you are hovering the weapon, you can use the magic button on your wand to activate your voice commands. After pressing the button, say Pick it up to obtain your weapon. Press J to go next or K to go back.', True, white)
+            elif(self.state_num == 3):
+                self.text = font.render('You can control your weapon by orienting the end of your magic wand in front of the camera in the position you want. The magical powers will then control the weapon on your screen. After you\'re done trying out the weapon, press J to spawn a monster to test what you\'ve learned!', True, white)
+            elif(self.state_num == 4):
+                self.text = font.render('Fight the enemy with your magic wand and avatar controller! After the monster is defeated, you can now go to the next rooms! Happy exploring. Press J to end tutorial.', True, white)
+                if not self.tutorial_enemy_spawned:
+                    self.world_manager.world.starting_room.enemy_list.append(Imp(self, random.randint(100, 150) / 10, 50, self.world_manager.world.starting_room))
+                    self.world_manager.world.starting_room.enemy_list[-1].damage = 0
+                    self.enemy_manager.upgrade_enemy(self.world_manager.world.starting_room.enemy_list[-1])
+                    self.world_manager.world.starting_room.enemy_list[-1].spawn()
+                    print(len(self.world_manager.world.starting_room.enemy_list))
+                self.tutorial_enemy_spawned = True
+            self.TutorialText = self.text.get_rect()
+            self.TutorialText.center= (805,60)
+            self.screen.blit(self.text, self.TutorialText)
         if pressed[pygame.K_ESCAPE]:
             if self.game_over.game_over:
                 self.refresh()

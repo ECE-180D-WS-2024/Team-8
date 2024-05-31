@@ -16,7 +16,6 @@ import paho.mqtt.client as mqtt
 from speech import Speech
 
 
-
 class MQTTClient:
     def __init__(self):
         self.client = mqtt.Client()
@@ -46,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '172.20.2.35'
+ip_address = '131.179.34.193'
 host = ip_address
 port = 12347
 white = (255, 255, 255)
@@ -236,14 +235,21 @@ def main():
             "localization": 0,
     }   
     message = {
-            "1": "Press E & say: pick up/drop it"
+            "1": "Press E & say:",
+            "2": "Pick up/Drop it"
     }
 
     while True:
         
-        text = font.render(message["1"], True, white)
-        textRect = text.get_rect()
-        textRect.center = (805, 60)
+        font_type = './font/Minecraft.ttf'
+        pygame.font.init()  # Initialize the font module
+        font = pygame.font.Font(font_type, 15)
+        text1 = font.render(message["1"], True, white)
+        textRect1 = text1.get_rect(topleft=(62, 60))
+
+        text2 = font.render(message["2"], True, white)
+        textRect2 = text2.get_rect(topleft=(62, 75))
+        #textRect.center = (60, 60)
         current_time = pygame.time.get_ticks()
         # print(current_time)
         _,frame = cap.read()
@@ -337,7 +343,8 @@ def main():
         data = zlib.decompress(data)
         image = pygame.image.frombytes(data, world_size, "RGB")
         screen.blit(image,(0,0)) # "show image" on the screen
-        screen.blit(text, textRect)
+        screen.blit(text1, textRect1)
+        screen.blit(text2, textRect2)
         pygame.display.flip()
         clientsocket.send(b'1')
 

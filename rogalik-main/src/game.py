@@ -34,7 +34,7 @@ pygame.init()
 pygame.mixer.init()
 
 world_size = (20*64, 12*64)
-ip_address = '172.20.2.35'
+ip_address = '131.179.34.193'
 
 class Game:
     def __init__(self):
@@ -169,9 +169,14 @@ class Game:
         textRect2 = text2.get_rect()
 
         #print(self.player2.speech.message)
-        speech_text = font.render(self.player2.speech.message, True, white)
-        speech_textRect = speech_text.get_rect()
-        speech_textRect.center = (805, 60)
+        font_speech = './assets/font/Minecraft.ttf'
+        pygame.font.init()
+        font = pygame.font.Font(font_speech, 15)
+        speech_text1 = font.render(self.player2.speech.message, True, white)
+        speech_textRect1 = speech_text1.get_rect(topleft=(320, 60))
+
+        speech_text2 = font.render('Pick Up/Drop It', True, white)
+        speech_textRect2 = speech_text2.get_rect(topleft=(320, 75))
 
         textRect1.center = (20*64 // 2, 12*64 // 2)
         textRect2.center = (20*64 // 2, 12*64 // 2 - 100)
@@ -219,12 +224,13 @@ class Game:
             client.sendall(size_data)
             client.sendall(data)
             self.display.blit(self.screen, self.screen_position)
-            self.display.blit(speech_text, speech_textRect)
+            self.display.blit(speech_text1, speech_textRect1)
+            self.display.blit(speech_text2, speech_textRect2)
             client.recv(1)
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
             if(self.player2.speech.reset != " "):
-                self.player2.speech.message = "Press E and say: 'Pick up/Drop it"
+                self.player2.speech.message = "Press E and say:"
             self.player2.speech.reset = " "
 
             #print(self.inputs)

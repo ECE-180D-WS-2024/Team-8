@@ -185,6 +185,7 @@ class Game:
 
     def run_game(self):
         counter = 0
+        font_speech = './assets/font/Minecraft.ttf'
         white = (255, 255, 255)
         font = pygame.font.Font('./assets/font/Minecraft.ttf', 32)
         text1 = font.render('Waiting for the second player', True, white)
@@ -193,7 +194,6 @@ class Game:
         textRect2 = text2.get_rect()
 
         #print(self.player2.speech.message)
-        font_speech = './assets/font/Minecraft.ttf'
         pygame.font.init()
         font = pygame.font.Font(font_speech, 15)
         speech_text1 = font.render(self.player2.speech.message, True, white)

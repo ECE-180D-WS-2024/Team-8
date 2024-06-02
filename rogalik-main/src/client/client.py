@@ -134,7 +134,7 @@ def callback_speech(list, ECE180_input, command, message):
 
 def main():
     global active
-    font = pygame.font.Font('freesansbold.ttf', 16)
+    font = pygame.font.Font('./font/Minecraft.ttf', 32)
     screen = pygame.display.set_mode(world_size)
     temp_screen1 = pygame.display.set_mode(world_size)
     temp_screen2 = pygame.display.set_mode(world_size)
@@ -144,12 +144,11 @@ def main():
 #GUI For IP address confirmation ---------------------------------
     input_text = ''
     white = (255, 255, 255)
-    font = pygame.font.Font('freesansbold.ttf', 32)
-    
-    text1 = font.render('Please enter your IP Address:', True, white)
+    text1 = font.render('IP Address:', True, white)
     text2 = font.render('Your IP address is correct', True, white)
     text4 = font.render('Connecting to the main server.....', True, white)
     text3 = font.render('Your IP address is wrong', True, white)
+    text5 = font.render('Please check the textbox to input', True, white)
     
     textRect1 = text1.get_rect()
     textRect1.center = (20*64 // 2 - 100, 12*64 // 2)
@@ -159,8 +158,10 @@ def main():
     textRect3.center = (20*64 // 2, 12*64 // 2)
     textRect4 = text4.get_rect()
     textRect4.center = (20*64 // 2, 12*64 // 2 + 100)
-    input_rect = pygame.Rect(785, 365, 140, 32) #(x,y, boxsize of x, boxsize of y)
-    
+    textRect5 = text5.get_rect()
+    textRect5.center = (20*64 // 2, 12*64 // 2 - 100)
+    input_rect = pygame.Rect(650, 365, 140, 32)
+
     IP_GUI = True
     while(IP_GUI):
         for event in pygame.event.get():
@@ -203,9 +204,10 @@ def main():
 
         if(IP_GUI == True):
             temp_screen1.fill((0,0,0))
-            #pygame.draw.rect(temp_screen1,white,input_rect,2)
             input_surface = font.render(input_text, True, (255, 255, 255)) 
+            pygame.draw.rect(temp_screen1, white, input_rect,2) 
             temp_screen1.blit(text1, textRect1)
+            temp_screen1.blit(text5, textRect5)
             temp_screen1.blit(input_surface, (input_rect.x+5, input_rect.y+5)) 
             input_rect.w = max(100, input_surface.get_width()+10) 
 

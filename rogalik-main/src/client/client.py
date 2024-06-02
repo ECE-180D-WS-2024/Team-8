@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '131.179.34.193'
+ip_address = '172.26.220.78'
 host = ip_address
 port = 12347
 white = (255, 255, 255)
@@ -134,7 +134,7 @@ def callback_speech(list, ECE180_input, command, message):
 
 def main():
     global active
-    font = pygame.font.Font('freesansbold.ttf', 16)
+    font = pygame.font.Font('./font/Minecraft.ttf', 16)
     screen = pygame.display.set_mode(world_size)
     temp_screen1 = pygame.display.set_mode(world_size)
     temp_screen2 = pygame.display.set_mode(world_size)
@@ -144,7 +144,7 @@ def main():
 #GUI For IP address confirmation ---------------------------------
     input_text = ''
     white = (255, 255, 255)
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('./font/Minecraft.ttf', 32)
     
     text1 = font.render('Please enter your IP Address:', True, white)
     text2 = font.render('Your IP address is correct', True, white)

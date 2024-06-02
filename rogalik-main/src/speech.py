@@ -16,7 +16,7 @@ class Speech:
             #add more here
         }
         self.reset = " "
-        self.message = "Press E and say: 'Pick up/Drop it'"
+        self.message = "Press E and say: "
     
 
     def _listen(self):

@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '172.26.235.77'
+ip_address = '172.26.220.78'
 host = ip_address
 port = 12347
 white = (255, 255, 255)
@@ -144,6 +144,7 @@ def main():
 #GUI For IP address confirmation ---------------------------------
     input_text = ''
     white = (255, 255, 255)
+    font = pygame.font.Font('./font/Minecraft.ttf', 32)
     text1 = font.render('IP Address:', True, white)
     text2 = font.render('Your IP address is correct', True, white)
     text4 = font.render('Connecting to the main server.....', True, white)

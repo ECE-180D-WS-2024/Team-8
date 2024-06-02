@@ -71,7 +71,7 @@ class MainMenu:
         self.play_button = PlayButton(self, 21 * 64 / 2, 8 * 64 / 2)
         self.exit_button = ExitButton(self, 21 * 64 / 2, 7 * 64 / 2 + 240)
         self.rogalik = pygame.image.load('./assets/misc/rogalik.png').convert_alpha()
-        self.rogalik = pygame.transform.scale(self.rogalik, (320, 240))
+        self.rogalik = pygame.transform.scale(self.rogalik, (370, 210))
         # self.rogalik.set_colorkey((0, 0, 0, 0))
         self.rogalik_rect = self.rogalik.get_rect()
         self.rogalik_rect.midtop = (21 * 64 / 2, 50)

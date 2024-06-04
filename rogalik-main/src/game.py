@@ -82,6 +82,10 @@ class Game:
 
     def change_message(self, speech_message):
         self.message = speech_message
+        print("====================================")
+        print(self.message)
+        print("====================================")
+
 
     def refresh(self):
         pygame.mixer.Sound.stop(self.sound)
@@ -198,20 +202,20 @@ class Game:
 
         #print(self.player2.speech.message)
         pygame.font.init()
-        font = pygame.font.Font(font_speech, 15)
-        speech_text1 = font.render(self.message, True, white)
-        speech_textRect1 = speech_text1.get_rect(topleft=(320, 60))
-
-        speech_text2 = font.render('Pick Up/Drop It', True, white)
-        speech_textRect2 = speech_text2.get_rect(topleft=(320, 75))
-
-        textRect1.center = (20*64 // 2, 12*64 // 2)
-        textRect2.center = (20*64 // 2, 12*64 // 2 - 100)
             
         self.enemy_manager.add_enemies()
         prev_time = time.time() 
         pygame.mixer.Sound.play(self.sound, loops=-1)
         while self.running:
+            font = pygame.font.Font(font_speech, 15)
+            speech_text1 = font.render(self.message, True, white)
+            speech_textRect1 = speech_text1.get_rect(topleft=(320, 60))
+
+            speech_text2 = font.render('Pick Up/Drop It', True, white)
+            speech_textRect2 = speech_text2.get_rect(topleft=(320, 75))
+
+            textRect1.center = (20*64 // 2, 12*64 // 2)
+            textRect2.center = (20*64 // 2, 12*64 // 2 - 100)
             self.clock.tick(self.fps)
             now = time.time()
             self.dt = now - prev_time

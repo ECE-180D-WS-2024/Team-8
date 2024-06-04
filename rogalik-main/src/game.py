@@ -67,7 +67,7 @@ class Game:
         self.text2 = font.render('', True, white)
         self.TutorialText2 = self.text2.get_rect(topleft=(550, 75))
         self.tutorial_enemy_spawned = False
-        
+        self.message = ""
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)
@@ -196,7 +196,7 @@ class Game:
         #print(self.player2.speech.message)
         pygame.font.init()
         font = pygame.font.Font(font_speech, 15)
-        speech_text1 = font.render(self.player2.speech.message, True, white)
+        speech_text1 = font.render(self.message, True, white)
         speech_textRect1 = speech_text1.get_rect(topleft=(320, 60))
 
         speech_text2 = font.render('Pick Up/Drop It', True, white)

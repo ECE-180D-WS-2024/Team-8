@@ -2,7 +2,7 @@ import threading
 import speech_recognition as sr
 
 class Speech:
-    def __init__(self, callback=None):
+    def __init__(self, game, callback=None):
         self.recognizer = sr.Recognizer()
         self.microphone = sr.Microphone()
         self.callback = callback
@@ -16,7 +16,8 @@ class Speech:
             #add more here
         }
         self.reset = " "
-        self.message = "Press E and say: "
+        self.game = game
+        self.game.message = "Press E and say: "
     
 
     def _listen(self):
@@ -24,7 +25,7 @@ class Speech:
             self.recognizer.adjust_for_ambient_noise(source)
             try:
                 print("Say Command")
-                self.message = "Say Command"
+                self.game.message = "Say Command"
                 audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1.5)
                 command = self.recognizer.recognize_google(audio).lower()
                 print(f"Recognized: {command}")
@@ -36,21 +37,21 @@ class Speech:
                 else:
       
                     print("Recognition Failed. Press key to try again.")
-                    self.message = "Press E to Try Again"
+                    self.game.message = "Press E to Try Again"
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
         
                 print(f"API unavailable, {e}")
-                self.message = "Press E to Try Again"
+                self.game.message = "Press E to Try Again"
             except sr.UnknownValueError as e:
                 # Handle unknown value error, log, or retry logic
 
                 print(f"Could not understand audio {e}")
-                self.message = "Press E to Try Again"
+                self.game.message = "Press E to Try Again"
             except Exception as e:
        
                 print(f"An unexpected error occurred: {e}")
-                self.message = "Press E to Try Again"
+                self.game.message = "Press E to Try Again"
         self.listening = False
         self.stop_event.set()
         if self.listening == False:

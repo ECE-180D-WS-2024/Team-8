@@ -16,7 +16,7 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
-        client.subscribe("lol123Player2")
+        client.subscribe("lol123")
 
     def on_message(self, client, userdata, msg):
         try:
@@ -57,7 +57,7 @@ class Player2(Entity):
         self.floor_value = self.rect.y
         self.fall(-100)
         self.last_e_press = 0
-        self.speech = Speech(callback=self.callback_speech)
+        self.speech = Speech(game, callback=self.callback_speech)
         self.mqtt_client = MQTTClient()
         self.mqtt_client.connect()
         self.keydeterm = {"K_w":False, "K_s":False, "K_a":False, "K_d":False}
@@ -102,7 +102,6 @@ class Player2(Entity):
             if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
                 self.last_e_press = current_time
                 self.speech.toggle_listening()
-            self.game.player2.speech.message = self.game.player2.speech.message
         if pressed[pygame.K_TAB]:
             self.game.mini_map.draw_all(self.game.screen)
             self.game.mini_map.draw_mini_map = False

@@ -254,7 +254,7 @@ class Game:
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
             if(self.player2.speech.reset != " "):
-                self.player2.speech.message = "Press E and say:"
+                self.message = "Press E and say:"
             self.player2.speech.reset = " "
 
             #print(self.inputs)

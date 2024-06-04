@@ -67,7 +67,7 @@ class Game:
         self.text2 = font.render('', True, white)
         self.TutorialText2 = self.text2.get_rect(topleft=(550, 75))
         self.tutorial_enemy_spawned = False
-        self.message = ""
+        self.message = "Press E and say:"
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)

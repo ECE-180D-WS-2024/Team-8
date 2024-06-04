@@ -226,8 +226,8 @@ def main():
     lower_blue = np.array([110,255,255])
     upper_blue = np.array([130,255,255])
 
-    lower_color = lower_green
-    upper_color = upper_green
+    lower_color = lower_yellow
+    upper_color = upper_yellow
     pre_angle = 0
     #---------------------------------------------
     last_e_press = 0

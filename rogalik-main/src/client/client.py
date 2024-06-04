@@ -56,7 +56,7 @@ cap = cv.VideoCapture(0)
 def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
     angle = pre_angle
     area = 0
-    attackArea = 100
+    attackArea = 10
     contours,hierarchy = cv.findContours(img_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
     for cnt in contours:
         area = cv.contourArea(cnt) 

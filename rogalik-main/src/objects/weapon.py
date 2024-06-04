@@ -106,12 +106,11 @@ class WeaponSwing:
         lower_blue = np.array([110,255,255])
         upper_blue = np.array([130,255,255])
 
-        lower_color = lower_green
-        upper_color = upper_green
+        lower_color = lower_yellow
+        upper_color = upper_yellow
 
         if(self.swing_side == 1):
             _,frame = cap.read()
-            #self.clock.tick(self.fps)
 
             angle15_hsv = cv.cvtColor(frame[0:43,390:640], cv.COLOR_BGR2HSV)
             angle30_hsv = cv.cvtColor(frame[43:86,390:640], cv.COLOR_BGR2HSV)

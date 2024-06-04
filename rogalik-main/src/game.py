@@ -67,7 +67,7 @@ class Game:
         self.text2 = font.render('', True, white)
         self.TutorialText2 = self.text2.get_rect(topleft=(550, 75))
         self.tutorial_enemy_spawned = False
-        self.message = ""
+        self.message = "Press E and say:"
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)
@@ -254,7 +254,7 @@ class Game:
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
             if(self.player2.speech.reset != " "):
-                self.player2.speech.message = "Press E and say:"
+                self.message = "Press E and say:"
             self.player2.speech.reset = " "
 
             #print(self.inputs)

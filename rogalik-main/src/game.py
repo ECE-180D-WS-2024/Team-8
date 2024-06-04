@@ -34,7 +34,7 @@ pygame.init()
 pygame.mixer.init()
 
 world_size = (20*64, 12*64)
-ip_address = '172.26.220.78'
+ip_address = '131.179.14.250'
 
 class Game:
     def __init__(self):

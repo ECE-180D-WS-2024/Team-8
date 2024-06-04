@@ -16,7 +16,7 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
-        client.subscribe("lol123")
+        client.subscribe("lol123Player2")
 
     def on_message(self, client, userdata, msg):
         try:
@@ -102,6 +102,7 @@ class Player2(Entity):
             if pressed[pygame.K_e] and not self.speech.listening and (current_time - self.last_e_press > 300):
                 self.last_e_press = current_time
                 self.speech.toggle_listening()
+            self.game.player2.speech.message = self.game.player2.speech.message
         if pressed[pygame.K_TAB]:
             self.game.mini_map.draw_all(self.game.screen)
             self.game.mini_map.draw_mini_map = False

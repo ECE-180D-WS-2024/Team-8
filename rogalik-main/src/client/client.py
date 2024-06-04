@@ -25,7 +25,7 @@ class MQTTClient:
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
-        client.subscribe("lol123Player2")
+        client.subscribe("lol123")
 
     def on_message(self, client, userdata, msg):
         try:
@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '172.26.220.78'
+ip_address = '131.179.14.250'
 host = ip_address
 port = 12347
 white = (255, 255, 255)
@@ -226,8 +226,8 @@ def main():
     lower_blue = np.array([110,255,255])
     upper_blue = np.array([130,255,255])
 
-    lower_color = lower_yellow
-    upper_color = upper_yellow
+    lower_color = lower_green
+    upper_color = upper_green
     pre_angle = 0
     #---------------------------------------------
     last_e_press = 0

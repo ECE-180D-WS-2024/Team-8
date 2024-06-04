@@ -80,6 +80,9 @@ class Game:
         self.sound = pygame.mixer.Sound('./assets/sound/dungeon_theme_1.wav')
         self.screen_position = (0, 0)
 
+    def change_message(self, speech_message):
+        self.message = speech_message
+
     def refresh(self):
         pygame.mixer.Sound.stop(self.sound)
         self.__init__()

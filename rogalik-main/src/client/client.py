@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '131.179.15.242'
+ip_address = '172.26.220.78'
 host = ip_address
 port = 12347
 white = (255, 255, 255)
@@ -226,9 +226,8 @@ def main():
     lower_blue = np.array([110,255,255])
     upper_blue = np.array([130,255,255])
 
-    #heeloaaa
-    lower_color = lower_yellow
-    upper_color = upper_yellow
+    lower_color = lower_green
+    upper_color = upper_green
     pre_angle = 0
     #---------------------------------------------
     last_e_press = 0

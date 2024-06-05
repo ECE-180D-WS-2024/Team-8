@@ -154,8 +154,7 @@ class Game:
                 self.state_num = self.state_num + 1
             if pressed[pygame.K_k] and (self.state_num > 0):
                 self.state_num = self.state_num - 1
-            if self.inputs["J_Pressed"] and ((current_time - self.last_j_press) > 300):
-                self.last_j_press = current_time
+            if self.inputs["J_Pressed"]:
                 self.state_num = self.state_num + 1
             if self.inputs["K_Pressed"] and (self.state_num > 0):
                 self.state_num = self.state_num - 1

@@ -40,7 +40,7 @@ class Speech:
                     if self.callback:
                         self.callback(self.command_alternatives, ECE180_input,command, message)
                 else:
-                    print("Recognition Failed. Press key to try again.")
+                    print("Recognition Failed. Cast purple to try again.")
                     message["1"] = "Cast Purple to Try Again"
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic

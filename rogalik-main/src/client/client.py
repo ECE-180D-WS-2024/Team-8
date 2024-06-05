@@ -238,7 +238,7 @@ def main():
             "localization": 0,
     }   
     message = {
-            "1": "Press E & say:",
+            "1": "Press Purple & say:",
             "2": "Pick up/Drop it"
     }
 

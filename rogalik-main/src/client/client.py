@@ -353,7 +353,7 @@ def main():
 
         ECE180_input, message = process_inputs(ECE180_input,current_time, last_e_press, message)
         if(ECE180_input["speech"] != " "):
-            message["1"] = "Press E & say: pick up/drop it"
+            message["1"] = "Cast Purple & say: pick up/drop it"
         input = pickle.dumps(ECE180_input)
         clientsocket.send(input)
         ECE180_input["speech"] = " "

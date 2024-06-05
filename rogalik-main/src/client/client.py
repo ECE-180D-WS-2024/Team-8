@@ -247,7 +247,7 @@ def main():
             "K_Pressed": False
     }   
     message = {
-            "1": "Press Purple & say:",
+            "1": "Cast Purple & say:",
             "2": "Pick up/Drop it"
     }
 

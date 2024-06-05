@@ -226,7 +226,7 @@ def main():
     lower_blue = np.array([110,255,255])
     upper_blue = np.array([130,255,255])
 
-    #heelo
+    #heeloaaa
     lower_color = lower_yellow
     upper_color = upper_yellow
     pre_angle = 0

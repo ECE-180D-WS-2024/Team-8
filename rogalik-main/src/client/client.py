@@ -117,11 +117,18 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 
 def process_inputs(ECE180_input, current_time, last_e_press, message):
     pressed = pygame.key.get_pressed()
+    ECE180_input["J_Pressed"] = False
+    ECE180_input["K_Pressed"] = False
     speech = Speech(callback=callback_speech)
     if pressed[pygame.K_e] and not speech.listening and (current_time - last_e_press > 300):
         last_e_press = current_time
         speech.toggle_listening(ECE180_input, message)
     message = message
+    if pressed[pygame.K_j]:
+        ECE180_input["J_pressed"] = True
+    elif pressed[pygame.K_k]:
+        ECE180_input["K_pressed"] = True
+
  
 
     return ECE180_input, message
@@ -236,6 +243,8 @@ def main():
             "gesture": 0,
             "speech": " ",
             "localization": 0,
+            "J_Pressed": False,
+            "K_Pressed": False
     }   
     message = {
             "1": "Press Purple & say:",

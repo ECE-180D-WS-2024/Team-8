@@ -115,7 +115,8 @@ def weaponAngle(img_mask,y1,y2,x1,x2,pre_angle):
 
     return angle
 
-def process_inputs(ECE180_input, current_time, last_e_press, message):
+def process_inputs(ECE180_input, current_time, last_e_press, last_j_press, message):
+    current_time = pygame.time.get_ticks()
     pressed = pygame.key.get_pressed()
     ECE180_input["J_Pressed"] = False
     ECE180_input["K_Pressed"] = False
@@ -124,7 +125,8 @@ def process_inputs(ECE180_input, current_time, last_e_press, message):
         last_e_press = current_time
         speech.toggle_listening(ECE180_input, message)
     message = message
-    if pressed[pygame.K_j]:
+    if pressed[pygame.K_j] and ((current_time - last_j_press) > 300):
+        slast_j_press = current_time
         ECE180_input["J_pressed"] = True
     elif pressed[pygame.K_k]:
         ECE180_input["K_pressed"] = True
@@ -238,6 +240,7 @@ def main():
     pre_angle = 0
     #---------------------------------------------
     last_e_press = 0
+    last_j_press = 0
     # loop .recv, it returns empty string when done, then transmitted data is completely received
     ECE180_input = {
             "gesture": 0,
@@ -360,7 +363,7 @@ def main():
         pygame.display.flip()
         clientsocket.send(b'1')
 
-        ECE180_input, message = process_inputs(ECE180_input,current_time, last_e_press, message)
+        ECE180_input, message = process_inputs(ECE180_input,current_time, last_e_press,last_j_press, message)
         if(ECE180_input["speech"] != " "):
             message["1"] = "Cast Purple & say: pick up/drop it"
         input = pickle.dumps(ECE180_input)

@@ -41,21 +41,21 @@ class Speech:
                         self.callback(self.command_alternatives, ECE180_input,command, message)
                 else:
                     print("Recognition Failed. Press key to try again.")
-                    message["1"] = "Press E to Try Again"
+                    message["1"] = "Cast Purple to Try Again"
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
                 #self.show_speech(f"API unavailable, {e}")
                 print(f"API unavailable, {e}")
-                message["1"] = "Press E to Try Again"
+                message["1"] = "Cast Purple to Try Again"
             except sr.UnknownValueError as e:
                 # Handle unknown value error, log, or retry logic
                 #self.show_speech(f"Could not understand audio {e}")
                 print(f"Could not understand audio {e}")
-                message["1"] = "Press E to Try Again"
+                message["1"] = "Cast Purple to Try Again"
             except Exception as e:
                 #self.show_speech(f"An unexpected error occurred: {e}")
                 print(f"An unexpected error occurred: {e}")
-                message["1"] = "Press E to Try Again"
+                message["1"] = "Cast Purple to Try Again"
         self.listening = False
         self.stop_event.set()
         if self.listening == False:

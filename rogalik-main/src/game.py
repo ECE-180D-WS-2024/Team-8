@@ -62,12 +62,12 @@ class Game:
         font = pygame.font.Font('./assets/font/Minecraft.ttf', 12)
         self.text = font.render('', True, white)
         self.TutorialText = self.text.get_rect()
-        self.text1 = font.render('Press J for next or K for previous', True, white)
+        self.text1 = font.render('Cast Pink for next or Blue for previous', True, white)
         self.TutorialText1 = self.text1.get_rect(topleft=(1300, 75))
         self.text2 = font.render('', True, white)
         self.TutorialText2 = self.text2.get_rect(topleft=(550, 75))
         self.tutorial_enemy_spawned = False
-        self.message = "Press E and say:"
+        self.message = "Cast Purple and say:"
         self.fps = 30
         #self.background = BackgroundEffects()
         self.game_over = GameOver(self)
@@ -152,16 +152,16 @@ class Game:
                 self.state_num = self.state_num - 1
             self.text2 = font.render('', True, white)
             if(self.state_num == 0):
-                self.text = font.render('I am the Rogue Master and welcome to the dungeon.', True, white)
-                self.text2 = font.render('Before you begin exploring these dungeons, I will have to prepare you!', True, white)          
+                self.text = font.render('I am the Rogue Master and welcome to the dungeon where USC demons run amok.', True, white)
+                self.text2 = font.render('Before you begin dungeon exploring, I will prepare you! Use the wand keys to cast a specific spell color.', True, white)          
             elif(self.state_num == 1):
                 self.text = font.render('First, you must learn how to move. Your character can be controlled with the avatar controller.', True, white)
             elif(self.state_num == 2):
-                self.text = font.render('Tilt it forward to move and rotate your controller in the direction you would like to go.', True, white)
+                self.text = font.render('Tilt the controller in the direction you\'d like your player to go.', True, white)
                 self.text2 = font.render('Navigate to the weapon and hover by it.', True, white)
             elif(self.state_num == 3):
                 self.text = font.render('Now, press the magic button on your wand to activate voice commands.', True, white)
-                self.text2 = font.render('After pressing the button, say Pick Up to obtain your weapon.', True, white)
+                self.text2 = font.render('After casting Purple, say Pick Up to obtain your weapon.', True, white)
             elif(self.state_num == 4):
                 self.text = font.render('You can control your weapon by orienting your magic wand in front of the camera.', True, white)
                 self.text2 = font.render('The magical powers through the USB will then control the weapon on your screen.', True, white)
@@ -170,7 +170,7 @@ class Game:
             elif(self.state_num == 6):
                 self.text = font.render('Fight the enemy with your magic wand and avatar controller!', True, white)
                 self.text2 = font.render('After the monster is defeated, you can now go to the next rooms! Happy exploring.', True, white)
-                self.text1 = font.render('Press J to end tutorial and move on.', True, white)
+                self.text1 = font.render('Cast Pink to end tutorial and move on.', True, white)
                 if not self.tutorial_enemy_spawned:
                     self.world_manager.world.starting_room.enemy_list.append(Imp(self, random.randint(100, 150) / 10, 50, self.world_manager.world.starting_room))
                     self.world_manager.world.starting_room.enemy_list[-1].damage = 0
@@ -261,7 +261,7 @@ class Game:
             input_data = client.recv(1024)
             self.inputs = pickle.loads(input_data)
             if(self.player2.speech.reset != " "):
-                self.message = "Press E and say:"
+                self.message = "Cast Purple and say:"
             self.player2.speech.reset = " "
 
             #print(self.inputs)

@@ -30,7 +30,7 @@ class Speech:
                 #self.show_speech("Say Command")
                 print("Say Command")
                 message["1"] = "Say Command"
-                audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1)
+                audio = self.recognizer.listen(source, timeout=2.5, phrase_time_limit=1)
                 #duration
                 command = self.recognizer.recognize_google(audio).lower()
                 #self.show_speech(f"Recognized: {command}")

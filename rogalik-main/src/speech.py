@@ -27,7 +27,7 @@ class Speech:
                 print("Say Command")
                 self.game.change_message("Say Command")
                 #self.game.message = "Say Command"
-                audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=1.5)
+                audio = self.recognizer.listen(source, timeout=2.5, phrase_time_limit=1.5)
                 command = self.recognizer.recognize_google(audio).lower()
                 print(f"Recognized: {command}")
      

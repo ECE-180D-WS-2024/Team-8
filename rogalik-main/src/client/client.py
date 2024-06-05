@@ -45,7 +45,7 @@ class MQTTClient:
 pygame.init()
 
 world_size = (20* 64, 12*64)
-ip_address = '172.26.220.78'
+ip_address = '172.26.233.215'
 host = ip_address
 port = 12347
 white = (255, 255, 255)

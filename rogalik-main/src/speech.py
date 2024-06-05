@@ -38,24 +38,24 @@ class Speech:
                 else:
       
                     print("Recognition Failed. Press key to try again.")
-                    self.game.change_message("Press E to Try Again")
+                    self.game.change_message("Cast Purple to Try Again")
                     #self.game.message = "Press E to Try Again"
             except sr.RequestError as e:
                 # Handle request error, log, or retry logic
         
                 print(f"API unavailable, {e}")
-                self.game.change_message("Press E to Try Again")
+                self.game.change_message("Cast Purple to Try Again")
                 #self.game.message = "Press E to Try Again"
             except sr.UnknownValueError as e:
                 # Handle unknown value error, log, or retry logic
 
                 print(f"Could not understand audio {e}")
-                self.game.change_message("Press E to Try Again")
+                self.game.change_message("Cast Purple to Try Again")
                 #self.game.message = "Press E to Try Again"
             except Exception as e:
        
                 print(f"An unexpected error occurred: {e}")
-                self.game.change_message("Press E to Try Again")
+                self.game.change_message("Cast Purple to Try Again")
                 #self.game.message = "Press E to Try Again"
         self.listening = False
         self.stop_event.set()
